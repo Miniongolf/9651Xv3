@@ -1,0 +1,76 @@
+#pragma once
+
+#include <array>
+#include <memory>
+#include <cmath>
+
+#include "pros/misc.hpp"
+
+#include "subHeads/button.hpp"
+
+class Gamepad {
+    private:
+        // Pointer array for joysticks
+        std::array<double*, 4> ptrSticksArr = {
+            &leftX, &leftY, &rightX, &rightY
+        };
+
+        // Pointer array for buttons (using wrapper button class)
+        std::array<Button*, 12> ptrButtonsArr = {
+            &lb, &lt, &rb, &rt,
+            &dpadUp, &dpadDown, &dpadLeft, &dpadRight,
+            &x, &b, &y, &a
+        };
+
+    public:
+        double leftX, leftY, rightX, rightY;
+        Button lb, lt, rb, rt;
+        Button dpadUp, dpadDown, dpadLeft, dpadRight;
+        Button x, b, y, a;
+
+        std::unique_ptr<pros::Controller> controller;
+
+        bool disabled;
+
+        /** 
+         * @brief Gamepad class constructor
+         * 
+         * @param id `pros::controller_id_e_t` enum
+         */
+        Gamepad(pros::controller_id_e_t id);
+
+        /** 
+         * @brief Gets the inputs from the gamepad
+         * 
+         * @param None
+         */
+        void getInputs(float deadzone);
+
+        /**
+         * @brief Processes the inputs from the gamepad sticks and converts them to movement powers. 
+         * 
+         * @param None
+         * @return Float array with lateral power and turning power
+         */
+        std::array<float, 2> processSticks(bool curve=true);
+
+        /** 
+         * @brief Sets all gamepad inputs to 0 or false (except cancel button)
+         * 
+         * @param None
+         * @return `None`
+         * 
+         * @note Use when running semi auton
+         */
+        void disable();
+
+        /** 
+         * @brief Sets disabled to false
+         * 
+         * @param None
+         * @return `None`
+         * 
+         * @note Use every time semiauton is canceled or ends
+         */
+        void resume();
+};
