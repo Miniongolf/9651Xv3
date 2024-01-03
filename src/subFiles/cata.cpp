@@ -20,12 +20,12 @@ void Cata::update() {
     angle = (int)floor((*motors)[0].get_position() * CATA_RATIO) % 120;
 }
 
-void Cata::start(int power) {
+void Cata::fire(int power) {
     motors->move(power);
 }
 
 void Cata::stop() {
-    motors->brake();
+    motors->move_velocity(0);
 }
 
 void Cata::standby() {

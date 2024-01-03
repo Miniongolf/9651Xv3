@@ -42,7 +42,7 @@ class Cata {
          *        Motor voltage [0, 127]
          * @return `None`
          */
-        void start(int power = 127);
+        void fire(int power = 127);
 
         /**
          * @brief Stops the catapult instantly

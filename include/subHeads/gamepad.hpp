@@ -44,15 +44,16 @@ class Gamepad {
          * 
          * @param None
          */
-        void getInputs(float deadzone);
+        void getInputs();
 
         /**
          * @brief Processes the inputs from the gamepad sticks and converts them to movement powers. 
          * 
-         * @param None
+         * @param deadzone Minimum input scale to consider (cross deadzone)
+         * @param curve Curves the stick inputs (credits to Finlay 46846T for the formula)
          * @return Float array with lateral power and turning power
          */
-        std::array<float, 2> processSticks(bool curve=true);
+        std::array<float, 2> processSticks(float deadzone, bool curve=true);
 
         /** 
          * @brief Sets all gamepad inputs to 0 or false (except cancel button)

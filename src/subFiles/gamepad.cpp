@@ -1,11 +1,12 @@
 #include "subHeads/gamepad.hpp"
 #include "globals.hpp"
+#include "subHeads/constants.hpp"
 
 Gamepad::Gamepad(pros::controller_id_e_t id) {
     controller = std::make_unique<pros::Controller>(id);
 }
 
-void Gamepad::getInputs(float deadzone) {
+void Gamepad::getInputs() {
     // Guard clause against a disabled controller (during auton and semi-autons)
     // Use the B button to cancel semi autons
     if (disabled) {
@@ -18,9 +19,6 @@ void Gamepad::getInputs(float deadzone) {
         pros::controller_analog_e_t stick = static_cast<pros::controller_analog_e_t>(i);
         double stickInput = controller->get_analog(stick)/127.0;
         
-        // Cross deadzone
-        if (fabs(stickInput) <= deadzone) stickInput = 0;
-
         *ptrSticksArr[i]= stickInput;
     }
 
@@ -32,7 +30,7 @@ void Gamepad::getInputs(float deadzone) {
     }
 }
 
-std::array<float, 2> Gamepad::processSticks(bool curve) {
+std::array<float, 2> Gamepad::processSticks(float deadzone, bool curve) {
     // Stick curving lambda
     // Credit to Finlay 46846T for the curve formula
     auto curveInput = [] (float x) -> float {
@@ -51,6 +49,11 @@ std::array<float, 2> Gamepad::processSticks(bool curve) {
     forwardsVel = this->leftY;
     turnVel = this->rightX*TURN_CONST;
 
+    // Cross deadzone
+    if (fabs(forwardsVel) < deadzone) forwardsVel = 0;
+    if (fabs(forwardsVel) < deadzone) turnVel = 0;
+
+    // Curve inputs
     if (curve) {
         forwardsVel = curveInput(forwardsVel);
         turnVel = curveInput(turnVel);

@@ -1,114 +1,88 @@
+#include "globals.hpp"
+#include "lemlib/chassis/chassis.hpp"
+#include "lemlib/exitcondition.hpp"
 #include "main.h"
 #include "opcontrolHelpers.hpp"
-#include <cmath>
+#include "subHeads/constants.hpp"
 
-/**
- * Runs the operator control code. This function will be started in its own task
- * with the default priority and stack size whenever the robot is enabled via
- * the Field Management System or the VEX Competition Switch in the operator
- * control mode.
- *
- * If no competition control is connected, this function will run immediately
- * following initialize().
- *
- * If the robot is disabled or communications is lost, the
- * operator control task will be stopped. Re-enabling the robot will restart the
- * task, not resume it from where it left off.
- */
+void updateStateMachines(SysStates sysStates) {
+	cataStateMachine(sysStates.cataState);
+	intakeStateMachine(sysStates.intakeState);
+	wingsStateMachine(sysStates.leftWingState, sysStates.rightWingState);
+}
+
+// TeleOp
 void opcontrol() {
-	// Catapult toggle
-	bool cataToggle = false;
-
-	// Chassis velocities
-	float throttleVel, turnVel, highVel;
+	// System states
+	SysStates sysStates;
 
 	// Drive mode enums
-	DMode driveMode;
-	AutoAlignState autoAlignState;
+	DMode driveMode = DMode::normal;
+	AutoAlignState autoAlignState = AutoAlignState::off;
 
 	// Robot position pose
 	lemlib::Pose robotPos = chassis.getPose();
 
 	// Autoalign PID and target
-	lemlib::PID autoAlignPID(0.1, 0, 0, 3, true);
-	float targetTheta, deltaTheta;
+	lemlib::PID autoAlignPID(angularController.kP, angularController.kI, angularController.kD, angularController.windupRange, true);
+	lemlib::ExitCondition autoAlignExit(angularController.largeError, angularController.largeErrorTimeout);
 
-	// 
-	float curveGain = 0;
 	float controllerDeadzone = DEFAULT_CONTROLLER_DEADZONE;
 
 	while (true) {
-		/** UPDATE SYSTEM STATES */
-		gamepad1.getInputs(controllerDeadzone);
-		gamepad2.getInputs(controllerDeadzone);
+		/** REGION: UPDATE SYSTEM STATES */
+		gamepad1.getInputs();
+		gamepad2.getInputs();
 		cata.update();
 		robotPos = chassis.getPose();
 
-		/** DRIVETRAIN COMMANDS */
-		// Map stick inputs to throttleVel and turnVel
-		std::array<float, 2>vels = gamepad1.processSticks();
-		throttleVel = vels[0], turnVel = vels[1];
 
-		// AUTOALIGN
-		// Get AutoAlign target
-		targetTheta = (gamepad1.rightY > 0.75) ? 90 : (gamepad1.rightY < -0.75) ? -90 : 0;
-
-		// Update AutoAlign status
-		if (targetTheta == 0) {autoAlignState = AutoAlignState::off;}
-		else if (autoAlignState == AutoAlignState::off) {autoAlignState = AutoAlignState::start;}
-		else {autoAlignState = AutoAlignState::on;}
-
-		// AutoAlign calculations
-		if (autoAlignState == AutoAlignState::start) {
-			autoAlignPID.reset();
-			autoAlignState = AutoAlignState::on;
-		}
-		if (autoAlignState == AutoAlignState::on){
-			turnVel += autoAlignPID.update(lemlib::angleError(targetTheta, robotPos.theta));
-		}
-
-		// DRIVE MODE
-		// lt = precision, else normal
-		driveMode = (gamepad1.lt) ? DMode::precision : DMode::normal;
-
-		// Process drive mode calculations
-		switch (driveMode) {
-			// Speed (do nothing)
-			case DMode::normal:
+		/** REGION: CATA STATE MACHINE*/
+		// X button toggle, Y button hold
+		switch (sysStates.cataState) {
+			case CataStates::active:
+				if (gamepad1.x.pressed) sysStates.cataState = CataStates::standby;
+				cata.fire();
 				break;
-			// Precision drive (half speed)
-			case DMode::precision:
-				throttleVel /= 2;
-				turnVel /= 2;
+			case CataStates::standby:
+				if (gamepad1.x.pressed || gamepad1.y) sysStates.cataState = CataStates::active;
+				cata.standby();
 				break;
-			// Should not reach this point but just in case
-			default:
+			case CataStates::hardstop:
+				cata.stop();
+				break;
+    	}
+
+
+		/** REGION: WINGS STATE MACHINES */
+		// Hold left trigger to extend wings, release to retract
+		switch (sysStates.leftWingState) {
+			case WingStates::retracted:
+				if (gamepad1.lt) sysStates.leftWingState = WingStates::extended;
+				
+				wings.retract(Wings::L);
+				break;
+			case WingStates::extended:
+				if (!gamepad1.lt) sysStates.leftWingState = WingStates::retracted;
+
+				wings.extend(Wings::L);
 				break;
 		}
+		switch (sysStates.rightWingState) {
+			case WingStates::retracted:
+				if (gamepad1.lt) sysStates.leftWingState = WingStates::extended;
 
-		// Normalize throttle and turning to [-1, 1]
-		highVel = std::max(fabs(throttleVel), fabs(turnVel));
-		if (highVel > 1) {
-			throttleVel /= highVel;
-			turnVel /= highVel;
+				wings.retract(Wings::R);
+				break;
+			case WingStates::extended:
+				if (!gamepad1.lt) sysStates.leftWingState = WingStates::retracted;
+
+				wings.extend(Wings::R);
+				break;
 		}
 
-		// LemLib arcade drive
-		chassis.arcade(throttleVel*127, turnVel*127);
 
-		/** CATA */
-		// X button toggles catapult, Y button to manually run cata
-		if (gamepad1.x.pressed) {cataToggle = !cataToggle;}
-		
-		/** TODO: test logic on standby */
-		(gamepad1.y || cataToggle) ? cata.start() : cata.standby();
-
-		/** WINGS */
-		// Hold bumpers to extend their respective wings
-		(gamepad1.lb) ? wings.extend(Wings::L) : wings.retract(Wings::L);
-		(gamepad1.rb) ? wings.extend(Wings::R) : wings.retract(Wings::R);
-		
-		/** NOTE: #region testing code stuffs, disable for comp */
+		/** NOTE: TESTS | DISABLE FOR COMP */
 		if (!isCompMatch) {
 			gamepad1.controller->print(0, 0, "%d", cata.angle);
 
@@ -116,8 +90,56 @@ void opcontrol() {
 				autonomous();
 			}
 		}
-		/* #endregion testing code stuffs, disable for comp */
 
-		pros::delay(20); // Delay to prevent from overdrawing cpu resources
+
+		/** REGION: DRIVETRAIN COMMANDS */
+		// Map stick inputs to throttleVel and turnVel
+		std::array<float, 2> vels = gamepad1.processSticks(controllerDeadzone, true);
+		float throttleVel = vels[0], turnVel = vels[1];
+
+		float targetTheta;
+
+		switch (autoAlignState) {
+			case AutoAlignState::off:
+				if (fabs(gamepad1.rightY) > 0.75) {
+					targetTheta = (gamepad1.rightY > 0.75) ? 90 : -90;
+					autoAlignState = AutoAlignState::start;
+				}
+				break;
+			case AutoAlignState::start:
+				autoAlignPID.reset();
+				autoAlignState = AutoAlignState::on;
+				break;
+			case AutoAlignState::on:
+				chassis.autoAlign(targetTheta, &turnVel, 1000);
+				break;
+			case AutoAlignState::stop:
+				autoAlignState = AutoAlignState::off;
+				break;
+		}
+
+		/** REGION: DRIVE MODE STATE MACHINE */
+		// lt = precision, else normal
+		driveMode = (gamepad1.lt) ? DMode::precision : DMode::normal;
+
+		switch (driveMode) {
+			// Normal (do nothing)
+			case DMode::normal:
+				normalizeVels(&throttleVel, &turnVel);
+				chassis.arcade(throttleVel*127, turnVel*127);
+				break;
+			// Precision drive (half speed)
+			case DMode::precision:
+				normalizeVels(&throttleVel, &turnVel);
+				chassis.arcade(throttleVel*127, turnVel*127);
+				throttleVel /= 2;
+				turnVel /= 2;
+				break;
+			case DMode::semiauton:
+				throttleVel = 0;
+				turnVel = 0;
+		}
+
+		pros::delay(10); // Delay to prevent from overdrawing cpu resources
 	}
 }
