@@ -5,15 +5,15 @@
 
 void normalizeVels(float *vel1, float *vel2);
 
-// Drive mode state machine enum class
-enum class DMode {
+// Drive mode state machine enum
+enum class DModes {
 	normal = 0,
 	precision,
     semiauton
 };
 
 // Autoalign state machine enum
-enum class AutoAlignState {
+enum class AutoAlignStates {
 	off = 0,
 	start,
 	on,
@@ -21,7 +21,7 @@ enum class AutoAlignState {
 };
 
 // Catapult state machine enum
-enum class CataStates : int {
+enum class CataStates {
     standby = -1,
     hardstop = 0,
     active = 1
@@ -43,13 +43,10 @@ enum class WingStates {
 // Subsystems state machines struct
 struct SysStates {
 	SysStates();
+	SysStates(CataStates cataState, IntakeStates intakeState, std::array<WingStates, 2> wingStates);
 
     CataStates cataState;
 	IntakeStates intakeState;
     WingStates leftWingState;
 	WingStates rightWingState;
 };
-
-void cataStateMachine(CataStates cataState);
-void intakeStateMachine(IntakeStates intakeState);
-void wingsStateMachine(WingStates leftWingState, WingStates rightWingState);

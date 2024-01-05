@@ -26,8 +26,9 @@ extern pros::Motor rm;
 extern pros::Motor rb;
 extern pros::Motor rs;
 
-// CATA MOTORS
+// SUBSYS MOTORS
 extern pros::Motor cataMotor;
+extern pros::Motor intakeMotor;
 
 // MOTOR GROUPS
 extern pros::MotorGroup leftMotors; // Left side drivetrain motor group

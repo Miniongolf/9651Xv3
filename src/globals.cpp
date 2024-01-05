@@ -20,6 +20,7 @@ pros::Motor rs(8, pros::E_MOTOR_GEAR_GREEN);
 
 // CATA MOTORS
 pros::Motor cataMotor(9, pros::E_MOTOR_GEAR_GREEN);
+pros::Motor intakeMotor(10, pros::E_MOTOR_GEAR_BLUE);
 
 // MOTOR GROUPS
 pros::MotorGroup leftMotors({lf, lm, lb, ls});

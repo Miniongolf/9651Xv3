@@ -5,20 +5,14 @@
 #include "opcontrolHelpers.hpp"
 #include "subHeads/constants.hpp"
 
-void updateStateMachines(SysStates sysStates) {
-	cataStateMachine(sysStates.cataState);
-	intakeStateMachine(sysStates.intakeState);
-	wingsStateMachine(sysStates.leftWingState, sysStates.rightWingState);
-}
-
 // TeleOp
 void opcontrol() {
 	// System states
 	SysStates sysStates;
 
 	// Drive mode enums
-	DMode driveMode = DMode::normal;
-	AutoAlignState autoAlignState = AutoAlignState::off;
+	DModes driveMode = DModes::normal;
+	AutoAlignStates autoAlignState = AutoAlignStates::off;
 
 	// Robot position pose
 	lemlib::Pose robotPos = chassis.getPose();
@@ -52,6 +46,24 @@ void opcontrol() {
 				cata.stop();
 				break;
     	}
+
+
+		/** REGION: INTAKE STATE MACHINE*/
+		// hold rt to intake, hold rb to outtake
+		switch (sysStates.intakeState) {
+			case IntakeStates::intake:
+				if (gamepad1.rb.pressed) sysStates.intakeState = IntakeStates::outtake;
+				else if (gamepad1.rt.released) sysStates.intakeState = IntakeStates::stop;
+				intakeMotor.move(127);
+			case IntakeStates::outtake:
+				if (gamepad1.rt.pressed) sysStates.intakeState = IntakeStates::intake;
+				else if (gamepad1.rb.released) sysStates.intakeState = IntakeStates::stop;
+				intakeMotor.move(-127);
+			case IntakeStates::stop:
+				if (gamepad1.rt.pressed) sysStates.intakeState = IntakeStates::intake;
+				else if (gamepad1.rb.pressed) sysStates.intakeState = IntakeStates::outtake;
+				intakeMotor.move(0);
+		}
 
 
 		/** REGION: WINGS STATE MACHINES */
@@ -100,42 +112,42 @@ void opcontrol() {
 		float targetTheta;
 
 		switch (autoAlignState) {
-			case AutoAlignState::off:
+			case AutoAlignStates::off:
 				if (fabs(gamepad1.rightY) > 0.75) {
 					targetTheta = (gamepad1.rightY > 0.75) ? 90 : -90;
-					autoAlignState = AutoAlignState::start;
+					autoAlignState = AutoAlignStates::start;
 				}
 				break;
-			case AutoAlignState::start:
+			case AutoAlignStates::start:
 				autoAlignPID.reset();
-				autoAlignState = AutoAlignState::on;
+				autoAlignState = AutoAlignStates::on;
 				break;
-			case AutoAlignState::on:
+			case AutoAlignStates::on:
 				chassis.autoAlign(targetTheta, &turnVel, 1000);
 				break;
-			case AutoAlignState::stop:
-				autoAlignState = AutoAlignState::off;
+			case AutoAlignStates::stop:
+				autoAlignState = AutoAlignStates::off;
 				break;
 		}
 
 		/** REGION: DRIVE MODE STATE MACHINE */
 		// lt = precision, else normal
-		driveMode = (gamepad1.lt) ? DMode::precision : DMode::normal;
+		driveMode = (gamepad1.lt) ? DModes::precision : DModes::normal;
 
 		switch (driveMode) {
 			// Normal (do nothing)
-			case DMode::normal:
+			case DModes::normal:
 				normalizeVels(&throttleVel, &turnVel);
 				chassis.arcade(throttleVel*127, turnVel*127);
 				break;
 			// Precision drive (half speed)
-			case DMode::precision:
+			case DModes::precision:
 				normalizeVels(&throttleVel, &turnVel);
 				chassis.arcade(throttleVel*127, turnVel*127);
 				throttleVel /= 2;
 				turnVel /= 2;
 				break;
-			case DMode::semiauton:
+			case DModes::semiauton:
 				throttleVel = 0;
 				turnVel = 0;
 		}

@@ -16,25 +16,9 @@ SysStates::SysStates() {
     rightWingState = WingStates::retracted;
 }
 
-void cataStateMachine(CataStates cataState) {
-    switch (cataState) {
-        case CataStates::active:
-            cata.fire();
-        case CataStates::standby:
-            cata.standby();
-        case CataStates::hardstop:
-            cata.stop();
-    }
-}
-
-void intakeStateMachine(IntakeStates intakeState) {
-
-}
-
-void wingStateMachine(WingStates leftWingState, WingStates rightWingState) {
-
-}
-
-void moveStateMachines(SysStates sysStates) {
-
-}
+// Subsystem states constructor
+SysStates::SysStates(CataStates cataState, IntakeStates intakeState, std::array<WingStates, 2> wingStates)
+    : cataState(cataState),
+      intakeState(intakeState),
+      leftWingState(wingStates[0]),
+      rightWingState(wingStates[1]) {}
