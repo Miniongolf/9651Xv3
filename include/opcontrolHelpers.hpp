@@ -1,52 +1,31 @@
 #pragma once
 #include "main.h"
-#include <array>
-
 
 void normalizeVels(float *vel1, float *vel2);
 
 // Drive mode state machine enum
-enum class DModes {
-	normal = 0,
-	precision,
-    semiauton
-};
+enum class DModes { normal, precision, semiauton };
 
 // Autoalign state machine enum
-enum class AutoAlignStates {
-	off = 0,
-	start,
-	on,
-    stop
-};
+enum class AutoAlignStates { off, start, on, stop };
 
 // Catapult state machine enum
-enum class CataStates {
-    standby = -1,
-    hardstop = 0,
-    active = 1
-};
+enum class CataStates { load, fire, hardstop };
 
 // Intake state machine enum
-enum class IntakeStates {
-    intake = 0,
-    outtake,
-    stop
-};
+enum class IntakeStates { intake, outtake, stop };
 
 // Single wing state machine enum
-enum class WingStates {
-    extended = 0,
-    retracted
-};
+enum class WingStates { extended, retracted };
 
 // Subsystems state machines struct
 struct SysStates {
-	SysStates();
-	SysStates(CataStates cataState, IntakeStates intakeState, std::array<WingStates, 2> wingStates);
+  SysStates();
+  SysStates(CataStates cataState, IntakeStates intakeState,
+            std::array<WingStates, 2> wingStates);
 
-    CataStates cataState;
-	IntakeStates intakeState;
-    WingStates leftWingState;
-	WingStates rightWingState;
+  CataStates cataState;
+  IntakeStates intakeState;
+  WingStates leftWingState;
+  WingStates rightWingState;
 };
