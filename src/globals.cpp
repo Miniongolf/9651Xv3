@@ -59,8 +59,8 @@ lemlib::Drivetrain drivetrain (
     &leftMotors, // left drivetrain motors
     &rightMotors, // right drivetrain motors
     10.75, // track width
-    lemlib::Omniwheel::NEW_275, // wheel diameter
-    600, // wheel rpm
+    lemlib::Omniwheel::NEW_325, // wheel diameter
+    450, // wheel rpm
     8 // chase power
 );
 

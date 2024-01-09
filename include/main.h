@@ -45,7 +45,15 @@
 #include "autoSelect/selection.h"
 #include "lemlib/api.hpp"
 
-#include "subHeads/api.hpp"
+#include "subHeads/constants.hpp"
+
+#include "subHeads/button.hpp"
+#include "subHeads/gamepad.hpp"
+
+#include "subHeads/cata.hpp"
+#include "subHeads/wings.hpp"
+
+#include "globals.hpp"
 
 /**
  * If you find doing pros::Motor() to be tedious and you'd prefer just to do

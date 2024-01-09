@@ -11,8 +11,8 @@ void initialize() {
     selector::init();
     
     // Initialize chassis
-    leftMotors.set_brake_modes(MOTOR_BRAKE_BRAKE);
-    rightMotors.set_brake_modes(MOTOR_BRAKE_BRAKE);
+    leftMotors.set_brake_modes(pros::E_MOTOR_BRAKE_BRAKE);
+    rightMotors.set_brake_modes(pros::E_MOTOR_BRAKE_BRAKE);
     
     chassis.calibrate();
 
