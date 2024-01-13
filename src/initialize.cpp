@@ -7,21 +7,21 @@
  * to keep execution time for this mode under a few seconds.
  */
 void initialize() {
-    // LVGL auton selector init
-    selector::init();
-    
-    // Initialize chassis
-    leftMotors.set_brake_modes(pros::E_MOTOR_BRAKE_BRAKE);
-    rightMotors.set_brake_modes(pros::E_MOTOR_BRAKE_BRAKE);
-    
-    chassis.calibrate();
+  // LVGL auton selector init
+  selector::init();
 
-    // Tuck in wings
-    wings.retract(Wings::B);
+  // Initialize chassis
+  leftMotors.set_brake_modes(pros::E_MOTOR_BRAKE_BRAKE);
+  rightMotors.set_brake_modes(pros::E_MOTOR_BRAKE_BRAKE);
 
-    // Default start position (will change depending on selected auton)
-    lemlib::Pose origin(0, 0, 0);
-    chassis.setPose(origin);
+  chassis.calibrate();
+
+  // Tuck in wings
+  wings.retract(Wings::B);
+
+  // Default start position (will change depending on selected auton)
+  lemlib::Pose origin(0, 0, 0);
+  chassis.setPose(origin);
 }
 
 /**
@@ -33,7 +33,4 @@ void initialize() {
  * This task will exit when the robot is enabled and autonomous or opcontrol
  * starts.
  */
-void competition_initialize() {
-	isCompMatch = true;
-}
-
+void competition_initialize() { isCompMatch = true; }

@@ -36,7 +36,6 @@ extern pros::MotorGroup rightMotors; // Right side drivetrain motor group
 extern pros::MotorGroup cataMotors; // Catapult motor group
 
 // SUBSYSTEMS
-extern Cata cata;   // Catapult wrapper class
 extern Wings wings; // Wings wrapper class
 
 // CHASSIS PID

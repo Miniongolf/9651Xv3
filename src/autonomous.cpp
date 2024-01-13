@@ -40,7 +40,7 @@ void autonomous() {
   lemlib::Pose currPose = chassis.getPose();
   std::cout << "moved | " << currPose.x << ' ' << currPose.y << ' '
             << currPose.theta << '\n';
-  // chassis.follow(jerrycurve_txt, 3, 2000);
+  chassis.follow(jerrycurve_txt, 3, 2000);
   // std::cout << "followed\n";
 
   autonSelection autonMode = static_cast<autonSelection>(selector::auton);

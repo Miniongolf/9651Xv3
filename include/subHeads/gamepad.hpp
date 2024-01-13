@@ -28,7 +28,7 @@ class Gamepad {
         Button dpadUp, dpadDown, dpadLeft, dpadRight;
         Button x, b, y, a;
 
-        std::unique_ptr<pros::Controller> controller;
+        pros::Controller* controller;
 
         bool disabled;
 

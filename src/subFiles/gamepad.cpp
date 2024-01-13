@@ -3,7 +3,7 @@
 #include "subHeads/constants.hpp"
 
 Gamepad::Gamepad(pros::controller_id_e_t id) {
-    controller = std::make_unique<pros::Controller>(id);
+    *controller = pros::Controller(id);
 }
 
 void Gamepad::getInputs() {

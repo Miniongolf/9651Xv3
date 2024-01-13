@@ -13,20 +13,12 @@ void opcontrol() {
   // Robot position pose
   lemlib::Pose robotPos = chassis.getPose();
 
-  // Autoalign PID and target
-  lemlib::PID autoAlignPID(angularController.kP, angularController.kI,
-                           angularController.kD, angularController.windupRange,
-                           true);
-  lemlib::ExitCondition autoAlignExit(angularController.largeError,
-                                      angularController.largeErrorTimeout);
-
   float controllerDeadzone = DEFAULT_CONTROLLER_DEADZONE;
 
   while (true) {
     /** REGION: UPDATE SYSTEM STATES */
     gamepad1.getInputs();
     gamepad2.getInputs();
-    cata.update();
     robotPos = chassis.getPose();
 
     /** REGION: CATA STATE MACHINE*/
@@ -35,7 +27,7 @@ void opcontrol() {
     case CataStates::fire:
       cataMotors.move(127);
 
-      if (gamepad1.x.pressed) {
+      if (gamepad1.x.pressed || !gamepad1.y) {
         sysStates.cataState = CataStates::load;
       }
       break;
@@ -56,7 +48,6 @@ void opcontrol() {
       break;
 
     case CataStates::disconnect:
-      cataMotors.move(0);
       /** TODO: PTO back to drivetrain */
 
       if (gamepad1.x.pressed || gamepad1.y) {
@@ -133,8 +124,6 @@ void opcontrol() {
 
     /** NOTE: TESTS | DISABLE FOR COMP */
     if (!isCompMatch) {
-      gamepad1.controller->print(0, 0, "%d", cata.angle);
-
       if (gamepad1.a.pressed) {
         autonomous();
       }
