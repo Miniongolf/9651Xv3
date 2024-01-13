@@ -30,17 +30,25 @@ pros::Motor cataMotor(9, pros::E_MOTOR_GEAR_GREEN);
 pros::Motor intakeMotor(10, pros::E_MOTOR_GEAR_BLUE);
 
 // MOTOR GROUPS
-pros::MotorGroup leftMotors({pros::Motor(1, pros::E_MOTOR_GEAR_BLUE),
-                             pros::Motor(2, pros::E_MOTOR_GEAR_BLUE),
-                             pros::Motor(3, pros::E_MOTOR_GEAR_BLUE),
-                             pros::Motor(4, pros::E_MOTOR_GEAR_GREEN)});
+pros::MotorGroup leftMotors({
+    pros::Motor(1, pros::E_MOTOR_GEAR_BLUE),
+    pros::Motor(2, pros::E_MOTOR_GEAR_BLUE),
+    pros::Motor(3, pros::E_MOTOR_GEAR_BLUE),
+    pros::Motor(4, pros::E_MOTOR_GEAR_GREEN) // 5.5 watt motor
+});
 
-pros::MotorGroup rightMotors({pros::Motor(-5, pros::E_MOTOR_GEAR_BLUE),
-                              pros::Motor(-6, pros::E_MOTOR_GEAR_BLUE),
-                              pros::Motor(-7, pros::E_MOTOR_GEAR_BLUE),
-                              pros::Motor(-8, pros::E_MOTOR_GEAR_GREEN)});
+pros::MotorGroup rightMotors({
+    pros::Motor(-5, pros::E_MOTOR_GEAR_BLUE),
+    pros::Motor(-6, pros::E_MOTOR_GEAR_BLUE),
+    pros::Motor(-7, pros::E_MOTOR_GEAR_BLUE),
+    pros::Motor(-8, pros::E_MOTOR_GEAR_GREEN) // 5.5 watt motor
+});
 
-pros::MotorGroup cataMotors({cataMotor});
+/** NOTE: these motors are the same as the drivetrain ones. */
+pros::MotorGroup cataMotors({
+    pros::Motor(4, pros::E_MOTOR_GEAR_GREEN), // left side
+    pros::Motor(-8, pros::E_MOTOR_GEAR_GREEN) // right side
+});
 
 // SUBSYSTEMS
 Wings wings('A', 'H');
