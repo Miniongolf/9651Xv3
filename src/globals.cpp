@@ -19,14 +19,14 @@ std::array<pros::Motor, 2> ptoMotors = {
 pros::MotorGroup leftMotors({
     pros::Motor(-1, pros::E_MOTOR_GEAR_BLUE),
     pros::Motor(-11, pros::E_MOTOR_GEAR_BLUE),
-    pros::Motor(-3, pros::E_MOTOR_GEAR_BLUE),
+    pros::Motor(-20, pros::E_MOTOR_GEAR_BLUE),
     ptoMotors[0] // 5.5 watt motor
 });
 
 pros::MotorGroup rightMotors({
     pros::Motor(19, pros::E_MOTOR_GEAR_BLUE),
     pros::Motor(18, pros::E_MOTOR_GEAR_BLUE),
-    pros::Motor(7, pros::E_MOTOR_GEAR_BLUE),
+    pros::Motor(10, pros::E_MOTOR_GEAR_BLUE),
     ptoMotors[1] // 5.5 watt motor
 });
 

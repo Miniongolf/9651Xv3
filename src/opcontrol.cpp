@@ -1,3 +1,4 @@
+#include "lemlib/util.hpp"
 #include "main.h"
 #include "opcontrolHelpers.hpp"
 
@@ -15,21 +16,27 @@ void opcontrol() {
 
   float controllerDeadzone = DEFAULT_CONTROLLER_DEADZONE;
 
+  float throttleVel, turnVel;
+  float targetTheta;
+
   while (true) {
     /** REGION: UPDATE SYSTEM STATES */
     gamepad1.getInputs();
     robotPos = chassis.getPose();
 
     /** REGION: CATA STATE MACHINE*/
-    // X button toggle, Y button hold
-
-    int cataStopTime = 0;
 
     switch (sysStates.cataState) {
+    case CataStates::connect:
+      /** TODO: release PTO from drivetrain */
+
+      if (gamepad1.x.released)
+        sysStates.cataState = CataStates::fire;
+      break;
     case CataStates::fire:
       cataMotors.move(127);
 
-      if (gamepad1.x.pressed || !gamepad1.y) {
+      if (gamepad1.x.pressed) {
         sysStates.cataState = CataStates::idle;
       }
 
@@ -38,8 +45,9 @@ void opcontrol() {
     case CataStates::idle:
       cataMotors.move(0);
 
-      if (gamepad1.x.pressed || gamepad1.y) {
-        cataStopTime = pros::millis();
+      if (gamepad1.x.released) {
+        sysStates.cataState = CataStates::disconnect;
+      } else if (gamepad1.x.pressed) {
         sysStates.cataState = CataStates::fire;
       }
 
@@ -48,7 +56,7 @@ void opcontrol() {
     case CataStates::disconnect:
       /** TODO: PTO back to drivetrain */
 
-      if (gamepad1.x.pressed || gamepad1.y) {
+      if (gamepad1.x.pressed) {
         sysStates.cataState = CataStates::fire;
       }
 
@@ -64,10 +72,11 @@ void opcontrol() {
       if (gamepad1.rb.pressed) {
         sysStates.intakeState = IntakeStates::outtake;
       } else if (gamepad1.rt.released) {
-        if (gamepad1.rb)
+        if (gamepad1.rb) {
           sysStates.intakeState = IntakeStates::outtake;
-        else
+        } else {
           sysStates.intakeState = IntakeStates::stop;
+        }
       }
 
       break;
@@ -78,10 +87,12 @@ void opcontrol() {
       if (gamepad1.rt.pressed) {
         sysStates.intakeState = IntakeStates::intake;
       } else if (gamepad1.rb.released) {
-        if (gamepad1.rt)
+        if (gamepad1.rt) {
           sysStates.intakeState = IntakeStates::intake;
-        else
+        } else {
           sysStates.intakeState = IntakeStates::stop;
+        }
+        break;
       }
 
       break;
@@ -102,28 +113,32 @@ void opcontrol() {
     // Hold left trigger to extend wings, release to retract
     switch (sysStates.leftWingState) {
     case WingStates::retracted:
-      if (gamepad1.lt)
+      if (gamepad1.lt) {
         sysStates.leftWingState = WingStates::extended;
+      }
 
       wings.retract(Wings::L);
       break;
     case WingStates::extended:
-      if (!gamepad1.lt)
+      if (!gamepad1.lt) {
         sysStates.leftWingState = WingStates::retracted;
+      }
 
       wings.extend(Wings::L);
       break;
     }
     switch (sysStates.rightWingState) {
     case WingStates::retracted:
-      if (gamepad1.lt)
+      if (gamepad1.lt) {
         sysStates.leftWingState = WingStates::extended;
+      }
 
       wings.retract(Wings::R);
       break;
     case WingStates::extended:
-      if (!gamepad1.lt)
+      if (!gamepad1.lt) {
         sysStates.leftWingState = WingStates::retracted;
+      }
 
       wings.extend(Wings::R);
       break;
@@ -141,36 +156,55 @@ void opcontrol() {
     // Map stick inputs to throttleVel and turnVel
     std::array<float, 2> vels =
         gamepad1.processSticks(controllerDeadzone, true);
-    
-    float throttleVel = vels[0], turnVel = vels[1];
 
-    float targetTheta;
+    throttleVel = vels[0], turnVel = vels[1];
 
     if (fabs(gamepad1.rightY) > 0.75 && driveMode != DModes::semiauton) {
-      targetTheta = (gamepad1.rightY > 0.75) ? M_PI/2 : -M_PI/2;
-      chassis.turnTo(cos(targetTheta), sin(targetTheta), 750);
+      targetTheta = (gamepad1.rightY > 0.75) ? 90 : -90;
+      targetTheta = lemlib::degToRad(targetTheta);
+      chassis.turnTo(100 * cos(targetTheta), 100 * sin(targetTheta), 750);
     }
 
     /** REGION: DRIVE MODE STATE MACHINE */
+    normalizeVels(throttleVel, turnVel);
+
+    // Precision drive (half speed)
+    if (gamepad1.lt) {
+      throttleVel /= 2;
+      turnVel /= 2;
+    }
+
     switch (driveMode) {
     // Normal (do nothing)
     case DModes::normal:
-      normalizeVels(throttleVel, turnVel);
+      /** TODO: Retract back wings, use front wings */
 
-      // Precision drive (half speed)
-      if (gamepad1.lt) {
-        throttleVel /= 2;
-        turnVel /= 2;
-      }
-
-      // Switch to semiauton when in a LemLib motion
-      if (chassis.isInMotion())
+      if (chassis.isInMotion()) // Switch to semiauton when in a LemLib motion
         driveMode = DModes::semiauton;
+
+      if (gamepad1.lb) // Reverse if lb is pressed
+        driveMode = DModes::reverse;
+
+      chassis.arcade(throttleVel * 127, turnVel * 127);
+      break;
+
+    // Reverse (drive backwards)
+    case DModes::reverse:
+      throttleVel *= -1; // Reverse driving
+
+      /** TODO: Retract front wings, use back wings */
+
+      if (chassis.isInMotion()) // Switch to semiauton when in a LemLib motion
+        driveMode = DModes::semiauton;
+
+      if (gamepad1.lb)
+        driveMode = DModes::normal;
 
       chassis.arcade(throttleVel * 127, turnVel * 127);
       break;
 
     // Semiauton (disable controller inputs)
+    // Hold `b` to cancel
     case DModes::semiauton:
       if ((int)gamepad1.b > 500) {
         chassis.cancelAllMotions();
@@ -178,7 +212,7 @@ void opcontrol() {
       if (!chassis.isInMotion()) {
         driveMode = DModes::normal;
       }
-      
+
       throttleVel = 0;
       turnVel = 0;
       break;

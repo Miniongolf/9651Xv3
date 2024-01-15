@@ -4,13 +4,13 @@
 void normalizeVels(float& vel1, float& vel2);
 
 // Drive mode state machine enum
-enum class DModes { normal, semiauton };
+enum class DModes { normal, reverse, semiauton };
 
 // Autoalign state machine enum
 enum class AutoAlignStates { off, start, on, stop };
 
 // Catapult state machine enum
-enum class CataStates { idle, fire, disconnect };
+enum class CataStates { connect, fire, idle, disconnect };
 
 // Intake state machine enum
 enum class IntakeStates { intake, outtake, stop };
