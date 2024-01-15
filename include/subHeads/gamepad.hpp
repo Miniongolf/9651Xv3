@@ -37,7 +37,7 @@ class Gamepad {
          * 
          * @param id `pros::controller_id_e_t` enum
          */
-        Gamepad(pros::controller_id_e_t id);
+        Gamepad(pros::Controller *controller);
 
         /** 
          * @brief Gets the inputs from the gamepad

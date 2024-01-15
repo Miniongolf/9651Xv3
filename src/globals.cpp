@@ -1,47 +1,36 @@
 #include "globals.hpp"
+#include "pros/misc.h"
 #include "pros/motors.hpp"
 
 // GAMEPADS
-Gamepad gamepad1(pros::E_CONTROLLER_MASTER);  // Primary controller
-Gamepad gamepad2(pros::E_CONTROLLER_PARTNER); // Secondary controller
+pros::Controller controller1(pros::E_CONTROLLER_MASTER);
+Gamepad gamepad1(&controller1);  // Primary controller
 
 // SENSORS
 pros::IMU imu(10);
 
 // DRIVE MOTORS
-/*
-pros::Motor lf(-1, pros::E_MOTOR_GEAR_BLUE);
-pros::Motor lm(-2, pros::E_MOTOR_GEAR_BLUE);
-pros::Motor lb(-3, pros::E_MOTOR_GEAR_BLUE);
-pros::Motor ls(-4, pros::E_MOTOR_GEAR_GREEN);
-
-pros::Motor rf(5, pros::E_MOTOR_GEAR_BLUE);
-pros::Motor rm(6, pros::E_MOTOR_GEAR_BLUE);
-pros::Motor rb(7, pros::E_MOTOR_GEAR_BLUE);
-pros::Motor rs(8, pros::E_MOTOR_GEAR_GREEN);
-*/
-
 std::array<pros::Motor, 2> ptoMotors = {
     pros::Motor(2, pros::E_MOTOR_GEAR_GREEN),
-    pros::Motor(-3, pros::E_MOTOR_GEAR_GREEN)
+    pros::Motor(-4, pros::E_MOTOR_GEAR_GREEN)
 };
 
 // MOTOR GROUPS
 pros::MotorGroup leftMotors({
-    pros::Motor(1, pros::E_MOTOR_GEAR_BLUE),
-    pros::Motor(11, pros::E_MOTOR_GEAR_BLUE),
-    pros::Motor(3, pros::E_MOTOR_GEAR_BLUE),
+    pros::Motor(-1, pros::E_MOTOR_GEAR_BLUE),
+    pros::Motor(-11, pros::E_MOTOR_GEAR_BLUE),
+    pros::Motor(-3, pros::E_MOTOR_GEAR_BLUE),
     ptoMotors[0] // 5.5 watt motor
 });
 
 pros::MotorGroup rightMotors({
-    pros::Motor(-19, pros::E_MOTOR_GEAR_BLUE),
-    pros::Motor(-18, pros::E_MOTOR_GEAR_BLUE),
-    pros::Motor(-7, pros::E_MOTOR_GEAR_BLUE),
+    pros::Motor(19, pros::E_MOTOR_GEAR_BLUE),
+    pros::Motor(18, pros::E_MOTOR_GEAR_BLUE),
+    pros::Motor(7, pros::E_MOTOR_GEAR_BLUE),
     ptoMotors[1] // 5.5 watt motor
 });
 
-// INTAKE MOTORS
+// INTAKE MOTOR
 pros::Motor intakeMotor(10, pros::E_MOTOR_GEAR_BLUE);
 
 // CATA MOTORS

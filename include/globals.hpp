@@ -10,29 +10,23 @@
 #include "subHeads/wings.hpp"
 
 // GAMEPADS
+extern pros::Controller controller1;
 extern Gamepad gamepad1; // Primary controller
-extern Gamepad gamepad2; // Secondary controller
 
 // SENSORS
 extern pros::IMU imu; // Inertial Measurement Unit
 
-// DRIVE MOTORS
-extern pros::Motor lf;
-extern pros::Motor lm;
-extern pros::Motor lb;
-extern pros::Motor ls;
-extern pros::Motor rf;
-extern pros::Motor rm;
-extern pros::Motor rb;
-extern pros::Motor rs;
-
 // SUBSYS MOTORS
-extern pros::Motor cataMotor;
-extern pros::Motor intakeMotor;
+extern std::array<pros::Motor, 2> ptoMotors;
 
 // MOTOR GROUPS
 extern pros::MotorGroup leftMotors; // Left side drivetrain motor group
 extern pros::MotorGroup rightMotors; // Right side drivetrain motor group
+
+// INTAKE MOTOR
+extern pros::Motor intakeMotor;
+
+// CATA MOTORS
 extern pros::MotorGroup cataMotors; // Catapult motor group
 
 // SUBSYSTEMS

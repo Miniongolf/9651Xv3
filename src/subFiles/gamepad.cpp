@@ -2,9 +2,7 @@
 #include "globals.hpp"
 #include "subHeads/constants.hpp"
 
-Gamepad::Gamepad(pros::controller_id_e_t id) {
-    *controller = pros::Controller(id);
-}
+Gamepad::Gamepad(pros::Controller *controller) : controller(controller) {}
 
 void Gamepad::getInputs() {
     // Guard clause against a disabled controller (during auton and semi-autons)
@@ -35,19 +33,14 @@ std::array<float, 2> Gamepad::processSticks(float deadzone, bool curve) {
     // Credit to Finlay 46846T for the curve formula
     auto curveInput = [] (float &x) -> float {
         float a = STICK_CURVE_GAIN;
-        float y;
         if (x <= 0) {
-            y = -1 * (1 - powf(M_E, -1 * a * x) / (1 - powf(M_E, a)));
+            x = -1 * (1 - powf(M_E, -1*a*x)) / (1 - powf(M_E, a));
         } else {
-            y = (1 - powf(M_E, a * x) / (1 - powf(M_E, a)));
+            x = (1 - powf(M_E, a * x)) / (1 - powf(M_E, a));
         }
-        return y;
     };
 
     float forwardsVel, turnVel;
-
-    forwardsVel = leftY;
-    turnVel = rightX * TURN_CONST;
 
     // Cross deadzone
     if (fabs(forwardsVel) < deadzone) forwardsVel = 0;
@@ -58,6 +51,9 @@ std::array<float, 2> Gamepad::processSticks(float deadzone, bool curve) {
         curveInput(forwardsVel);
         curveInput(turnVel);
     }
+    
+    forwardsVel = leftY;
+    turnVel = rightX * TURN_CONST;
 
     return {forwardsVel, turnVel};
 }

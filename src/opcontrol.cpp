@@ -1,6 +1,5 @@
 #include "main.h"
 #include "opcontrolHelpers.hpp"
-#include "pros/rtos.hpp"
 
 // TeleOp
 void opcontrol() {
@@ -19,7 +18,6 @@ void opcontrol() {
   while (true) {
     /** REGION: UPDATE SYSTEM STATES */
     gamepad1.getInputs();
-    gamepad2.getInputs();
     robotPos = chassis.getPose();
 
     /** REGION: CATA STATE MACHINE*/
@@ -133,6 +131,7 @@ void opcontrol() {
 
     /** NOTE: TESTS | DISABLE FOR COMP */
     if (!isCompMatch) {
+      std::cout << gamepad1.leftY << ' ' << gamepad1.rightX << '\n';
       if (gamepad1.a.pressed) {
         autonomous();
       }
@@ -185,6 +184,6 @@ void opcontrol() {
       break;
     }
 
-    pros::delay(10); // Delay to prevent from overdrawing cpu resources
+    pros::delay(20); // Delay to prevent from overdrawing cpu resources
   }
 }
