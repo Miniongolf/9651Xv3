@@ -1,7 +1,7 @@
 #pragma once
 #include "main.h"
 
-void normalizeVels(float *vel1, float *vel2);
+void normalizeVels(float& vel1, float& vel2);
 
 // Drive mode state machine enum
 enum class DModes { normal, semiauton };
@@ -10,7 +10,7 @@ enum class DModes { normal, semiauton };
 enum class AutoAlignStates { off, start, on, stop };
 
 // Catapult state machine enum
-enum class CataStates { load, fire, disconnect };
+enum class CataStates { idle, fire, disconnect };
 
 // Intake state machine enum
 enum class IntakeStates { intake, outtake, stop };

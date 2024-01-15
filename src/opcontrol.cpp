@@ -1,5 +1,6 @@
 #include "main.h"
 #include "opcontrolHelpers.hpp"
+#include "pros/rtos.hpp"
 
 // TeleOp
 void opcontrol() {
@@ -23,28 +24,27 @@ void opcontrol() {
 
     /** REGION: CATA STATE MACHINE*/
     // X button toggle, Y button hold
+
+    int cataStopTime = 0;
+
     switch (sysStates.cataState) {
     case CataStates::fire:
       cataMotors.move(127);
 
       if (gamepad1.x.pressed || !gamepad1.y) {
-        sysStates.cataState = CataStates::load;
+        sysStates.cataState = CataStates::idle;
       }
+
       break;
 
-    case CataStates::load:
-      cataMotors.move(127);
+    case CataStates::idle:
+      cataMotors.move(0);
 
       if (gamepad1.x.pressed || gamepad1.y) {
+        cataStopTime = pros::millis();
         sysStates.cataState = CataStates::fire;
       }
 
-      /** TODO: Update cata angle getter depending on what sensors are available
-       */
-      if (abs((int)floor((cataMotors)[0].get_position() * CATA_RATIO) % 120) <=
-          3) {
-        sysStates.cataState = CataStates::disconnect;
-      }
       break;
 
     case CataStates::disconnect:
@@ -53,6 +53,7 @@ void opcontrol() {
       if (gamepad1.x.pressed || gamepad1.y) {
         sysStates.cataState = CataStates::fire;
       }
+
       break;
     }
 
@@ -62,33 +63,41 @@ void opcontrol() {
     case IntakeStates::intake:
       intakeMotor.move(127);
 
-      sysStates.intakeState =
-          (gamepad1.rb.pressed) ? IntakeStates::outtake
-          : (gamepad1.rt.released)
-              ? (gamepad1.rb) ? IntakeStates::outtake : IntakeStates::stop
-              : IntakeStates::intake;
+      if (gamepad1.rb.pressed) {
+        sysStates.intakeState = IntakeStates::outtake;
+      } else if (gamepad1.rt.released) {
+        if (gamepad1.rb)
+          sysStates.intakeState = IntakeStates::outtake;
+        else
+          sysStates.intakeState = IntakeStates::stop;
+      }
+
+      break;
 
     case IntakeStates::outtake:
       intakeMotor.move(-127);
 
-      sysStates.intakeState =
-          (gamepad1.rt.pressed) ? IntakeStates::intake
-          : (gamepad1.rb.released)
-              ? ((gamepad1.rt) ? IntakeStates::intake : IntakeStates::stop)
-              : IntakeStates::outtake;
+      if (gamepad1.rt.pressed) {
+        sysStates.intakeState = IntakeStates::intake;
+      } else if (gamepad1.rb.released) {
+        if (gamepad1.rt)
+          sysStates.intakeState = IntakeStates::intake;
+        else
+          sysStates.intakeState = IntakeStates::stop;
+      }
+
+      break;
 
     case IntakeStates::stop:
       intakeMotor.move(0);
-
-      sysStates.intakeState = (gamepad1.rt.pressed)   ? IntakeStates::intake
-                              : (gamepad1.rb.pressed) ? IntakeStates::outtake
-                                                      : IntakeStates::stop;
 
       if (gamepad1.rt.pressed) { // press rt to intake
         sysStates.intakeState = IntakeStates::intake;
       } else if (gamepad1.rb.pressed) { // press rb to outtake
         sysStates.intakeState = IntakeStates::outtake;
       }
+
+      break;
     }
 
     /** REGION: WINGS STATE MACHINES */
@@ -133,39 +142,21 @@ void opcontrol() {
     // Map stick inputs to throttleVel and turnVel
     std::array<float, 2> vels =
         gamepad1.processSticks(controllerDeadzone, true);
+    
     float throttleVel = vels[0], turnVel = vels[1];
 
     float targetTheta;
 
     if (fabs(gamepad1.rightY) > 0.75 && driveMode != DModes::semiauton) {
-      targetTheta = (gamepad1.rightY > 0.75) ? 90 : -90;
-      chassis.turnToHeading(targetTheta, 750);
+      targetTheta = (gamepad1.rightY > 0.75) ? M_PI/2 : -M_PI/2;
+      chassis.turnTo(cos(targetTheta), sin(targetTheta), 750);
     }
-
-    // switch (autoAlignState) {
-    // case AutoAlignStates::off:
-    //   if (fabs(gamepad1.rightY) > 0.75) {
-    //     targetTheta = (gamepad1.rightY > 0.75) ? 90 : -90;
-    //     autoAlignState = AutoAlignStates::start;
-    //   }
-    //   break;
-    // case AutoAlignStates::start:
-    //   autoAlignPID.reset();
-    //   autoAlignState = AutoAlignStates::on;
-    //   break;
-    // case AutoAlignStates::on:
-    //   chassis.autoAlign(targetTheta, &turnVel, 1000);
-    //   break;
-    // case AutoAlignStates::stop:
-    //   autoAlignState = AutoAlignStates::off;
-    //   break;
-    // }
 
     /** REGION: DRIVE MODE STATE MACHINE */
     switch (driveMode) {
     // Normal (do nothing)
     case DModes::normal:
-      normalizeVels(&throttleVel, &turnVel);
+      normalizeVels(throttleVel, turnVel);
 
       // Precision drive (half speed)
       if (gamepad1.lt) {
@@ -173,6 +164,7 @@ void opcontrol() {
         turnVel /= 2;
       }
 
+      // Switch to semiauton when in a LemLib motion
       if (chassis.isInMotion())
         driveMode = DModes::semiauton;
 
@@ -187,8 +179,10 @@ void opcontrol() {
       if (!chassis.isInMotion()) {
         driveMode = DModes::normal;
       }
+      
       throttleVel = 0;
       turnVel = 0;
+      break;
     }
 
     pros::delay(10); // Delay to prevent from overdrawing cpu resources

@@ -30,20 +30,22 @@ enum autonSelection {
  */
 void autonomous() {
   std::cout << "auton\n";
-  lemlib::Pose startPos(0, 0, 0);
-  chassis.setPose(startPos);
-  // chassis.follow(path_txt, 15, 5000);
-  // chassis.turnTo(30, 0, 1500);
-  // std::cout << "turned\n";
-  chassis.moveToPose(24, 24, 90, 1000, {.lead = 0.5, .minSpeed = 75});
+  chassis.setPose(0, 0, 0);
+
+  chassis.turnTo(100, 0, 1000);
   chassis.waitUntilDone();
-  lemlib::Pose currPose = chassis.getPose();
-  std::cout << "moved | " << currPose.x << ' ' << currPose.y << ' '
-            << currPose.theta << '\n';
-  chassis.follow(jerrycurve_txt, 3, 2000);
-  // std::cout << "followed\n";
+  std::cout << "turned | " << chassis.getPose().x << ' ' << chassis.getPose().y << ' '
+            << chassis.getPose().theta << '\n';
+  pros::delay(1000);
+  
+  chassis.moveToPoint(24, 0, 2000);
+  chassis.waitUntilDone();
+  std::cout << "moved | " << chassis.getPose().x << ' ' << chassis.getPose().y << ' '
+            << chassis.getPose().theta << '\n';
 
   autonSelection autonMode = static_cast<autonSelection>(selector::auton);
+  
+  std::cout << "selected auton | " << autonMode << '\n';
 
   // switch (autonMode) {
   //     case redFront:

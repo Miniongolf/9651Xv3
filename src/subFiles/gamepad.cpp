@@ -33,7 +33,7 @@ void Gamepad::getInputs() {
 std::array<float, 2> Gamepad::processSticks(float deadzone, bool curve) {
     // Stick curving lambda
     // Credit to Finlay 46846T for the curve formula
-    auto curveInput = [] (float x) -> float {
+    auto curveInput = [] (float &x) -> float {
         float a = STICK_CURVE_GAIN;
         float y;
         if (x <= 0) {
@@ -46,8 +46,8 @@ std::array<float, 2> Gamepad::processSticks(float deadzone, bool curve) {
 
     float forwardsVel, turnVel;
 
-    forwardsVel = this->leftY;
-    turnVel = this->rightX*TURN_CONST;
+    forwardsVel = leftY;
+    turnVel = rightX * TURN_CONST;
 
     // Cross deadzone
     if (fabs(forwardsVel) < deadzone) forwardsVel = 0;
@@ -55,8 +55,8 @@ std::array<float, 2> Gamepad::processSticks(float deadzone, bool curve) {
 
     // Curve inputs
     if (curve) {
-        forwardsVel = curveInput(forwardsVel);
-        turnVel = curveInput(turnVel);
+        curveInput(forwardsVel);
+        curveInput(turnVel);
     }
 
     return {forwardsVel, turnVel};
