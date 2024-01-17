@@ -8,13 +8,13 @@ ASSET(jerrycurve_txt);
 
 // Auton selection enum
 enum autonSelection {
-  redFront = 1,
-  redBack = 2,
-  redNone = 3,
-  blueFront = -1,
-  blueBack = -2,
-  blueNone = -3,
-  skills = 0
+    redFront = 1,
+    redBack = 2,
+    redNone = 3,
+    blueFront = -1,
+    blueBack = -2,
+    blueNone = -3,
+    skills = 0
 };
 
 /**
@@ -29,47 +29,47 @@ enum autonSelection {
  * from where it left off.
  */
 void autonomous() {
-  std::cout << "auton\n";
-  chassis.setPose(0, 0, 0);
+    std::cout << "auton\n";
+    chassis.setPose(0, 0, 0);
 
-  chassis.turnTo(100, 0, 1000);
-  chassis.waitUntilDone();
-  std::cout << "turned | " << chassis.getPose().x << ' ' << chassis.getPose().y << ' '
-            << chassis.getPose().theta << '\n';
-  pros::delay(1000);
-  
-  chassis.moveToPoint(24, 0, 2000);
-  chassis.waitUntilDone();
-  std::cout << "moved | " << chassis.getPose().x << ' ' << chassis.getPose().y << ' '
-            << chassis.getPose().theta << '\n';
+    chassis.turnTo(100, 0, 1000);
+    chassis.waitUntilDone();
+    std::cout << "turned | " << chassis.getPose().x << ' ' << chassis.getPose().y << ' ' << chassis.getPose().theta
+              << '\n';
+    pros::delay(1000);
 
-  autonSelection autonMode = static_cast<autonSelection>(selector::auton);
-  
-  std::cout << "selected auton | " << autonMode << '\n';
+    chassis.moveToPoint(24, 0, 2000);
+    chassis.waitUntilDone();
+    std::cout << "moved | " << chassis.getPose().x << ' ' << chassis.getPose().y << ' ' << chassis.getPose().theta
+              << '\n';
 
-  // switch (autonMode) {
-  //     case redFront:
-  //         redFront_funct();
-  //         break;
-  //     case redBack:
-  //         redBack_funct();
-  //         break;
-  //     case redNone:
-  //         doNothing_funct();
-  //         break;
-  //     case blueFront:
-  //         blueFront_funct();
-  //         break;
-  //     case blueBack:
-  //         blueBack_funct();
-  //         break;
-  //     case blueNone:
-  //         doNothing_funct();
-  //         break;
-  //     case skills:
-  //         skillsAuto_funct();
-  //         break;
-  //     default:
-  //         doNothing_funct();
-  // }
+    autonSelection autonMode = static_cast<autonSelection>(selector::auton);
+
+    std::cout << "selected auton | " << autonMode << '\n';
+
+    // switch (autonMode) {
+    //     case redFront:
+    //         redFront_funct();
+    //         break;
+    //     case redBack:
+    //         redBack_funct();
+    //         break;
+    //     case redNone:
+    //         doNothing_funct();
+    //         break;
+    //     case blueFront:
+    //         blueFront_funct();
+    //         break;
+    //     case blueBack:
+    //         blueBack_funct();
+    //         break;
+    //     case blueNone:
+    //         doNothing_funct();
+    //         break;
+    //     case skills:
+    //         skillsAuto_funct();
+    //         break;
+    //     default:
+    //         doNothing_funct();
+    // }
 }

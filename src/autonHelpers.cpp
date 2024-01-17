@@ -29,9 +29,7 @@ void redBack_funct() {
 }
 
 // Literally just do nothing
-void doNothing_funct() {
-    std::cout << "Do nothing auto \n";
-}
+void doNothing_funct() { std::cout << "Do nothing auto \n"; }
 
 // Blue front auton
 void blueFront_funct() {
@@ -46,6 +44,4 @@ void blueBack_funct() {
 }
 
 // Skills auton
-void skillsAuto_funct() {
-    std::cout << "Skills auto \n";
-}
+void skillsAuto_funct() { std::cout << "Skills auto \n"; }

@@ -6,7 +6,6 @@
 #include "pros/imu.hpp"
 
 #include "subHeads/gamepad.hpp"
-#include "subHeads/cata.hpp"
 #include "subHeads/wings.hpp"
 
 // GAMEPADS
@@ -37,9 +36,9 @@ extern lemlib::ControllerSettings lateralController; // LemLib Lateral PID
 extern lemlib::ControllerSettings angularController; // LemLib Turning PID
 
 // LEMLIB CHASSIS
-extern lemlib::Drivetrain drivetrain;                // LemLib Drivetrain
-extern lemlib::OdomSensors odomSensors;              // LemLib Odometry sensors
-extern lemlib::Chassis chassis;                      // LemLib Chassis
+extern lemlib::Drivetrain drivetrain; // LemLib Drivetrain
+extern lemlib::OdomSensors odomSensors; // LemLib Odometry sensors
+extern lemlib::Chassis chassis; // LemLib Chassis
 
 // MISC
 extern bool isCompMatch;

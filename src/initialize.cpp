@@ -7,21 +7,21 @@
  * to keep execution time for this mode under a few seconds.
  */
 void initialize() {
-  // LVGL auton selector init
-  selector::init();
+    // LVGL auton selector init
+    selector::init();
 
-  // Initialize chassis
-  leftMotors.set_brake_modes(pros::E_MOTOR_BRAKE_BRAKE);
-  rightMotors.set_brake_modes(pros::E_MOTOR_BRAKE_BRAKE);
+    // Initialize chassis
+    leftMotors.set_brake_modes(pros::E_MOTOR_BRAKE_BRAKE);
+    rightMotors.set_brake_modes(pros::E_MOTOR_BRAKE_BRAKE);
 
-  chassis.calibrate();
+    chassis.calibrate();
 
-  // Tuck in wings
-  wings.retract(Wings::B);
+    // Tuck in wings
+    wings.retract(Wings::B);
 
-  // Default start position (will change depending on selected auton)
-  lemlib::Pose origin(0, 0, 0);
-  chassis.setPose(origin);
+    // Default start position (will change depending on selected auton)
+    lemlib::Pose origin(0, 0, 0);
+    chassis.setPose(origin);
 }
 
 /**
