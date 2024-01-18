@@ -8,7 +8,6 @@ void opcontrol() {
 
     // Drive mode enums
     DModes driveMode = DModes::normal;
-    AutoAlignStates autoAlignState = AutoAlignStates::off;
 
     // Robot position pose
     lemlib::Pose robotPos = chassis.getPose();
@@ -17,8 +16,6 @@ void opcontrol() {
 
     float throttleVel, turnVel;
     float targetTheta;
-
-    Gamepad gamepad2;
 
     while (true) {
         /** REGION: UPDATE SYSTEM STATES */
@@ -144,7 +141,8 @@ void opcontrol() {
 
         throttleVel = vels[0], turnVel = vels[1];
 
-        if (fabs(gamepad1.rightY) > 0.75 && driveMode != DModes::semiauton) {
+        // Autoalign
+        if (fabs(gamepad1.rightY) > 0.8 && driveMode != DModes::semiauton) {
             targetTheta = (gamepad1.rightY > 0.75) ? 90 : -90;
             targetTheta = lemlib::degToRad(targetTheta);
             chassis.turnTo(100 * cos(targetTheta), 100 * sin(targetTheta), 750);

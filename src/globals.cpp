@@ -1,10 +1,8 @@
 #include "globals.hpp"
-#include "pros/misc.h"
 #include "pros/motors.hpp"
 
 // GAMEPADS
-pros::Controller controller1(pros::E_CONTROLLER_MASTER);
-Gamepad gamepad1(&controller1); // Primary controller
+Gamepad gamepad1(pros::E_CONTROLLER_MASTER); // Primary controller
 
 // SENSORS
 pros::IMU imu(10);

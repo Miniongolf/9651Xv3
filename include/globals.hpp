@@ -1,6 +1,7 @@
 #pragma once
 
 #include "lemlib/api.hpp"
+#include "pros/misc.hpp"
 #include "pros/motors.hpp"
 #include "pros/adi.hpp"
 #include "pros/imu.hpp"
@@ -9,7 +10,6 @@
 #include "subHeads/wings.hpp"
 
 // GAMEPADS
-extern pros::Controller controller1;
 extern Gamepad gamepad1; // Primary controller
 
 // SENSORS
