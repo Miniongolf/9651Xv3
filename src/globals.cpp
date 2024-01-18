@@ -16,17 +16,34 @@ std::array<pros::Motor, 2> ptoMotors = {
 };
 
 // MOTOR GROUPS
-pros::MotorGroup leftMotors({
-    pros::Motor(-1, pros::E_MOTOR_GEAR_BLUE), pros::Motor(-11, pros::E_MOTOR_GEAR_BLUE),
+pros::MotorGroup normalLeftMotors({
+    pros::Motor(-1, pros::E_MOTOR_GEAR_BLUE),
+    pros::Motor(-11, pros::E_MOTOR_GEAR_BLUE),
+    pros::Motor(-20, pros::E_MOTOR_GEAR_BLUE)
+});
+
+pros::MotorGroup normalRightMotors({
+    pros::Motor(19, pros::E_MOTOR_GEAR_BLUE),
+    pros::Motor(18, pros::E_MOTOR_GEAR_BLUE),
+    pros::Motor(10, pros::E_MOTOR_GEAR_BLUE)
+});
+
+pros::MotorGroup ptoLeftMotors({
+    pros::Motor(-1, pros::E_MOTOR_GEAR_BLUE),
+    pros::Motor(-11, pros::E_MOTOR_GEAR_BLUE),
     pros::Motor(-20, pros::E_MOTOR_GEAR_BLUE),
     ptoMotors[0] // 5.5 watt motor
 });
 
-pros::MotorGroup rightMotors({
-    pros::Motor(19, pros::E_MOTOR_GEAR_BLUE), pros::Motor(18, pros::E_MOTOR_GEAR_BLUE),
+pros::MotorGroup ptoRightMotors({
+    pros::Motor(19, pros::E_MOTOR_GEAR_BLUE),
+    pros::Motor(18, pros::E_MOTOR_GEAR_BLUE),
     pros::Motor(10, pros::E_MOTOR_GEAR_BLUE),
     ptoMotors[1] // 5.5 watt motor
 });
+
+pros::MotorGroup* leftMotorsPtr = &normalLeftMotors;
+pros::MotorGroup* rightMotorsPtr = &normalRightMotors;
 
 // INTAKE MOTOR
 pros::Motor intakeMotor(10, pros::E_MOTOR_GEAR_BLUE);
@@ -65,8 +82,8 @@ lemlib::ControllerSettings angularController(8, // proportional gain (kP)
 );
 
 // LEMLIB CHASSIS
-lemlib::Drivetrain drivetrain(&leftMotors, // left drivetrain motors
-                              &rightMotors, // right drivetrain motors
+lemlib::Drivetrain drivetrain(leftMotorsPtr, // left drivetrain motors
+                              rightMotorsPtr, // right drivetrain motors
                               12.7, // track width
                               lemlib::Omniwheel::NEW_325, // wheel diameter
                               450, // wheel rpm

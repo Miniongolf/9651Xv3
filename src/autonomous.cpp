@@ -7,14 +7,14 @@
 ASSET(jerrycurve_txt);
 
 // Auton selection enum
-enum autonSelection {
-    redFront = 1,
-    redBack = 2,
-    redNone = 3,
-    blueFront = -1,
-    blueBack = -2,
-    blueNone = -3,
-    skills = 0
+enum class AutoSelect {
+    frontQual = 1,
+    frontSafe = 2,
+    frontElim = 3,
+    backQual = -1,
+    backSafe = -2,
+    backElim = -3,
+    doNothing = 0
 };
 
 /**
@@ -43,33 +43,15 @@ void autonomous() {
     std::cout << "moved | " << chassis.getPose().x << ' ' << chassis.getPose().y << ' ' << chassis.getPose().theta
               << '\n';
 
-    autonSelection autonMode = static_cast<autonSelection>(selector::auton);
+    AutoSelect autonMode = static_cast<AutoSelect>(selector::auton);
 
-    std::cout << "selected auton | " << autonMode << '\n';
-
-    // switch (autonMode) {
-    //     case redFront:
-    //         redFront_funct();
-    //         break;
-    //     case redBack:
-    //         redBack_funct();
-    //         break;
-    //     case redNone:
-    //         doNothing_funct();
-    //         break;
-    //     case blueFront:
-    //         blueFront_funct();
-    //         break;
-    //     case blueBack:
-    //         blueBack_funct();
-    //         break;
-    //     case blueNone:
-    //         doNothing_funct();
-    //         break;
-    //     case skills:
-    //         skillsAuto_funct();
-    //         break;
-    //     default:
-    //         doNothing_funct();
-    // }
+    switch (autonMode) {
+        case AutoSelect::frontQual: frontQual_funct(); break;
+        case AutoSelect::frontSafe: frontSafe_funct(); break;
+        case AutoSelect::frontElim: frontElim_funct(); break;
+        case AutoSelect::backQual: backSafe_funct(); break;
+        case AutoSelect::backSafe: backSafe_funct(); break;
+        case AutoSelect::backElim: frontElim_funct(); break;
+        case AutoSelect::doNothing: backElim_funct(); break;
+    }
 }

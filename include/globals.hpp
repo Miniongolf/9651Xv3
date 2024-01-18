@@ -19,8 +19,14 @@ extern pros::IMU imu; // Inertial Measurement Unit
 extern std::array<pros::Motor, 2> ptoMotors;
 
 // MOTOR GROUPS
-extern pros::MotorGroup leftMotors; // Left side drivetrain motor group
-extern pros::MotorGroup rightMotors; // Right side drivetrain motor group
+extern pros::MotorGroup* leftMotorsPtr;
+extern pros::MotorGroup* rightMotorsPtr;
+
+extern pros::MotorGroup normalLeftMotors; // Left side drivetrain motor group
+extern pros::MotorGroup normalRightMotors; // Right side drivetrain motor group
+
+extern pros::MotorGroup ptoLeftMotors; // Left side drivetrain motor group
+extern pros::MotorGroup ptoRightMotors; // Right side drivetrain motor group
 
 // INTAKE MOTOR
 extern pros::Motor intakeMotor;
