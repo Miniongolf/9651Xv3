@@ -1,4 +1,3 @@
-#include "lemlib/util.hpp"
 #include "main.h"
 #include "opcontrolHelpers.hpp"
 
@@ -18,6 +17,8 @@ void opcontrol() {
 
     float throttleVel, turnVel;
     float targetTheta;
+
+    Gamepad gamepad2;
 
     while (true) {
         /** REGION: UPDATE SYSTEM STATES */

@@ -17,8 +17,7 @@ void initialize() {
     wings.retract(Wings::B);
 
     // Default start position (will change depending on selected auton)
-    lemlib::Pose origin(0, 0, 0);
-    chassis.setPose(origin);
+    chassis.setPose(0, 0, 0);
 }
 
 /**

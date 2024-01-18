@@ -1,9 +1,7 @@
 #include "subHeads/gamepad.hpp"
-#include "globals.hpp"
-#include "subHeads/constants.hpp"
 
-Gamepad::Gamepad(pros::Controller* controller)
-    : controller(controller) {}
+Gamepad::Gamepad(pros::controller_id_e_t id)
+    : controller(std::make_unique<pros::Controller>(id)) {}
 
 void Gamepad::getInputs() {
     // Guard clause against a disabled controller (during auton and semi-autons)

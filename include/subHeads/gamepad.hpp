@@ -4,9 +4,11 @@
 #include <memory>
 #include <cmath>
 
+#include "pros/misc.h"
 #include "pros/misc.hpp"
 
 #include "subHeads/button.hpp"
+#include "subHeads/constants.hpp"
 
 class Gamepad {
     private:
@@ -22,7 +24,8 @@ class Gamepad {
         Button dpadUp, dpadDown, dpadLeft, dpadRight;
         Button x, b, y, a;
 
-        pros::Controller* controller;
+        // Smart pointer to pros controller | use smart pointer to auto delete when ptr goes out of scope
+        std::unique_ptr<pros::Controller> controller;
 
         bool disabled;
 
@@ -31,7 +34,12 @@ class Gamepad {
          *
          * @param id `pros::controller_id_e_t` enum
          */
-        Gamepad(pros::Controller* controller);
+        Gamepad(pros::controller_id_e_t id);
+
+        /**
+         * @brief Delete default constructor to force initialization with an id
+         */
+        Gamepad() = delete;
 
         /**
          * @brief Gets the inputs from the gamepad
