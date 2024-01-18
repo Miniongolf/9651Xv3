@@ -1,9 +1,9 @@
 #pragma once
 #include "main.h"
 
-void redFront_funct();
-void redBack_funct();
-void doNothing_funct();
-void blueFront_funct();
-void blueBack_funct();
-void skillsAuto_funct();
+void frontQual_funct();
+void frontSafe_funct();
+void frontElim_funct();
+void backQual_funct();
+void backSafe_funct();
+void backElim_funct();

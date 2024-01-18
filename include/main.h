@@ -40,8 +40,7 @@
 /**
  * You should add more #includes here
  */
-//#include "okapi/api.hpp"
-//#include "pros/api_legacy.h"
+
 #include "autoSelect/selection.h"
 #include "lemlib/api.hpp"
 
@@ -50,7 +49,6 @@
 #include "subHeads/button.hpp"
 #include "subHeads/gamepad.hpp"
 
-#include "subHeads/cata.hpp"
 #include "subHeads/wings.hpp"
 
 #include "globals.hpp"

@@ -5,7 +5,7 @@ Button::Button() {}
 
 void Button::setStatus(bool isPressed) {
     currState = isPressed;
-    
+
     // Rising edge detection
     if (!prevState && currState) {
         pressed = true;
@@ -14,7 +14,7 @@ void Button::setStatus(bool isPressed) {
         startTime = pros::millis();
         heldTime = 0;
     }
-    
+
     // Sustained
     else if (prevState && currState) {
         pressed = false;
@@ -23,7 +23,7 @@ void Button::setStatus(bool isPressed) {
         currTime = pros::millis();
         heldTime = currTime - startTime;
     }
-    
+
     // Falling edge detection
     else if (prevState && !currState) {
         pressed = false;
@@ -32,7 +32,7 @@ void Button::setStatus(bool isPressed) {
         startTime = -1;
         heldTime = -1;
     }
-    
+
     // Not pressed
     else {
         pressed = false;
@@ -53,11 +53,6 @@ void Button::disable() {
     heldTime = 0;
 }
 
-Button::operator bool() const {
-    return held;
-}
+Button::operator bool() const { return held; }
 
-Button::operator int() const {
-    return heldTime;
-}
-
+Button::operator int() const { return heldTime; }

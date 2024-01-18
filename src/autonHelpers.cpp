@@ -1,8 +1,8 @@
 #include "autonHelpers.hpp"
 
 // Red front auton
-void redFront_funct() {
-    std::cout << "Red front auto \n";
+void frontQual_funct() {
+    std::cout << "Front qual auto \n";
     // leftMotors.move(127);
     // rightMotors.move(127);
     // pros::delay(1400);
@@ -15,8 +15,8 @@ void redFront_funct() {
 }
 
 // Red front auton
-void redBack_funct() {
-    std::cout << "Red back auto \n";
+void frontSafe_funct() {
+    std::cout << "Front safe auto \n";
     // leftMotors.move(127);
     // rightMotors.move(127);
     // pros::delay(1400);
@@ -28,24 +28,14 @@ void redBack_funct() {
     // chassis.turnTo(150, 0, 1000);
 }
 
-// Literally just do nothing
-void doNothing_funct() {
-    std::cout << "Do nothing auto \n";
-}
+// Front elim auton
+void frontElim_funct() { std::cout << "Front elim auto \n"; }
 
-// Blue front auton
-void blueFront_funct() {
-    std::cout << "Blue front auto \n";
-    redFront_funct();
-}
+// Back qualification auton
+void backQual_funct() { std::cout << "Back qual auto \n"; }
 
-// Blue back auton
-void blueBack_funct() {
-    std::cout << "Blue back auto \n";
-    redBack_funct();
-}
+// Back safe auton
+void backSafe_funct() { std::cout << "Back safe auto \n"; }
 
-// Skills auton
-void skillsAuto_funct() {
-    std::cout << "Skills auto \n";
-}
+// Back elim auton
+void backElim_funct() { std::cout << "Back elims auto \n"; }
