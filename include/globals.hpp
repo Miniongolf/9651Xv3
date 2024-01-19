@@ -7,7 +7,7 @@
 #include "pros/imu.hpp"
 
 #include "subHeads/gamepad.hpp"
-#include "subHeads/wings.hpp"
+#include "subHeads/pneumatics.hpp"
 
 // GAMEPADS
 extern Gamepad gamepad1; // Primary controller
@@ -19,14 +19,11 @@ extern pros::IMU imu; // Inertial Measurement Unit
 extern std::array<pros::Motor, 2> ptoMotors;
 
 // MOTOR GROUPS
-extern pros::MotorGroup* leftMotorsPtr;
-extern pros::MotorGroup* rightMotorsPtr;
+extern pros::MotorGroup normalLeftMotors; // Left side drivetrain motor group (normal)
+extern pros::MotorGroup normalRightMotors; // Right side drivetrain motor group (normal)
 
-extern pros::MotorGroup normalLeftMotors; // Left side drivetrain motor group
-extern pros::MotorGroup normalRightMotors; // Right side drivetrain motor group
-
-extern pros::MotorGroup ptoLeftMotors; // Left side drivetrain motor group
-extern pros::MotorGroup ptoRightMotors; // Right side drivetrain motor group
+extern pros::MotorGroup ptoLeftMotors; // Left side drivetrain motor group (pto)
+extern pros::MotorGroup ptoRightMotors; // Right side drivetrain motor group (pto)
 
 // INTAKE MOTOR
 extern pros::Motor intakeMotor;
@@ -35,7 +32,8 @@ extern pros::Motor intakeMotor;
 extern pros::MotorGroup cataMotors; // Catapult motor group
 
 // SUBSYSTEMS
-extern Wings wings; // Wings wrapper class
+extern PistonGroup frontWings;
+extern PistonGroup rearWings;
 
 // CHASSIS PID
 extern lemlib::ControllerSettings lateralController; // LemLib Lateral PID

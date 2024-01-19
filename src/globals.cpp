@@ -40,9 +40,6 @@ pros::MotorGroup ptoRightMotors({
     ptoMotors[1] // 5.5 watt motor
 });
 
-pros::MotorGroup* leftMotorsPtr = &normalLeftMotors;
-pros::MotorGroup* rightMotorsPtr = &normalRightMotors;
-
 // INTAKE MOTOR
 pros::Motor intakeMotor(10, pros::E_MOTOR_GEAR_BLUE);
 
@@ -54,7 +51,8 @@ pros::MotorGroup cataMotors({
 });
 
 // SUBSYSTEMS
-Wings wings('A', 'H');
+PistonGroup frontWings({'A', 'H'});
+PistonGroup backWings({'B', 'G'});
 
 // CHASSIS PID
 lemlib::ControllerSettings lateralController(8, // proportional gain (kP)
@@ -80,8 +78,8 @@ lemlib::ControllerSettings angularController(8, // proportional gain (kP)
 );
 
 // LEMLIB CHASSIS
-lemlib::Drivetrain drivetrain(leftMotorsPtr, // left drivetrain motors
-                              rightMotorsPtr, // right drivetrain motors
+lemlib::Drivetrain drivetrain(&normalLeftMotors, // left drivetrain motors
+                              &normalRightMotors, // right drivetrain motors
                               12.7, // track width
                               lemlib::Omniwheel::NEW_325, // wheel diameter
                               450, // wheel rpm

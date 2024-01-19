@@ -8,6 +8,11 @@ void normalizeVels(float& vel1, float& vel2) {
     }
 }
 
+void setDrivetrainMotors(pros::MotorGroup *newLeftMotors, pros::MotorGroup *newRightMotors) {
+    chassis.drivetrain.leftMotors = newLeftMotors;
+    chassis.drivetrain.rightMotors = newRightMotors;
+}
+
 // Subsystem states default constructor
 SysStates::SysStates() {
     cataState = CataStates::disconnect;

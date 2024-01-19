@@ -1,3 +1,4 @@
+#include "globals.hpp"
 #include "main.h"
 #include "opcontrolHelpers.hpp"
 
@@ -26,6 +27,7 @@ void opcontrol() {
 
         switch (sysStates.cataState) {
             case CataStates::connect:
+                setDrivetrainMotors(&ptoLeftMotors, &ptoRightMotors);
                 /** TODO: release PTO from drivetrain */
 
                 if (gamepad1.x.released) sysStates.cataState = CataStates::fire;
@@ -50,6 +52,7 @@ void opcontrol() {
 
             case CataStates::disconnect:
                 /** TODO: PTO back to drivetrain */
+                setDrivetrainMotors(&normalLeftMotors, &normalRightMotors);
 
                 if (gamepad1.x.pressed) { sysStates.cataState = CataStates::fire; }
 
@@ -99,33 +102,6 @@ void opcontrol() {
                     sysStates.intakeState = IntakeStates::outtake;
                 }
 
-                break;
-        }
-
-        /** REGION: WINGS STATE MACHINES */
-        // Hold left trigger to extend wings, release to retract
-        switch (sysStates.leftWingState) {
-            case WingStates::retracted:
-                if (gamepad1.lt) { sysStates.leftWingState = WingStates::extended; }
-
-                wings.retract(Wings::L);
-                break;
-            case WingStates::extended:
-                if (!gamepad1.lt) { sysStates.leftWingState = WingStates::retracted; }
-
-                wings.extend(Wings::L);
-                break;
-        }
-        switch (sysStates.rightWingState) {
-            case WingStates::retracted:
-                if (gamepad1.lt) { sysStates.leftWingState = WingStates::extended; }
-
-                wings.retract(Wings::R);
-                break;
-            case WingStates::extended:
-                if (!gamepad1.lt) { sysStates.leftWingState = WingStates::retracted; }
-
-                wings.extend(Wings::R);
                 break;
         }
 

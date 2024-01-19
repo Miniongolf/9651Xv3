@@ -49,7 +49,7 @@
 #include "subHeads/button.hpp"
 #include "subHeads/gamepad.hpp"
 
-#include "subHeads/wings.hpp"
+#include "subHeads/pneumatics.hpp"
 
 #include "globals.hpp"
 

@@ -3,6 +3,8 @@
 
 void normalizeVels(float& vel1, float& vel2);
 
+void setDrivetrainMotors(pros::MotorGroup* newLeftMotors, pros::MotorGroup* newRightMotors);
+
 // Drive mode state machine enum
 enum class DModes { normal, reverse, semiauton };
 

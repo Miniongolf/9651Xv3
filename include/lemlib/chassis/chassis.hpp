@@ -317,6 +317,11 @@ class Chassis {
          * @return whether a motion is currently running
          */
         bool isInMotion() const;
+
+        ControllerSettings lateralSettings;
+        ControllerSettings angularSettings;
+        Drivetrain drivetrain;
+
     protected:
         /**
          * @brief Indicates that this motion is queued and blocks current task until this motion reaches front of queue
@@ -326,6 +331,7 @@ class Chassis {
          * @brief Dequeues this motion and permits queued task to run
          */
         void endMotion();
+
     private:
         bool motionRunning = false;
         bool motionQueued = false;
@@ -333,9 +339,6 @@ class Chassis {
         pros::Mutex mutex;
         float distTravelled = 0;
 
-        ControllerSettings lateralSettings;
-        ControllerSettings angularSettings;
-        Drivetrain drivetrain;
         OdomSensors sensors;
         DriveCurveFunction_t driveCurve;
 
