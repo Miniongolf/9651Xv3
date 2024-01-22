@@ -1,7 +1,5 @@
-#include "globals.hpp"
 #include "main.h"
 #include "opcontrolHelpers.hpp"
-#include "pros/misc.hpp"
 
 // TeleOp
 void opcontrol() {
@@ -34,6 +32,7 @@ void opcontrol() {
             chassis.angularSettings.kD = (gamepad1.dpadRight.pressed)  ? kD + 0.5
                                          : (gamepad1.dpadLeft.pressed) ? kD - 0.5
                                                                        : kD;
+            std::cout << static_cast<int>(sysStates.intakeState) << '\n';
         }
 
         /** REGION: CATA STATE MACHINE*/
@@ -89,6 +88,8 @@ void opcontrol() {
                     }
                 }
 
+                std::cout << "intake \n";
+
                 break;
 
             case IntakeStates::outtake:
@@ -105,6 +106,8 @@ void opcontrol() {
                     break;
                 }
 
+                std::cout << "outtake \n";
+
                 break;
 
             case IntakeStates::stop:
@@ -115,6 +118,8 @@ void opcontrol() {
                 } else if (gamepad1.rb.pressed) { // press rb to outtake
                     sysStates.intakeState = IntakeStates::outtake;
                 }
+
+                std::cout << "stop \n";
 
                 break;
         }
