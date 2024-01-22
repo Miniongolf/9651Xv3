@@ -58,7 +58,7 @@ void opcontrol() {
                 if (gamepad1.x.released) {
                     sysStates.cataState = CataStates::disconnect;
                 } else if (gamepad1.x.pressed) {
-                    sysStates.cataState = CataStates::fire;
+                    sysStates.cataState = CataStates::connect;
                 }
 
                 break;
@@ -68,7 +68,7 @@ void opcontrol() {
                 ptoPiston.set_value(false);
                 setDrivetrainMotors(&normalLeftMotors, &normalRightMotors);
 
-                if (gamepad1.x.pressed) { sysStates.cataState = CataStates::fire; }
+                if (gamepad1.x.pressed) { sysStates.cataState = CataStates::connect; }
 
                 break;
         }
