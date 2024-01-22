@@ -1,4 +1,5 @@
 #include "globals.hpp"
+#include "pros/adi.hpp"
 #include "pros/motors.hpp"
 
 // GAMEPADS
@@ -51,6 +52,7 @@ pros::MotorGroup cataMotors({
 });
 
 // SUBSYSTEMS
+pros::ADIDigitalOut ptoPiston('C');
 PistonGroup frontWings({'A', 'H'});
 PistonGroup backWings({'B', 'G'});
 

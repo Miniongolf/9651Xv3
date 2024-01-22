@@ -46,34 +46,5 @@ class Gamepad {
          *
          * @param None
          */
-        void getInputs();
-
-        /**
-         * @brief Processes the inputs from the gamepad sticks and converts them to movement powers.
-         *
-         * @param deadzone Minimum input scale to consider (cross deadzone)
-         * @param curve Curves the stick inputs (credits to Finlay 46846T for the formula)
-         * @return Float array with lateral power and turning power
-         */
-        std::array<float, 2> processSticks(float deadzone, bool curve = true);
-
-        /**
-         * @brief Sets all gamepad inputs to 0 or false (except cancel button)
-         *
-         * @param None
-         * @return `None`
-         *
-         * @note Use when running semi auton
-         */
-        void disable();
-
-        /**
-         * @brief Sets disabled to false
-         *
-         * @param None
-         * @return `None`
-         *
-         * @note Use every time semiauton is canceled or ends
-         */
-        void resume();
+        void update();
 };

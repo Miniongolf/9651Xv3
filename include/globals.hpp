@@ -32,8 +32,9 @@ extern pros::Motor intakeMotor;
 extern pros::MotorGroup cataMotors; // Catapult motor group
 
 // SUBSYSTEMS
-extern PistonGroup frontWings;
-extern PistonGroup rearWings;
+extern pros::ADIDigitalOut ptoPiston; // PTO pneumatics piston (retracted = drivetrain, extended = cata)
+extern PistonGroup frontWings; // Front wings piston group
+extern PistonGroup rearWings; // Rear wings piston group
 
 // CHASSIS PID
 extern lemlib::ControllerSettings lateralController; // LemLib Lateral PID
