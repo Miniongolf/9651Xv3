@@ -3,7 +3,7 @@
 #include "pros/motors.hpp"
 
 // GAMEPADS
-Gamepad gamepad1(pros::E_CONTROLLER_MASTER); // Primary controller
+nicklib::Gamepad gamepad1(pros::E_CONTROLLER_MASTER); // Primary controller
 
 // SENSORS
 pros::IMU imu(10);
@@ -42,7 +42,7 @@ pros::MotorGroup ptoRightMotors({
 });
 
 // INTAKE MOTOR
-pros::Motor intakeMotor(10, pros::E_MOTOR_GEAR_BLUE);
+pros::Motor intakeMotor(5, pros::E_MOTOR_GEAR_BLUE);
 
 // CATA MOTORS
 /** NOTE: these motors are the same as the drivetrain ones. */

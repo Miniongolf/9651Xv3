@@ -1,16 +1,18 @@
 #pragma once
 
-#include "lemlib/api.hpp"
 #include "pros/misc.hpp"
 #include "pros/motors.hpp"
 #include "pros/adi.hpp"
 #include "pros/imu.hpp"
 
-#include "subHeads/gamepad.hpp"
+#include "lemlib/api.hpp"
+
+#include "nicklib/api.hpp"
+
 #include "subHeads/pneumatics.hpp"
 
 // GAMEPADS
-extern Gamepad gamepad1; // Primary controller
+extern nicklib::Gamepad gamepad1; // Primary controller
 
 // SENSORS
 extern pros::IMU imu; // Inertial Measurement Unit

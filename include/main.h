@@ -43,12 +43,9 @@
 
 #include "autoSelect/selection.h"
 #include "lemlib/api.hpp"
+#include "nicklib/api.hpp"
 
 #include "subHeads/constants.hpp"
-
-#include "subHeads/button.hpp"
-#include "subHeads/gamepad.hpp"
-
 #include "subHeads/pneumatics.hpp"
 
 #include "globals.hpp"
