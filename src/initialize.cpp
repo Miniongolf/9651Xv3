@@ -12,11 +12,6 @@ void initialize() {
 
     // Initialize chassis
     chassis.calibrate();
-
-    // Tuck in wings
-    wings.retract(Wings::B);
-
-    // Default start position (will change depending on selected auton)
     chassis.setPose(0, 0, 0);
 }
 

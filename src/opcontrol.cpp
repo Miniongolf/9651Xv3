@@ -19,17 +19,31 @@ void opcontrol() {
 
     while (true) {
         /** REGION: UPDATE SYSTEM STATES */
-        gamepad1.getInputs();
+        gamepad1.update();
         robotPos = chassis.getPose();
 
-        /** REGION: CATA STATE MACHINE*/
+        /** NOTE: TESTS | DISABLE FOR COMP */
+        if (!isCompMatch) {
+            if (gamepad1.a.pressed) { autonomous(); }
+            float kP = chassis.angularSettings.kP, kD = chassis.angularSettings.kD;
+            chassis.angularSettings.kP = (gamepad1.dpadUp.pressed)     ? kP + 0.5
+                                         : (gamepad1.dpadDown.pressed) ? kP - 0.5
+                                                                       : kP;
+            chassis.angularSettings.kD = (gamepad1.dpadRight.pressed)  ? kD + 0.5
+                                         : (gamepad1.dpadLeft.pressed) ? kD - 0.5
+                                                                       : kD;
+            std::cout << static_cast<int>(sysStates.cataState) << '\n';
+        }
 
+        /** REGION: CATA STATE MACHINE*/
         switch (sysStates.cataState) {
             case CataStates::connect:
-                /** TODO: release PTO from drivetrain */
-
+                ptoPiston.set_value(true);
+                setDrivetrainMotors(&ptoLeftMotors, &ptoRightMotors);
                 if (gamepad1.x.released) sysStates.cataState = CataStates::fire;
+
                 break;
+
             case CataStates::fire:
                 cataMotors.move(127);
 
@@ -43,15 +57,17 @@ void opcontrol() {
                 if (gamepad1.x.released) {
                     sysStates.cataState = CataStates::disconnect;
                 } else if (gamepad1.x.pressed) {
-                    sysStates.cataState = CataStates::fire;
+                    sysStates.cataState = CataStates::connect;
                 }
 
                 break;
 
             case CataStates::disconnect:
                 /** TODO: PTO back to drivetrain */
+                ptoPiston.set_value(false);
+                setDrivetrainMotors(&normalLeftMotors, &normalRightMotors);
 
-                if (gamepad1.x.pressed) { sysStates.cataState = CataStates::fire; }
+                if (gamepad1.x.pressed) { sysStates.cataState = CataStates::connect; }
 
                 break;
         }
@@ -102,43 +118,9 @@ void opcontrol() {
                 break;
         }
 
-        /** REGION: WINGS STATE MACHINES */
-        // Hold left trigger to extend wings, release to retract
-        switch (sysStates.leftWingState) {
-            case WingStates::retracted:
-                if (gamepad1.lt) { sysStates.leftWingState = WingStates::extended; }
-
-                wings.retract(Wings::L);
-                break;
-            case WingStates::extended:
-                if (!gamepad1.lt) { sysStates.leftWingState = WingStates::retracted; }
-
-                wings.extend(Wings::L);
-                break;
-        }
-        switch (sysStates.rightWingState) {
-            case WingStates::retracted:
-                if (gamepad1.lt) { sysStates.leftWingState = WingStates::extended; }
-
-                wings.retract(Wings::R);
-                break;
-            case WingStates::extended:
-                if (!gamepad1.lt) { sysStates.leftWingState = WingStates::retracted; }
-
-                wings.extend(Wings::R);
-                break;
-        }
-
-        /** NOTE: TESTS | DISABLE FOR COMP */
-        if (!isCompMatch) {
-            std::cout << gamepad1.leftY << ' ' << gamepad1.rightX << '\n';
-            if (gamepad1.a.pressed) { autonomous(); }
-        }
-
         /** REGION: DRIVETRAIN COMMANDS */
         // Map stick inputs to throttleVel and turnVel
-        std::array<float, 2> vels = gamepad1.processSticks(controllerDeadzone, true);
-
+        std::array<float, 2> vels = processSticks(controllerDeadzone, true);
         throttleVel = vels[0], turnVel = vels[1];
 
         // Autoalign
@@ -169,6 +151,7 @@ void opcontrol() {
                     driveMode = DModes::reverse;
 
                 chassis.arcade(throttleVel * 127, turnVel * 127);
+
                 break;
 
             // Reverse (drive backwards)
@@ -183,6 +166,7 @@ void opcontrol() {
                 if (gamepad1.lb) driveMode = DModes::normal;
 
                 chassis.arcade(throttleVel * 127, turnVel * 127);
+
                 break;
 
             // Semiauton (disable controller inputs)
@@ -193,9 +177,10 @@ void opcontrol() {
 
                 throttleVel = 0;
                 turnVel = 0;
+                
                 break;
         }
 
-        pros::delay(20); // Delay to prevent from overdrawing cpu resources
+        pros::delay(10); // Delay to prevent from overdrawing cpu resources
     }
 }

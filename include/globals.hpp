@@ -1,16 +1,18 @@
 #pragma once
 
-#include "lemlib/api.hpp"
 #include "pros/misc.hpp"
 #include "pros/motors.hpp"
 #include "pros/adi.hpp"
 #include "pros/imu.hpp"
 
-#include "subHeads/gamepad.hpp"
-#include "subHeads/wings.hpp"
+#include "lemlib/api.hpp"
+
+#include "nicklib/api.hpp"
+
+#include "subHeads/pneumatics.hpp"
 
 // GAMEPADS
-extern Gamepad gamepad1; // Primary controller
+extern nicklib::Gamepad gamepad1; // Primary controller
 
 // SENSORS
 extern pros::IMU imu; // Inertial Measurement Unit
@@ -19,14 +21,11 @@ extern pros::IMU imu; // Inertial Measurement Unit
 extern std::array<pros::Motor, 2> ptoMotors;
 
 // MOTOR GROUPS
-extern pros::MotorGroup* leftMotorsPtr;
-extern pros::MotorGroup* rightMotorsPtr;
+extern pros::MotorGroup normalLeftMotors; // Left side drivetrain motor group (normal)
+extern pros::MotorGroup normalRightMotors; // Right side drivetrain motor group (normal)
 
-extern pros::MotorGroup normalLeftMotors; // Left side drivetrain motor group
-extern pros::MotorGroup normalRightMotors; // Right side drivetrain motor group
-
-extern pros::MotorGroup ptoLeftMotors; // Left side drivetrain motor group
-extern pros::MotorGroup ptoRightMotors; // Right side drivetrain motor group
+extern pros::MotorGroup ptoLeftMotors; // Left side drivetrain motor group (pto)
+extern pros::MotorGroup ptoRightMotors; // Right side drivetrain motor group (pto)
 
 // INTAKE MOTOR
 extern pros::Motor intakeMotor;
@@ -35,7 +34,9 @@ extern pros::Motor intakeMotor;
 extern pros::MotorGroup cataMotors; // Catapult motor group
 
 // SUBSYSTEMS
-extern Wings wings; // Wings wrapper class
+extern pros::ADIDigitalOut ptoPiston; // PTO pneumatics piston (retracted = drivetrain, extended = cata)
+extern PistonGroup frontWings; // Front wings piston group
+extern PistonGroup rearWings; // Rear wings piston group
 
 // CHASSIS PID
 extern lemlib::ControllerSettings lateralController; // LemLib Lateral PID
