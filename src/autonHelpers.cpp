@@ -28,8 +28,8 @@ void frontSafe_funct() {
     // chassis.turnTo(150, 0, 1000);
 }
 
-// Front elims auton
-void frontElims_funct() { std::cout << "Front elims auto \n"; }
+// Front elim auton
+void frontElim_funct() { std::cout << "Front elim auto \n"; }
 
 // Back qualification auton
 void backQual_funct() { std::cout << "Back qual auto \n"; }
@@ -37,5 +37,5 @@ void backQual_funct() { std::cout << "Back qual auto \n"; }
 // Back safe auton
 void backSafe_funct() { std::cout << "Back safe auto \n"; }
 
-// Back elims auton
-void backElims_funct() { std::cout << "Back elims auto \n"; }
+// Back elim auton
+void backElim_funct() { std::cout << "Back elims auto \n"; }
