@@ -1,4 +1,5 @@
 #include "globals.hpp"
+#include "lemlib/chassis/trackingWheel.hpp"
 #include "pros/adi.hpp"
 #include "pros/motors.hpp"
 
@@ -6,39 +7,39 @@
 nicklib::Gamepad gamepad1(pros::E_CONTROLLER_MASTER); // Primary controller
 
 // SENSORS
-pros::IMU imu(10);
+pros::IMU imu(13);
 
-// DRIVE MOTORS
+// // DRIVE MOTORS
 std::array<pros::Motor, 2> ptoMotors = {
-    pros::Motor(2, pros::E_MOTOR_GEAR_GREEN), // left side
+    pros::Motor(3, pros::E_MOTOR_GEAR_GREEN), // left side
     pros::Motor(-4, pros::E_MOTOR_GEAR_GREEN) // right side
 };
 
 // MOTOR GROUPS
 pros::MotorGroup normalLeftMotors({
-    pros::Motor(-1, pros::E_MOTOR_GEAR_BLUE),
-    pros::Motor(-11, pros::E_MOTOR_GEAR_BLUE),
-    pros::Motor(-20, pros::E_MOTOR_GEAR_BLUE)
+    pros::Motor(12, pros::E_MOTOR_GEAR_BLUE),
+    pros::Motor(19, pros::E_MOTOR_GEAR_BLUE),
+    // pros::Motor(-20, pros::E_MOTOR_GEAR_BLUE)
 });
 
 pros::MotorGroup normalRightMotors({
-    pros::Motor(19, pros::E_MOTOR_GEAR_BLUE),
-    pros::Motor(18, pros::E_MOTOR_GEAR_BLUE),
+    pros::Motor(-2, pros::E_MOTOR_GEAR_BLUE),
+    pros::Motor(-9, pros::E_MOTOR_GEAR_BLUE),
     pros::Motor(10, pros::E_MOTOR_GEAR_BLUE)
 });
 
 pros::MotorGroup ptoLeftMotors({
-    pros::Motor(-1, pros::E_MOTOR_GEAR_BLUE),
-    pros::Motor(-11, pros::E_MOTOR_GEAR_BLUE),
-    pros::Motor(-20, pros::E_MOTOR_GEAR_BLUE),
-    ptoMotors[0] // 5.5 watt motor
+    pros::Motor(12, pros::E_MOTOR_GEAR_BLUE),
+    pros::Motor(19, pros::E_MOTOR_GEAR_BLUE),
+    // pros::Motor(-20, pros::E_MOTOR_GEAR_BLUE),
+    // ptoMotors[0] // 5.5 watt motor
 });
 
 pros::MotorGroup ptoRightMotors({
-    pros::Motor(19, pros::E_MOTOR_GEAR_BLUE),
-    pros::Motor(18, pros::E_MOTOR_GEAR_BLUE),
-    pros::Motor(10, pros::E_MOTOR_GEAR_BLUE),
-    ptoMotors[1] // 5.5 watt motor
+    pros::Motor(-2, pros::E_MOTOR_GEAR_BLUE),
+    pros::Motor(-9, pros::E_MOTOR_GEAR_BLUE),
+    // pros::Motor(10, pros::E_MOTOR_GEAR_BLUE),
+    // ptoMotors[1] // 5.5 watt motor
 });
 
 // INTAKE MOTOR
@@ -82,10 +83,10 @@ lemlib::ControllerSettings angularController(8, // proportional gain (kP)
 // LEMLIB CHASSIS
 lemlib::Drivetrain drivetrain(&normalLeftMotors, // left drivetrain motors
                               &normalRightMotors, // right drivetrain motors
-                              12.7, // track width
-                              lemlib::Omniwheel::NEW_325, // wheel diameter
-                              450, // wheel rpm
-                              8 // chase power
+                              13.25, // track width
+                              lemlib::Omniwheel::OLD_4, // wheel diameter
+                              600, // wheel rpm
+                              2 // chase power
 );
 
 lemlib::OdomSensors odomSensors(nullptr, // vertical tracking wheel 1
