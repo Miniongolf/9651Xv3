@@ -4,16 +4,16 @@
 /**
  * LemLib path txt file assets
  */
-ASSET(jerrycurve_txt);
+
 
 // Auton selection enum
 enum class AutoSelect {
     frontQual = 1,
     frontSafe = 2,
-    frontElim = 3,
+    frontElims = 3,
     backQual = -1,
     backSafe = -2,
-    backElim = -3,
+    backElims = -3,
     doNothing = 0
 };
 
@@ -48,10 +48,10 @@ void autonomous() {
     switch (autonMode) {
         case AutoSelect::frontQual: frontQual_funct(); break;
         case AutoSelect::frontSafe: frontSafe_funct(); break;
-        case AutoSelect::frontElim: frontElim_funct(); break;
+        case AutoSelect::frontElims: frontElims_funct(); break;
         case AutoSelect::backQual: backSafe_funct(); break;
         case AutoSelect::backSafe: backSafe_funct(); break;
-        case AutoSelect::backElim: frontElim_funct(); break;
-        case AutoSelect::doNothing: backElim_funct(); break;
+        case AutoSelect::backElims: backElims_funct(); break;
+        case AutoSelect::doNothing: break;
     }
 }
