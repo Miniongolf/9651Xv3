@@ -30,7 +30,7 @@ void opcontrol() {
             chassis.angularSettings.kD = (gamepad1.dpadRight.pressed)  ? kD + 0.5
                                          : (gamepad1.dpadLeft.pressed) ? kD - 0.5
                                                                        : kD;
-            // gamepad1.controller->print(0, 0, "%f | %f", chassis.angularSettings.kP, chassis.angularSettings.kD);
+            gamepad1.controller->print(0, 0, "%f | %f", chassis.angularSettings.kP, chassis.angularSettings.kD);
         }
 
         /** REGION: CATA STATE MACHINE*/
@@ -140,7 +140,6 @@ void opcontrol() {
         switch (driveMode) {
             // Normal (drive forwards)
             case DModes::normal:
-                gamepad1.controller->print(0, 0, "%f %f", throttleVel, turnVel);
                 /** TODO: Retract back wings, use front wings */
 
                 if (chassis.isInMotion()) // Switch to semiauton when in a LemLib motion
@@ -155,7 +154,6 @@ void opcontrol() {
 
             // Reverse (drive backwards)
             case DModes::reverse:
-                gamepad1.controller->print(0, 0, "reverse");
                 throttleVel *= -1; // Reverse driving
 
                 /** TODO: Retract front wings, use back wings */
@@ -171,7 +169,6 @@ void opcontrol() {
 
             // Semiauton (disable controller inputs), hold `b` to cancel
             case DModes::semiauton:
-                gamepad1.controller->print(0, 0, "semiauton");
                 if ((int)gamepad1.b > 500) { chassis.cancelAllMotions(); }
                 if (!chassis.isInMotion()) { driveMode = DModes::normal; }
 

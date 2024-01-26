@@ -30,7 +30,7 @@ pros::Motor intakeMotor(19, pros::E_MOTOR_GEAR_BLUE);
 // SUBSYSTEMS
 pros::ADIDigitalOut ptoPiston('C');
 PistonGroup frontWings({'A', 'H'});
-PistonGroup backWings({'B', 'G'});
+PistonGroup rearWings({'B', 'G'});
 PistonGroup blocker({'D', 'E'});
 pros::ADIDigitalOut hang('F');
 
