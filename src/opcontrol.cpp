@@ -12,8 +12,6 @@ void opcontrol() {
     // Robot position pose
     lemlib::Pose robotPos = chassis.getPose();
 
-    float controllerDeadzone = DEFAULT_CONTROLLER_DEADZONE;
-
     float throttleVel, turnVel;
     float targetTheta;
 
@@ -32,7 +30,7 @@ void opcontrol() {
             chassis.angularSettings.kD = (gamepad1.dpadRight.pressed)  ? kD + 0.5
                                          : (gamepad1.dpadLeft.pressed) ? kD - 0.5
                                                                        : kD;
-            std::cout << static_cast<int>(sysStates.cataState) << '\n';
+            // gamepad1.controller->print(0, 0, "%f | %f", chassis.angularSettings.kP, chassis.angularSettings.kD);
         }
 
         /** REGION: CATA STATE MACHINE*/
@@ -120,8 +118,8 @@ void opcontrol() {
 
         /** REGION: DRIVETRAIN COMMANDS */
         // Map stick inputs to throttleVel and turnVel
-        std::array<float, 2> vels = processSticks(controllerDeadzone, true);
-        throttleVel = vels[0], turnVel = vels[1];
+        std::tuple<float, float> vels = processSticks();
+        std::tie(throttleVel, turnVel) = vels;
 
         // Autoalign
         if (fabs(gamepad1.rightY) > 0.8 && driveMode != DModes::semiauton) {
@@ -140,8 +138,9 @@ void opcontrol() {
         }
 
         switch (driveMode) {
-            // Normal (do nothing)
+            // Normal (drive forwards)
             case DModes::normal:
+                gamepad1.controller->print(0, 0, "%f %f", throttleVel, turnVel);
                 /** TODO: Retract back wings, use front wings */
 
                 if (chassis.isInMotion()) // Switch to semiauton when in a LemLib motion
@@ -156,6 +155,7 @@ void opcontrol() {
 
             // Reverse (drive backwards)
             case DModes::reverse:
+                gamepad1.controller->print(0, 0, "reverse");
                 throttleVel *= -1; // Reverse driving
 
                 /** TODO: Retract front wings, use back wings */
@@ -163,15 +163,15 @@ void opcontrol() {
                 if (chassis.isInMotion()) // Switch to semiauton when in a LemLib motion
                     driveMode = DModes::semiauton;
 
-                if (gamepad1.lb) driveMode = DModes::normal;
+                if (!gamepad1.lb) driveMode = DModes::normal;
 
                 chassis.arcade(throttleVel * 127, turnVel * 127);
 
                 break;
 
-            // Semiauton (disable controller inputs)
-            // Hold `b` to cancel
+            // Semiauton (disable controller inputs), hold `b` to cancel
             case DModes::semiauton:
+                gamepad1.controller->print(0, 0, "semiauton");
                 if ((int)gamepad1.b > 500) { chassis.cancelAllMotions(); }
                 if (!chassis.isInMotion()) { driveMode = DModes::normal; }
 

@@ -4,14 +4,22 @@
 /**
  * @brief Processes the inputs from the gamepad sticks and converts them to movement powers.
  *
- * @param deadzone Minimum input scale to consider (cross deadzone)
- * @param curve Curves the stick inputs (credits to Finlay 46846T for the formula)
- * @return Float array with lateral power and turning power
+ * @return Tuple of forwards power and turning power. Use std::tie() to unpack.
  */
-std::array<float, 2> processSticks(float deadzone, bool curve);
+std::tuple<float, float> processSticks();
 
+/**
+ * @brief Normalizes the two inputted velocities to [-1, 1].
+ * @param vel1 Reference to first velocity float
+ * @param vel2 Reference to second velocity float
+ */
 void normalizeVels(float& vel1, float& vel2);
 
+/**
+ * @brief Sets the drivetrain motors to the inputted motor groups.
+ * @param newLeftMotors Pointer to new left motor group
+ * @param newRightMotors Pointer to new right motor group
+ */
 void setDrivetrainMotors(pros::MotorGroup* newLeftMotors, pros::MotorGroup* newRightMotors);
 
 // Drive mode state machine enum
@@ -26,16 +34,18 @@ enum class CataStates { connect, fire, idle, disconnect };
 // Intake state machine enum
 enum class IntakeStates { intake, outtake, stop };
 
+// Blocker state machine enum
+enum class BlockerStates { up, down, hang };
+
 // Single wing state machine enum
-enum class WingStates { extended, retracted };
+// enum class WingStates { extended, retracted };
 
 // Subsystems state machines struct
 struct SysStates {
         SysStates();
-        SysStates(CataStates cataState, IntakeStates intakeState, std::array<WingStates, 2> wingStates);
+        SysStates(CataStates cataState, IntakeStates intakeState, BlockerStates blockerState);
 
         CataStates cataState;
         IntakeStates intakeState;
-        WingStates leftWingState;
-        WingStates rightWingState;
+        BlockerStates blockerState;
 };

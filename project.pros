@@ -220,7 +220,7 @@
                 "version": "3.8.0"
             },
             "nicklib": {
-                "location": "/Users/nicholas.cheng/Library/Application Support/PROS/templates/nicklib@1.0.0",
+                "location": "/Users/nicholas.cheng/Library/Application Support/PROS/templates/nicklib@1.1.0",
                 "metadata": {
                     "origin": "local"
                 },
@@ -230,12 +230,13 @@
                 "system_files": [
                     "include/nicklib/button.hpp",
                     "include/nicklib/gamepad.hpp",
+                    "include/nicklib/api.hpp",
                     "firmware/nicklib.a",
-                    "include/nicklib/api.hpp"
+                    "include/nicklib/util.hpp"
                 ],
                 "target": "v5",
                 "user_files": [],
-                "version": "1.0.0"
+                "version": "1.1.0"
             }
         },
         "upload_options": {

@@ -17,29 +17,29 @@ std::array<pros::Motor, 2> ptoMotors = {
 
 // MOTOR GROUPS
 pros::MotorGroup normalLeftMotors({
-    pros::Motor(12, pros::E_MOTOR_GEAR_BLUE),
-    pros::Motor(19, pros::E_MOTOR_GEAR_BLUE),
-    // pros::Motor(-20, pros::E_MOTOR_GEAR_BLUE)
+    pros::Motor(-12, pros::E_MOTOR_GEAR_BLUE),
+    pros::Motor(-19, pros::E_MOTOR_GEAR_BLUE),
+    pros::Motor(-20, pros::E_MOTOR_GEAR_BLUE)
 });
 
 pros::MotorGroup normalRightMotors({
-    pros::Motor(-2, pros::E_MOTOR_GEAR_BLUE),
-    pros::Motor(-9, pros::E_MOTOR_GEAR_BLUE),
+    pros::Motor(2, pros::E_MOTOR_GEAR_BLUE),
+    pros::Motor(8, pros::E_MOTOR_GEAR_BLUE),
     pros::Motor(10, pros::E_MOTOR_GEAR_BLUE)
 });
 
 pros::MotorGroup ptoLeftMotors({
-    pros::Motor(12, pros::E_MOTOR_GEAR_BLUE),
-    pros::Motor(19, pros::E_MOTOR_GEAR_BLUE),
-    // pros::Motor(-20, pros::E_MOTOR_GEAR_BLUE),
-    // ptoMotors[0] // 5.5 watt motor
+    pros::Motor(-12, pros::E_MOTOR_GEAR_BLUE),
+    pros::Motor(-19, pros::E_MOTOR_GEAR_BLUE),
+    pros::Motor(-20, pros::E_MOTOR_GEAR_BLUE),
+    ptoMotors[0] // 5.5 watt motor
 });
 
 pros::MotorGroup ptoRightMotors({
-    pros::Motor(-2, pros::E_MOTOR_GEAR_BLUE),
-    pros::Motor(-9, pros::E_MOTOR_GEAR_BLUE),
-    // pros::Motor(10, pros::E_MOTOR_GEAR_BLUE),
-    // ptoMotors[1] // 5.5 watt motor
+    pros::Motor(2, pros::E_MOTOR_GEAR_BLUE),
+    pros::Motor(8, pros::E_MOTOR_GEAR_BLUE),
+    pros::Motor(10, pros::E_MOTOR_GEAR_BLUE),
+    ptoMotors[1] // 5.5 watt motor
 });
 
 // INTAKE MOTOR
@@ -56,6 +56,8 @@ pros::MotorGroup cataMotors({
 pros::ADIDigitalOut ptoPiston('C');
 PistonGroup frontWings({'A', 'H'});
 PistonGroup backWings({'B', 'G'});
+PistonGroup blocker({'D', 'E'});
+pros::ADIDigitalOut hang('F');
 
 // CHASSIS PID
 lemlib::ControllerSettings lateralController(8, // proportional gain (kP)
@@ -66,7 +68,7 @@ lemlib::ControllerSettings lateralController(8, // proportional gain (kP)
                                              100, // small error range timeout, in milliseconds
                                              3, // large error range, in inches
                                              500, // large error range timeout, in milliseconds
-                                             127 // maximum acceleration (slew)
+                                             0 // maximum acceleration (slew)
 );
 
 lemlib::ControllerSettings angularController(8, // proportional gain (kP)
@@ -77,16 +79,16 @@ lemlib::ControllerSettings angularController(8, // proportional gain (kP)
                                              100, // small error range timeout, in milliseconds
                                              5, // large error range, in degrees
                                              500, // large error range timeout, in milliseconds
-                                             127 // maximum acceleration (slew)
+                                             0 // maximum acceleration (slew)
 );
 
 // LEMLIB CHASSIS
 lemlib::Drivetrain drivetrain(&normalLeftMotors, // left drivetrain motors
                               &normalRightMotors, // right drivetrain motors
-                              13.25, // track width
-                              lemlib::Omniwheel::OLD_4, // wheel diameter
-                              600, // wheel rpm
-                              2 // chase power
+                              10.7, // track width
+                              lemlib::Omniwheel::NEW_325, // wheel diameter
+                              450, // wheel rpm
+                              8 // chase power
 );
 
 lemlib::OdomSensors odomSensors(nullptr, // vertical tracking wheel 1

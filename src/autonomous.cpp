@@ -38,10 +38,10 @@ void autonomous() {
               << '\n';
     pros::delay(1000);
 
-    chassis.moveToPoint(24, 0, 2000);
-    chassis.waitUntilDone();
-    std::cout << "moved | " << chassis.getPose().x << ' ' << chassis.getPose().y << ' ' << chassis.getPose().theta
-              << '\n';
+    // chassis.moveToPoint(24, 0, 2000);
+    // chassis.waitUntilDone();
+    // std::cout << "moved | " << chassis.getPose().x << ' ' << chassis.getPose().y << ' ' << chassis.getPose().theta
+    //           << '\n';
 
     AutoSelect autonMode = static_cast<AutoSelect>(selector::auton);
 

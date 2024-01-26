@@ -19,5 +19,5 @@ temp.errors
 # template files
 *.zip
 
-# MacOS weirdness
+# MacOS
 .DS_Store

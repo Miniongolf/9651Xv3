@@ -7,7 +7,7 @@
 
 #include "lemlib/api.hpp"
 
-#include "nicklib/api.hpp"
+#include "nicklib/gamepad.hpp"
 
 #include "subHeads/pneumatics.hpp"
 

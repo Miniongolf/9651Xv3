@@ -3,15 +3,7 @@
 // Red front auton
 void frontQual_funct() {
     std::cout << "Front qual auto \n";
-    // leftMotors.move(127);
-    // rightMotors.move(127);
-    // pros::delay(1400);
-    // leftMotors.move(0);
-    // rightMotors.move(0);
-    // leftMotors.move(-70);
-    // rightMotors.move(-70);
-    // pros::delay(500);
-    // chassis.turnTo(-120, 0, 1000);
+    chassis.setPose(0, 0, 0);
 }
 
 // Red front auton
