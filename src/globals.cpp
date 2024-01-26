@@ -13,13 +13,15 @@ pros::IMU imu(8);
 pros::MotorGroup normalLeftMotors({
     pros::Motor(-10, pros::E_MOTOR_GEAR_BLUE),
     pros::Motor(-5, pros::E_MOTOR_GEAR_BLUE),
-    pros::Motor(-1, pros::E_MOTOR_GEAR_BLUE)
+    pros::Motor(-1, pros::E_MOTOR_GEAR_BLUE),
+    pros::Motor(-18, pros::E_MOTOR_GEAR_GREEN) // 5.5 watt motor
 });
 
 pros::MotorGroup normalRightMotors({
     pros::Motor(20, pros::E_MOTOR_GEAR_BLUE),
     pros::Motor(16, pros::E_MOTOR_GEAR_BLUE),
-    pros::Motor(11, pros::E_MOTOR_GEAR_BLUE)
+    pros::Motor(11, pros::E_MOTOR_GEAR_BLUE),
+    pros::Motor(17, pros::E_MOTOR_GEAR_GREEN) // 5.5 watt motor
 });
 
 // INTAKE MOTOR
