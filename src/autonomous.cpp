@@ -4,7 +4,6 @@
 /**
  * LemLib path txt file assets
  */
-ASSET(jerrycurve_txt);
 
 // Auton selection enum
 enum class AutoSelect {

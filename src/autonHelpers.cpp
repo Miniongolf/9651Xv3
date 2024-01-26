@@ -3,7 +3,15 @@
 // Red front auton
 void frontQual_funct() {
     std::cout << "Front qual auto \n";
-    chassis.setPose(0, 0, 0);
+    chassis.setPose(-50, -58, 90);
+    rearWings.extend();
+    chassis.turnTo(-65, -75, 2000, true);
+    chassis.waitUntilDone();
+    rearWings.retract();
+    chassis.moveToPoint(-58, -23, 1000);
+    //outake ball
+    chassis.moveToPoint(-30, -59, 1000);
+    chassis.moveToPoint(-4,-59,1000);
 }
 
 // Red front auton
