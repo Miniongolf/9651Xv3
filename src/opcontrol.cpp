@@ -1,3 +1,4 @@
+#include "globals.hpp"
 #include "main.h"
 #include "opcontrolHelpers.hpp"
 
@@ -26,6 +27,8 @@ void opcontrol() {
                 chassis.setPose(0,0,0);
                 chassis.turnTo(100,0,1000);
                 chassis.waitUntilDone();
+                normalLeftMotors.move_velocity(0);
+                normalRightMotors.move_velocity(0);
                 std::cout << "turned | " << chassis.getPose().theta
                           << '\n';
                 // autonomous();
