@@ -34,41 +34,41 @@ void opcontrol() {
         }
 
         /** REGION: CATA STATE MACHINE*/
-        switch (sysStates.cataState) {
-            case CataStates::connect:
-                ptoPiston.set_value(true);
-                setDrivetrainMotors(&ptoLeftMotors, &ptoRightMotors);
-                if (gamepad1.x.released) sysStates.cataState = CataStates::fire;
+        // switch (sysStates.cataState) {
+        //     case CataStates::connect:
+        //         ptoPiston.set_value(true);
+        //         setDrivetrainMotors(&ptoLeftMotors, &ptoRightMotors);
+        //         if (gamepad1.x.released) sysStates.cataState = CataStates::fire;
 
-                break;
+        //         break;
 
-            case CataStates::fire:
-                cataMotors.move(127);
+        //     case CataStates::fire:
+        //         cataMotors.move(127);
 
-                if (gamepad1.x.pressed) { sysStates.cataState = CataStates::idle; }
+        //         if (gamepad1.x.pressed) { sysStates.cataState = CataStates::idle; }
 
-                break;
+        //         break;
 
-            case CataStates::idle:
-                cataMotors.move(0);
+        //     case CataStates::idle:
+        //         cataMotors.move(0);
 
-                if (gamepad1.x.released) {
-                    sysStates.cataState = CataStates::disconnect;
-                } else if (gamepad1.x.pressed) {
-                    sysStates.cataState = CataStates::connect;
-                }
+        //         if (gamepad1.x.released) {
+        //             sysStates.cataState = CataStates::disconnect;
+        //         } else if (gamepad1.x.pressed) {
+        //             sysStates.cataState = CataStates::connect;
+        //         }
 
-                break;
+        //         break;
 
-            case CataStates::disconnect:
-                /** TODO: PTO back to drivetrain */
-                ptoPiston.set_value(false);
-                setDrivetrainMotors(&normalLeftMotors, &normalRightMotors);
+        //     case CataStates::disconnect:
+        //         /** TODO: PTO back to drivetrain */
+        //         ptoPiston.set_value(false);
+        //         setDrivetrainMotors(&normalLeftMotors, &normalRightMotors);
 
-                if (gamepad1.x.pressed) { sysStates.cataState = CataStates::connect; }
+        //         if (gamepad1.x.pressed) { sysStates.cataState = CataStates::connect; }
 
-                break;
-        }
+        //         break;
+        // }
 
         /** REGION: INTAKE STATE MACHINE*/
         // hold rt to intake, hold rb to outtake
