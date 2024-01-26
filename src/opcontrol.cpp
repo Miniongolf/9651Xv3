@@ -22,7 +22,14 @@ void opcontrol() {
 
         /** NOTE: TESTS | DISABLE FOR COMP */
         if (!isCompMatch) {
-            if (gamepad1.a.pressed) { autonomous(); }
+            if (gamepad1.a.pressed) { 
+                chassis.setPose(0,0,0);
+                chassis.turnTo(100,0,1000);
+                chassis.waitUntilDone();
+                std::cout << "turned | " << chassis.getPose().theta
+                          << '\n';
+                // autonomous();
+            }
             float kP = chassis.angularSettings.kP, kD = chassis.angularSettings.kD;
             chassis.angularSettings.kP = (gamepad1.dpadUp.pressed)     ? kP + 1
                                          : (gamepad1.dpadDown.pressed) ? kP - 1
