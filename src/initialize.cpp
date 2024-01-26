@@ -13,7 +13,6 @@ void initialize() {
 
     normalLeftMotors.set_brake_modes(pros::E_MOTOR_BRAKE_BRAKE);
     normalRightMotors.set_brake_modes(pros::E_MOTOR_BRAKE_BRAKE);
-    
     // Initialize chassis
     chassis.calibrate();
     chassis.setPose(0, 0, 0);
