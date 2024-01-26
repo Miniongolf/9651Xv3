@@ -24,13 +24,13 @@ void opcontrol() {
         if (!isCompMatch) {
             if (gamepad1.a.pressed) { autonomous(); }
             float kP = chassis.angularSettings.kP, kD = chassis.angularSettings.kD;
-            chassis.angularSettings.kP = (gamepad1.dpadUp.pressed)     ? kP + 0.5
-                                         : (gamepad1.dpadDown.pressed) ? kP - 0.5
+            chassis.angularSettings.kP = (gamepad1.dpadUp.pressed)     ? kP + 1
+                                         : (gamepad1.dpadDown.pressed) ? kP - 1
                                                                        : kP;
-            chassis.angularSettings.kD = (gamepad1.dpadRight.pressed)  ? kD + 0.5
-                                         : (gamepad1.dpadLeft.pressed) ? kD - 0.5
+            chassis.angularSettings.kD = (gamepad1.dpadRight.pressed)  ? kD + 1
+                                         : (gamepad1.dpadLeft.pressed) ? kD - 1
                                                                        : kD;
-            gamepad1.controller->print(0, 0, "%f | %f", chassis.angularSettings.kP, chassis.angularSettings.kD);
+            gamepad1.controller->print(0, 0, "%d | %d", (int)chassis.angularSettings.kP, (int)chassis.angularSettings.kD);
         }
 
         /** REGION: CATA STATE MACHINE*/
