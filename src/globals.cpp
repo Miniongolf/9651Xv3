@@ -7,23 +7,23 @@
 nicklib::Gamepad gamepad1(pros::E_CONTROLLER_MASTER); // Primary controller
 
 // SENSORS
-pros::IMU imu(13);
+pros::IMU imu(8);
 
 // MOTOR GROUPS
 pros::MotorGroup normalLeftMotors({
-    pros::Motor(-12, pros::E_MOTOR_GEAR_BLUE),
-    pros::Motor(-19, pros::E_MOTOR_GEAR_BLUE),
-    pros::Motor(-20, pros::E_MOTOR_GEAR_BLUE)
+    pros::Motor(-10, pros::E_MOTOR_GEAR_BLUE),
+    pros::Motor(-5, pros::E_MOTOR_GEAR_BLUE),
+    pros::Motor(-1, pros::E_MOTOR_GEAR_BLUE)
 });
 
 pros::MotorGroup normalRightMotors({
-    pros::Motor(2, pros::E_MOTOR_GEAR_BLUE),
-    pros::Motor(8, pros::E_MOTOR_GEAR_BLUE),
-    pros::Motor(10, pros::E_MOTOR_GEAR_BLUE)
+    pros::Motor(20, pros::E_MOTOR_GEAR_BLUE),
+    pros::Motor(16, pros::E_MOTOR_GEAR_BLUE),
+    pros::Motor(11, pros::E_MOTOR_GEAR_BLUE)
 });
 
 // INTAKE MOTOR
-pros::Motor intakeMotor(5, pros::E_MOTOR_GEAR_BLUE);
+pros::Motor intakeMotor(19, pros::E_MOTOR_GEAR_BLUE);
 
 // SUBSYSTEMS
 pros::ADIDigitalOut ptoPiston('C');
