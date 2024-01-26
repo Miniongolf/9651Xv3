@@ -9,12 +9,6 @@ nicklib::Gamepad gamepad1(pros::E_CONTROLLER_MASTER); // Primary controller
 // SENSORS
 pros::IMU imu(13);
 
-// // DRIVE MOTORS
-std::array<pros::Motor, 2> ptoMotors = {
-    pros::Motor(3, pros::E_MOTOR_GEAR_GREEN), // left side
-    pros::Motor(-4, pros::E_MOTOR_GEAR_GREEN) // right side
-};
-
 // MOTOR GROUPS
 pros::MotorGroup normalLeftMotors({
     pros::Motor(-12, pros::E_MOTOR_GEAR_BLUE),
@@ -28,29 +22,8 @@ pros::MotorGroup normalRightMotors({
     pros::Motor(10, pros::E_MOTOR_GEAR_BLUE)
 });
 
-pros::MotorGroup ptoLeftMotors({
-    pros::Motor(-12, pros::E_MOTOR_GEAR_BLUE),
-    pros::Motor(-19, pros::E_MOTOR_GEAR_BLUE),
-    pros::Motor(-20, pros::E_MOTOR_GEAR_BLUE),
-    ptoMotors[0] // 5.5 watt motor
-});
-
-pros::MotorGroup ptoRightMotors({
-    pros::Motor(2, pros::E_MOTOR_GEAR_BLUE),
-    pros::Motor(8, pros::E_MOTOR_GEAR_BLUE),
-    pros::Motor(10, pros::E_MOTOR_GEAR_BLUE),
-    ptoMotors[1] // 5.5 watt motor
-});
-
 // INTAKE MOTOR
 pros::Motor intakeMotor(5, pros::E_MOTOR_GEAR_BLUE);
-
-// CATA MOTORS
-/** NOTE: these motors are the same as the drivetrain ones. */
-pros::MotorGroup cataMotors({
-    ptoMotors[0], // left side
-    ptoMotors[1] // right side
-});
 
 // SUBSYSTEMS
 pros::ADIDigitalOut ptoPiston('C');
