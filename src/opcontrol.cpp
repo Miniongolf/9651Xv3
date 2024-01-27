@@ -130,7 +130,9 @@ void opcontrol() {
         /** REGION: DRIVETRAIN COMMANDS */
         // Map stick inputs to throttleVel and turnVel
         std::tie(throttleVel, turnVel) = processSticks();
-
+        std::array<float, 2> vels = nicklib::normalizeVels(throttleVel, turnVel);
+        throttleVel = vels[0], turnVel = vels[1];
+        
         // Autoalign
         if (fabs(gamepad1.rightY) > 0.8 && driveMode != DModes::semiauton) {
             targetTheta = (gamepad1.rightY > 0.75) ? 90 : -90;
@@ -139,14 +141,6 @@ void opcontrol() {
         }
 
         /** REGION: DRIVE MODE STATE MACHINE */
-        normalizeVels(throttleVel, turnVel);
-
-        // Precision drive (half speed)
-        if (gamepad1.lt) {
-            throttleVel /= 2;
-            turnVel /= 2;
-        }
-
         switch (driveMode) {
             // Normal (drive forwards)
             case DModes::normal:

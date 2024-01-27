@@ -8,20 +8,6 @@
  */
 std::tuple<float, float> processSticks();
 
-/**
- * @brief Normalizes the two inputted velocities to [-1, 1].
- * @param vel1 Reference to first velocity float
- * @param vel2 Reference to second velocity float
- */
-void normalizeVels(float& vel1, float& vel2);
-
-/**
- * @brief Sets the drivetrain motors to the inputted motor groups.
- * @param newLeftMotors Pointer to new left motor group
- * @param newRightMotors Pointer to new right motor group
- */
-void setDrivetrainMotors(pros::MotorGroup* newLeftMotors, pros::MotorGroup* newRightMotors);
-
 // Drive mode state machine enum
 enum class DModes { normal, reverse, semiauton };
 

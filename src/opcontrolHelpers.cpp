@@ -12,21 +12,6 @@ std::tuple<float, float> processSticks() {
     return std::make_tuple(forwardsVel, turnVel * TURN_CONST);
 }
 
-
-
-void normalizeVels(float& vel1, float& vel2) {
-    float highVel = std::max(fabs(vel1), fabs(vel2));
-    if (highVel > 1) {
-        vel1 /= highVel;
-        vel2 /= highVel;
-    }
-}
-
-void setDrivetrainMotors(pros::MotorGroup* newLeftMotors, pros::MotorGroup* newRightMotors) {
-    chassis.drivetrain.leftMotors = newLeftMotors;
-    chassis.drivetrain.rightMotors = newRightMotors;
-}
-
 // Subsystem states default constructor
 SysStates::SysStates() {
     cataState = CataStates::disconnect;
