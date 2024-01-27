@@ -25,16 +25,6 @@ pros::MotorGroup normalRightMotors({
     
 });
 
-// INTAKE MOTOR
-pros::Motor intakeMotor(9, pros::E_MOTOR_GEAR_BLUE);
-
-// SUBSYSTEMS
-pros::ADIDigitalOut ptoPiston('C');
-PistonGroup frontWings({'A', 'H'});
-PistonGroup rearWings({'B', 'G'});
-PistonGroup blocker({'D', 'E'});
-pros::ADIDigitalOut hang('F'); 
-
 // CHASSIS PID
 lemlib::ControllerSettings lateralController(8, // proportional gain (kP)
                                              0, // integral gain (kI)
