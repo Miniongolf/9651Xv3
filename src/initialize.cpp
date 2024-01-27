@@ -10,6 +10,9 @@ void initialize() {
     selector::init();
     normalLeftMotors.set_brake_modes(pros::E_MOTOR_BRAKE_BRAKE);
     normalRightMotors.set_brake_modes(pros::E_MOTOR_BRAKE_BRAKE);
+
+    rearWings.set_value(true);
+    frontWings.set_value(true);
     // Initialize chassis
     chassis.calibrate();
     chassis.setPose(0, 0, 0);

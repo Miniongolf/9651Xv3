@@ -15,6 +15,8 @@ class PistonGroup {
         void extend();
         void retract();
         void toggle();
+
+        void set_value(bool extended);
         
         bool isExtended = false;
 

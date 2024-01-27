@@ -17,15 +17,15 @@ void frontQual_funct() {
 // Red front auton
 void frontSafe_funct() {
     std::cout << "Front safe auto \n";
-    // leftMotors.move(127);
-    // rightMotors.move(127);
-    // pros::delay(1400);
-    // leftMotors.move(0);
-    // rightMotors.move(0);
-    // leftMotors.move(-70);
-    // rightMotors.move(-70);
-    // pros::delay(500);
-    // chassis.turnTo(150, 0, 1000);
+    normalLeftMotors.move(127);
+    normalRightMotors.move(127);
+    pros::delay(1400);
+    normalLeftMotors.move(0);
+    normalRightMotors.move(0);
+    normalLeftMotors.move(-70);
+    normalRightMotors.move(-70);
+    pros::delay(500);
+    chassis.turnTo(150, 0, 1000);
 }
 
 // Front elim auton

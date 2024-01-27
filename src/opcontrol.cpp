@@ -41,7 +41,7 @@ void opcontrol() {
             chassis.angularSettings.kD = (gamepad1.dpadRight.pressed)  ? kD + 1
                                          : (gamepad1.dpadLeft.pressed) ? kD - 1
                                                                        : kD;
-            // gamepad1.controller->print(0, 0, "%d | %d", (int)chassis.angularSettings.kP, (int)chassis.angularSettings.kD);
+            gamepad1.controller->print(0, 0, "%d | %d", (int)chassis.angularSettings.kP, (int)chassis.angularSettings.kD);
         }
 
         /** REGION: INTAKE STATE MACHINE*/
@@ -108,8 +108,8 @@ void opcontrol() {
             // Normal (drive forwards)
             case DModes::normal:
                 // Retract back wings, use front wings 
-                rearWings.set_value(false);
-                frontWings.set_value((bool)gamepad1.lt);
+                rearWings.set_value(true);
+                frontWings.set_value(!(bool)gamepad1.lt);
 
                 // Switch to semiauton when in a LemLib motion
                 if (chassis.isInMotion()) driveMode = DModes::semiauton;
@@ -125,8 +125,8 @@ void opcontrol() {
                 throttleVel *= -1; // Reverse driving
 
                 // Retract front wings, use back wings
-                frontWings.set_value(false);
-                rearWings.set_value((bool)gamepad1.lt);
+                frontWings.set_value(true);
+                rearWings.set_value(!(bool)gamepad1.lt);
 
                 // Switch to semiauton when in a LemLib motion
                 if (chassis.isInMotion()) driveMode = DModes::semiauton;

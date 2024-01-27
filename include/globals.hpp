@@ -28,7 +28,7 @@ extern pros::Motor intakeMotor;
 extern pros::MotorGroup cataMotors; // Catapult motor group
 
 // SUBSYSTEMS
-extern pros::ADIDigitalOut frontWings; // Front wings piston group
+extern PistonGroup frontWings; // Front wings piston group
 extern pros::ADIDigitalOut rearWings; // Rear wings piston
 
 // CHASSIS PID

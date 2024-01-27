@@ -29,7 +29,7 @@ pros::MotorGroup normalRightMotors({
 pros::Motor intakeMotor(9, pros::E_MOTOR_GEAR_BLUE);
 
 // SUBSYSTEMS
-pros::ADIDigitalOut frontWings('G');
+PistonGroup frontWings({'F', 'G'});
 pros::ADIDigitalOut rearWings('H');
 
 // CHASSIS PID
@@ -44,9 +44,9 @@ lemlib::ControllerSettings lateralController(8, // proportional gain (kP)
                                              0 // maximum acceleration (slew)
 );
 
-lemlib::ControllerSettings angularController(8, // proportional gain (kP)
+lemlib::ControllerSettings angularController(5, // proportional gain (kP)
                                              0, // integral gain (kI)
-                                             0, // derivative gain (kD)
+                                             3, // derivative gain (kD)
                                              0, // anti windup
                                              3, // small error range, in degrees
                                              100, // small error range timeout, in milliseconds

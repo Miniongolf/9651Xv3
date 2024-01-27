@@ -33,3 +33,10 @@ void PistonGroup::toggle() {
     }
     this->isExtended = !isExtended;
 }
+
+void PistonGroup::set_value(bool extended) {
+    for (pros::ADIDigitalOut piston : this->pistonsVec) {
+        piston.set_value(extended);
+    }
+    this->isExtended = extended;
+}
