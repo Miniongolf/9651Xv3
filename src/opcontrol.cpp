@@ -24,15 +24,15 @@ void opcontrol() {
         /** NOTE: TESTS | DISABLE FOR COMP */
         if (!isCompMatch) {
             if (gamepad1.a.pressed) { 
-                std::cout << "A PRESSED \n";
-                chassis.setPose(0,0,0);
-                chassis.turnTo(100,0,1000);
-                chassis.waitUntilDone();
-                normalLeftMotors.move_velocity(0);
-                normalRightMotors.move_velocity(0);
-                std::cout << "turned | " << chassis.getPose().theta
-                          << '\n';
-                // autonomous();
+                // std::cout << "A PRESSED \n";
+                // chassis.setPose(0,0,0);
+                // chassis.turnTo(100,0,1000);
+                // chassis.waitUntilDone();
+                // normalLeftMotors.move_velocity(0);
+                // normalRightMotors.move_velocity(0);
+                // std::cout << "turned | " << chassis.getPose().theta
+                //           << '\n';
+                autonomous();
             }
             float kP = chassis.angularSettings.kP, kD = chassis.angularSettings.kD;
             chassis.angularSettings.kP = (gamepad1.dpadUp.pressed)     ? kP + 1
@@ -43,43 +43,6 @@ void opcontrol() {
                                                                        : kD;
             // gamepad1.controller->print(0, 0, "%d | %d", (int)chassis.angularSettings.kP, (int)chassis.angularSettings.kD);
         }
-
-        /** REGION: CATA STATE MACHINE*/
-        // switch (sysStates.cataState) {
-        //     case CataStates::connect:
-        //         ptoPiston.set_value(true);
-        //         setDrivetrainMotors(&ptoLeftMotors, &ptoRightMotors);
-        //         if (gamepad1.x.released) sysStates.cataState = CataStates::fire;
-
-        //         break;
-
-        //     case CataStates::fire:
-        //         cataMotors.move(127);
-
-        //         if (gamepad1.x.pressed) { sysStates.cataState = CataStates::idle; }
-
-        //         break;
-
-        //     case CataStates::idle:
-        //         cataMotors.move(0);
-
-        //         if (gamepad1.x.released) {
-        //             sysStates.cataState = CataStates::disconnect;
-        //         } else if (gamepad1.x.pressed) {
-        //             sysStates.cataState = CataStates::connect;
-        //         }
-
-        //         break;
-
-        //     case CataStates::disconnect:
-        //         /** TODO: PTO back to drivetrain */
-        //         ptoPiston.set_value(false);
-        //         setDrivetrainMotors(&normalLeftMotors, &normalRightMotors);
-
-        //         if (gamepad1.x.pressed) { sysStates.cataState = CataStates::connect; }
-
-        //         break;
-        // }
 
         /** REGION: INTAKE STATE MACHINE*/
         // hold rt to intake, hold rb to outtake

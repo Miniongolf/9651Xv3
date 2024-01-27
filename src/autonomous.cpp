@@ -1,3 +1,4 @@
+#include "autoSelect/selection.h"
 #include "autonHelpers.hpp"
 #include "main.h"
 
@@ -43,6 +44,8 @@ void autonomous() {
     //           << '\n';
 
     AutoSelect autonMode = static_cast<AutoSelect>(selector::auton);
+
+    std::cout << selector::auton << '\n';
 
     switch (autonMode) {
         case AutoSelect::frontQual: frontQual_funct(); break;
