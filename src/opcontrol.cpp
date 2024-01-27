@@ -37,7 +37,7 @@ void opcontrol() {
         /** REGION: CATA STATE MACHINE*/
         switch (sysStates.cataState) {
             case CataStates::fire:
-                cataMotors.move(127);
+                cataMotors.move(110);
 
                 if (gamepad1.x.pressed) { sysStates.cataState = CataStates::idle; }
 
