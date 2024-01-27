@@ -9,7 +9,6 @@ void opcontrol() {
     // System states
     SysStates sysStates;
 
-
     // Robot position pose
     lemlib::Pose robotPos = chassis.getPose();
 
@@ -23,63 +22,41 @@ void opcontrol() {
 
         /** NOTE: TESTS | DISABLE FOR COMP */
         if (!isCompMatch) {
-            if (gamepad1.a.pressed) { 
+            if (gamepad1.a.pressed) {
                 std::cout << "A PRESSED \n";
-                chassis.setPose(0,0,0);
-                chassis.turnTo(100,0,1000);
+                chassis.setPose(0, 0, 0);
+                chassis.turnTo(100, 0, 1000);
                 chassis.waitUntilDone();
                 normalLeftMotors.move_velocity(0);
                 normalRightMotors.move_velocity(0);
-                std::cout << "turned | " << chassis.getPose().theta
-                          << '\n';
+                std::cout << "turned | " << chassis.getPose().theta << '\n';
                 // autonomous();
             }
             float kP = chassis.angularSettings.kP, kD = chassis.angularSettings.kD;
-            chassis.angularSettings.kP = (gamepad1.dpadUp.pressed)     ? kP + 1
-                                         : (gamepad1.dpadDown.pressed) ? kP - 1
-                                                                       : kP;
+            chassis.angularSettings.kP = (gamepad1.dpadUp.pressed) ? kP + 1 : (gamepad1.dpadDown.pressed) ? kP - 1 : kP;
             chassis.angularSettings.kD = (gamepad1.dpadRight.pressed)  ? kD + 1
                                          : (gamepad1.dpadLeft.pressed) ? kD - 1
                                                                        : kD;
-            // gamepad1.controller->print(0, 0, "%d | %d", (int)chassis.angularSettings.kP, (int)chassis.angularSettings.kD);
+            // gamepad1.controller->print(0, 0, "%d | %d", (int)chassis.angularSettings.kP,
+            // (int)chassis.angularSettings.kD);
         }
 
         /** REGION: CATA STATE MACHINE*/
-        // switch (sysStates.cataState) {
-        //     case CataStates::connect:
-        //         ptoPiston.set_value(true);
-        //         setDrivetrainMotors(&ptoLeftMotors, &ptoRightMotors);
-        //         if (gamepad1.x.released) sysStates.cataState = CataStates::fire;
+        switch (sysStates.cataState) {
+            case CataStates::fire:
+                cataMotors.move(127);
 
-        //         break;
+                if (gamepad1.x.pressed) { sysStates.cataState = CataStates::idle; }
 
-        //     case CataStates::fire:
-        //         cataMotors.move(127);
+                break;
 
-        //         if (gamepad1.x.pressed) { sysStates.cataState = CataStates::idle; }
+            case CataStates::idle:
+                cataMotors.move(0);
 
-        //         break;
+                if (gamepad1.x.pressed) { sysStates.cataState = CataStates::fire; }
 
-        //     case CataStates::idle:
-        //         cataMotors.move(0);
-
-        //         if (gamepad1.x.released) {
-        //             sysStates.cataState = CataStates::disconnect;
-        //         } else if (gamepad1.x.pressed) {
-        //             sysStates.cataState = CataStates::connect;
-        //         }
-
-        //         break;
-
-        //     case CataStates::disconnect:
-        //         /** TODO: PTO back to drivetrain */
-        //         ptoPiston.set_value(false);
-        //         setDrivetrainMotors(&normalLeftMotors, &normalRightMotors);
-
-        //         if (gamepad1.x.pressed) { sysStates.cataState = CataStates::connect; }
-
-        //         break;
-        // }
+                break;
+        }
 
         /** REGION: INTAKE STATE MACHINE*/
         // hold rt to intake, hold rb to outtake
@@ -132,7 +109,7 @@ void opcontrol() {
         std::tie(throttleVel, turnVel) = processSticks();
         std::array<float, 2> vels = nicklib::normalizeVels(throttleVel, turnVel);
         throttleVel = vels[0], turnVel = vels[1];
-        gamepad1.controller->print(0, 0, "%d | %d", (int)(throttleVel*100), (int)(turnVel*100));
+        gamepad1.controller->print(0, 0, "%d | %d", (int)(throttleVel * 100), (int)(turnVel * 100));
 
         // Autoalign
         if (fabs(gamepad1.rightY) > 0.8 && driveMode != DModes::semiauton) {
@@ -179,7 +156,7 @@ void opcontrol() {
 
                 throttleVel = 0;
                 turnVel = 0;
-                
+
                 break;
         }
 
