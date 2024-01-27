@@ -14,25 +14,25 @@ pros::MotorGroup normalLeftMotors({
     pros::Motor(-10, pros::E_MOTOR_GEAR_BLUE),
     pros::Motor(-5, pros::E_MOTOR_GEAR_BLUE),
     pros::Motor(-1, pros::E_MOTOR_GEAR_BLUE),
-    pros::Motor(-18, pros::E_MOTOR_GEAR_GREEN) // 5.5 watt motor
+    pros::Motor(-15, pros::E_MOTOR_GEAR_GREEN) // 5.5 watt motor
 });
 
 pros::MotorGroup normalRightMotors({
     pros::Motor(20, pros::E_MOTOR_GEAR_BLUE),
     pros::Motor(16, pros::E_MOTOR_GEAR_BLUE),
     pros::Motor(11, pros::E_MOTOR_GEAR_BLUE),
-    pros::Motor(17, pros::E_MOTOR_GEAR_GREEN) // 5.5 watt motor
+    pros::Motor(6, pros::E_MOTOR_GEAR_GREEN) // 5.5 watt motor
 });
 
 // INTAKE MOTOR
-pros::Motor intakeMotor(19, pros::E_MOTOR_GEAR_BLUE);
+pros::Motor intakeMotor(9, pros::E_MOTOR_GEAR_BLUE);
 
 // SUBSYSTEMS
 pros::ADIDigitalOut ptoPiston('C');
 PistonGroup frontWings({'A', 'H'});
 PistonGroup rearWings({'B', 'G'});
 PistonGroup blocker({'D', 'E'});
-pros::ADIDigitalOut hang('F');
+pros::ADIDigitalOut hang('F'); 
 
 // CHASSIS PID
 lemlib::ControllerSettings lateralController(8, // proportional gain (kP)

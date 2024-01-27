@@ -24,6 +24,7 @@ void opcontrol() {
         /** NOTE: TESTS | DISABLE FOR COMP */
         if (!isCompMatch) {
             if (gamepad1.a.pressed) { 
+                std::cout << "A PRESSED \n";
                 chassis.setPose(0,0,0);
                 chassis.turnTo(100,0,1000);
                 chassis.waitUntilDone();
@@ -128,8 +129,7 @@ void opcontrol() {
 
         /** REGION: DRIVETRAIN COMMANDS */
         // Map stick inputs to throttleVel and turnVel
-        std::tuple<float, float> vels = processSticks();
-        std::tie(throttleVel, turnVel) = vels;
+        std::tie(throttleVel, turnVel) = processSticks();
 
         // Autoalign
         if (fabs(gamepad1.rightY) > 0.8 && driveMode != DModes::semiauton) {
