@@ -28,8 +28,9 @@ enum class BlockerStates { up, down, hang };
 
 // Subsystems state machines struct
 struct SysStates {
-        SysStates();
-        SysStates(CataStates cataState, IntakeStates intakeState, BlockerStates blockerState);
+        SysStates(CataStates cataState = CataStates::disconnect,
+                  IntakeStates intakeState = IntakeStates::stop,
+                  BlockerStates blockerState = BlockerStates::down);
 
         CataStates cataState;
         IntakeStates intakeState;

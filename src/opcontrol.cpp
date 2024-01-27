@@ -1,14 +1,14 @@
-#include "globals.hpp"
 #include "main.h"
 #include "opcontrolHelpers.hpp"
 
 // TeleOp
 void opcontrol() {
+    // Drive mode enums
+    DModes driveMode = DModes::normal;
+
     // System states
     SysStates sysStates;
 
-    // Drive mode enums
-    DModes driveMode = DModes::normal;
 
     // Robot position pose
     lemlib::Pose robotPos = chassis.getPose();
@@ -41,7 +41,7 @@ void opcontrol() {
             chassis.angularSettings.kD = (gamepad1.dpadRight.pressed)  ? kD + 1
                                          : (gamepad1.dpadLeft.pressed) ? kD - 1
                                                                        : kD;
-            gamepad1.controller->print(0, 0, "%d | %d", (int)chassis.angularSettings.kP, (int)chassis.angularSettings.kD);
+            // gamepad1.controller->print(0, 0, "%d | %d", (int)chassis.angularSettings.kP, (int)chassis.angularSettings.kD);
         }
 
         /** REGION: CATA STATE MACHINE*/
@@ -132,7 +132,8 @@ void opcontrol() {
         std::tie(throttleVel, turnVel) = processSticks();
         std::array<float, 2> vels = nicklib::normalizeVels(throttleVel, turnVel);
         throttleVel = vels[0], turnVel = vels[1];
-        
+        gamepad1.controller->print(0, 0, "%d | %d", (int)(throttleVel*100), (int)(turnVel*100));
+
         // Autoalign
         if (fabs(gamepad1.rightY) > 0.8 && driveMode != DModes::semiauton) {
             targetTheta = (gamepad1.rightY > 0.75) ? 90 : -90;
