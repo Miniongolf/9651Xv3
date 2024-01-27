@@ -24,15 +24,15 @@ void opcontrol() {
         /** NOTE: TESTS | DISABLE FOR COMP */
         if (!isCompMatch) {
             if (gamepad1.a.pressed) { 
-                // std::cout << "A PRESSED \n";
-                // chassis.setPose(0,0,0);
-                // chassis.turnTo(100,0,1000);
-                // chassis.waitUntilDone();
-                // normalLeftMotors.move_velocity(0);
-                // normalRightMotors.move_velocity(0);
-                // std::cout << "turned | " << chassis.getPose().theta
-                //           << '\n';
-                autonomous();
+                std::cout << "A PRESSED \n";
+                chassis.setPose(0,0,0);
+                chassis.turnTo(100,0,1000);
+                chassis.waitUntilDone();
+                normalLeftMotors.move_velocity(0);
+                normalRightMotors.move_velocity(0);
+                std::cout << "turned | " << chassis.getPose().theta
+                          << '\n';
+                // autonomous();
             }
             float kP = chassis.angularSettings.kP, kD = chassis.angularSettings.kD;
             chassis.angularSettings.kP = (gamepad1.dpadUp.pressed)     ? kP + 1
@@ -95,10 +95,9 @@ void opcontrol() {
         std::tie(throttleVel, turnVel) = processSticks();
         std::array<float, 2> vels = nicklib::normalizeVels(throttleVel, turnVel);
         throttleVel = vels[0], turnVel = vels[1];
-        gamepad1.controller->print(0, 0, "%d | %d", (int)(throttleVel*100), (int)(turnVel*100));
 
         // Autoalign
-        if (fabs(gamepad1.rightY) > 0.8 && driveMode != DModes::semiauton) {
+        if ((std::fabs(gamepad1.rightY) > 0.8) && (driveMode != DModes::semiauton)) {
             targetTheta = (gamepad1.rightY > 0.75) ? 90 : -90;
             targetTheta = lemlib::degToRad(targetTheta);
             chassis.turnTo(100 * cos(targetTheta), 100 * sin(targetTheta), 750);
