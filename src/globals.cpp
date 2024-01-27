@@ -7,21 +7,22 @@
 nicklib::Gamepad gamepad1(pros::E_CONTROLLER_MASTER); // Primary controller
 
 // SENSORS
-pros::IMU imu(8);
+pros::IMU imu(12);
 
 // MOTOR GROUPS
 pros::MotorGroup normalLeftMotors({
-    pros::Motor(-10, pros::E_MOTOR_GEAR_BLUE),
-    pros::Motor(-5, pros::E_MOTOR_GEAR_BLUE),
-    pros::Motor(-1, pros::E_MOTOR_GEAR_BLUE),
-    pros::Motor(-15, pros::E_MOTOR_GEAR_GREEN) // 5.5 watt motor
+    pros::Motor(-20, pros::E_MOTOR_GEAR_BLUE),
+    pros::Motor(-16, pros::E_MOTOR_GEAR_BLUE),
+    pros::Motor(-11, pros::E_MOTOR_GEAR_BLUE),
+    pros::Motor(-6, pros::E_MOTOR_GEAR_GREEN) // 5.5 watt motor
 });
 
 pros::MotorGroup normalRightMotors({
-    pros::Motor(20, pros::E_MOTOR_GEAR_BLUE),
-    pros::Motor(16, pros::E_MOTOR_GEAR_BLUE),
-    pros::Motor(11, pros::E_MOTOR_GEAR_BLUE),
-    pros::Motor(6, pros::E_MOTOR_GEAR_GREEN) // 5.5 watt motor
+    pros::Motor(10, pros::E_MOTOR_GEAR_BLUE),
+    pros::Motor(3, pros::E_MOTOR_GEAR_BLUE),
+    pros::Motor(1, pros::E_MOTOR_GEAR_BLUE),
+    pros::Motor(15, pros::E_MOTOR_GEAR_GREEN) // 5.5 watt motor
+    
 });
 
 // INTAKE MOTOR
