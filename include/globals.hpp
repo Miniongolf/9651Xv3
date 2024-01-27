@@ -24,19 +24,8 @@ extern std::array<pros::Motor, 2> ptoMotors;
 extern pros::MotorGroup normalLeftMotors; // Left side drivetrain motor group (normal)
 extern pros::MotorGroup normalRightMotors; // Right side drivetrain motor group (normal)
 
-extern pros::MotorGroup ptoLeftMotors; // Left side drivetrain motor group (pto)
-extern pros::MotorGroup ptoRightMotors; // Right side drivetrain motor group (pto)
-
-// INTAKE MOTOR
-extern pros::Motor intakeMotor;
-
 // CATA MOTORS
 extern pros::MotorGroup cataMotors; // Catapult motor group
-
-// SUBSYSTEMS
-extern pros::ADIDigitalOut ptoPiston; // PTO pneumatics piston (retracted = drivetrain, extended = cata)
-extern PistonGroup frontWings; // Front wings piston group
-extern PistonGroup rearWings; // Rear wings piston group
 
 // CHASSIS PID
 extern lemlib::ControllerSettings lateralController; // LemLib Lateral PID

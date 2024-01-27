@@ -15,7 +15,7 @@ enum class DModes { normal, reverse, semiauton };
 enum class AutoAlignStates { off, start, on, stop };
 
 // Catapult state machine enum
-enum class CataStates { connect, fire, idle, disconnect };
+enum class CataStates { fire, idle };
 
 // Intake state machine enum
 enum class IntakeStates { intake, outtake, stop };
@@ -28,7 +28,7 @@ enum class BlockerStates { up, down, hang };
 
 // Subsystems state machines struct
 struct SysStates {
-        SysStates(CataStates cataState = CataStates::disconnect,
+        SysStates(CataStates cataState = CataStates::idle,
                   IntakeStates intakeState = IntakeStates::stop,
                   BlockerStates blockerState = BlockerStates::down);
 

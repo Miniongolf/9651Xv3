@@ -1,4 +1,5 @@
 #include "autonHelpers.hpp"
+#include "globals.hpp"
 #include "main.h"
 
 /**
@@ -28,29 +29,12 @@ enum class AutoSelect {
  * from where it left off.
  */
 void autonomous() {
-    std::cout << "auton\n";
-    chassis.setPose(0, 0, 0);
-
-    chassis.turnTo(100, 0, 1000);
-    chassis.waitUntilDone();
-    std::cout << "turned | " << chassis.getPose().x << ' ' << chassis.getPose().y << ' ' << chassis.getPose().theta
-              << '\n';
-    pros::delay(1000);
-
-    // chassis.moveToPoint(24, 0, 2000);
-    // chassis.waitUntilDone();
-    // std::cout << "moved | " << chassis.getPose().x << ' ' << chassis.getPose().y << ' ' << chassis.getPose().theta
-    //           << '\n';
-
-    AutoSelect autonMode = static_cast<AutoSelect>(selector::auton);
-
-    switch (autonMode) {
-        case AutoSelect::frontQual: frontQual_funct(); break;
-        case AutoSelect::frontSafe: frontSafe_funct(); break;
-        case AutoSelect::frontElim: frontElim_funct(); break;
-        case AutoSelect::backQual: backSafe_funct(); break;
-        case AutoSelect::backSafe: backSafe_funct(); break;
-        case AutoSelect::backElim: frontElim_funct(); break;
-        case AutoSelect::doNothing: backElim_funct(); break;
-    }
+    normalLeftMotors.move(127);
+    normalRightMotors.move(127);
+    pros::delay(1500);
+    normalLeftMotors.move(-127);
+    normalRightMotors.move(-127);
+    pros::delay(750);
+    normalLeftMotors.move(0);
+    normalRightMotors.move(0);
 }

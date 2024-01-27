@@ -1,6 +1,7 @@
 #include "globals.hpp"
 #include "lemlib/chassis/trackingWheel.hpp"
 #include "pros/adi.hpp"
+#include "pros/motors.h"
 #include "pros/motors.hpp"
 
 // GAMEPADS
@@ -11,18 +12,17 @@ pros::IMU imu(12);
 
 // MOTOR GROUPS
 pros::MotorGroup normalLeftMotors({
-    pros::Motor(-20, pros::E_MOTOR_GEAR_BLUE),
-    pros::Motor(-16, pros::E_MOTOR_GEAR_BLUE),
-    pros::Motor(-11, pros::E_MOTOR_GEAR_BLUE),
-    pros::Motor(-6, pros::E_MOTOR_GEAR_GREEN) // 5.5 watt motor
+    pros::Motor(-12, pros::E_MOTOR_GEAR_BLUE),
+    pros::Motor(-19, pros::E_MOTOR_GEAR_BLUE)
 });
 
 pros::MotorGroup normalRightMotors({
-    pros::Motor(10, pros::E_MOTOR_GEAR_BLUE),
-    pros::Motor(3, pros::E_MOTOR_GEAR_BLUE),
-    pros::Motor(1, pros::E_MOTOR_GEAR_BLUE),
-    pros::Motor(15, pros::E_MOTOR_GEAR_GREEN) // 5.5 watt motor
-    
+    pros::Motor(2, pros::E_MOTOR_GEAR_BLUE),
+    pros::Motor(6, pros::E_MOTOR_GEAR_BLUE)
+});
+
+pros::MotorGroup cataMotors({
+    pros::Motor(18, pros::E_MOTOR_GEAR_GREEN)
 });
 
 // CHASSIS PID
@@ -52,8 +52,8 @@ lemlib::ControllerSettings angularController(8, // proportional gain (kP)
 lemlib::Drivetrain drivetrain(&normalLeftMotors, // left drivetrain motors
                               &normalRightMotors, // right drivetrain motors
                               10.7, // track width
-                              lemlib::Omniwheel::NEW_325, // wheel diameter
-                              450, // wheel rpm
+                              lemlib::Omniwheel::OLD_4, // wheel diameter
+                              600, // wheel rpm
                               8 // chase power
 );
 
