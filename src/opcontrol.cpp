@@ -107,13 +107,14 @@ void opcontrol() {
         switch (driveMode) {
             // Normal (drive forwards)
             case DModes::normal:
-                /** TODO: Retract back wings, use front wings */
+                // Retract back wings, use front wings 
+                rearWings.set_value(false);
+                frontWings.set_value((bool)gamepad1.lt);
 
-                if (chassis.isInMotion()) // Switch to semiauton when in a LemLib motion
-                    driveMode = DModes::semiauton;
+                // Switch to semiauton when in a LemLib motion
+                if (chassis.isInMotion()) driveMode = DModes::semiauton;
 
-                if (gamepad1.lb) // Reverse if lb is pressed
-                    driveMode = DModes::reverse;
+                if (gamepad1.lb.pressed) driveMode = DModes::reverse;
 
                 chassis.arcade(throttleVel * 127, turnVel * 127);
 
@@ -123,12 +124,14 @@ void opcontrol() {
             case DModes::reverse:
                 throttleVel *= -1; // Reverse driving
 
-                /** TODO: Retract front wings, use back wings */
+                // Retract front wings, use back wings
+                frontWings.set_value(false);
+                rearWings.set_value((bool)gamepad1.lt);
 
-                if (chassis.isInMotion()) // Switch to semiauton when in a LemLib motion
-                    driveMode = DModes::semiauton;
+                // Switch to semiauton when in a LemLib motion
+                if (chassis.isInMotion()) driveMode = DModes::semiauton;
 
-                if (!gamepad1.lb) driveMode = DModes::normal;
+                if (gamepad1.lb.released) driveMode = DModes::normal;
 
                 chassis.arcade(throttleVel * 127, turnVel * 127);
 

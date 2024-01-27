@@ -53,7 +53,7 @@ void autonomous() {
         case AutoSelect::frontElim: frontElim_funct(); break;
         case AutoSelect::backQual: backSafe_funct(); break;
         case AutoSelect::backSafe: backSafe_funct(); break;
-        case AutoSelect::backElim: frontElim_funct(); break;
-        case AutoSelect::doNothing: backElim_funct(); break;
+        case AutoSelect::backElim: backElim_funct(); break;
+        case AutoSelect::doNothing: break;
     }
 }

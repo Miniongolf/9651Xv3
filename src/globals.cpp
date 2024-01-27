@@ -29,8 +29,8 @@ pros::MotorGroup normalRightMotors({
 pros::Motor intakeMotor(9, pros::E_MOTOR_GEAR_BLUE);
 
 // SUBSYSTEMS
-PistonGroup frontWings({'A', 'H'});
-pros::ADIDigitalOut rearWings('B');
+pros::ADIDigitalOut frontWings('G');
+pros::ADIDigitalOut rearWings('H');
 
 // CHASSIS PID
 lemlib::ControllerSettings lateralController(8, // proportional gain (kP)
