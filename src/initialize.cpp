@@ -11,7 +11,7 @@ void initialize() {
     normalLeftMotors.set_brake_modes(pros::E_MOTOR_BRAKE_BRAKE);
     normalRightMotors.set_brake_modes(pros::E_MOTOR_BRAKE_BRAKE);
 
-    rearWings.set_value(true);
+    rearWings.set_value(false);
     frontWings.set_value(false);
     // Initialize chassis
     chassis.calibrate();

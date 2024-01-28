@@ -43,7 +43,7 @@ void autonomous() {
     // std::cout << "moved | " << chassis.getPose().x << ' ' << chassis.getPose().y << ' ' << chassis.getPose().theta
     //           << '\n';
 
-    std::cout << "Front safe auto \n";
+    // std::cout << "Front safe auto \n";
     normalLeftMotors.move(-127);
     normalRightMotors.move(-127);
     pros::delay(1400);
@@ -52,9 +52,9 @@ void autonomous() {
     pros::delay(500);
     chassis.turnTo(150, 0, 1000);
 
-    AutoSelect autonMode = static_cast<AutoSelect>(selector::auton);
+    // AutoSelect autonMode = static_cast<AutoSelect>(selector::auton);
 
-    std::cout << selector::auton << '\n';
+    // // std::cout << selector::auton << '\n';
 
     // switch (autonMode) {
     //     case AutoSelect::frontQual: frontQual_funct(); break;

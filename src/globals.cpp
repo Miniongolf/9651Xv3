@@ -44,7 +44,7 @@ lemlib::ControllerSettings lateralController(6, // proportional gain (kP)
                                              0 // maximum acceleration (slew)
 );
 
-lemlib::ControllerSettings angularController(5, // proportional gain (kP)
+lemlib::ControllerSettings angularController(4, // proportional gain (kP)
                                              0, // integral gain (kI)
                                              5, // derivative gain (kD)
                                              0, // anti windup

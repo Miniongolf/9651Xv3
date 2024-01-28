@@ -134,10 +134,6 @@ void opcontrol() {
         switch (driveMode) {
             // Normal (drive forwards)
             case DModes::normal:
-                // Retract back wings, use front wings 
-                rearWings.set_value(true);
-                frontWings.set_value(gamepad1.lt.held);
-
                 // Switch to semiauton when in a LemLib motion
                 if (chassis.isInMotion()) driveMode = DModes::semiauton;
 
