@@ -44,13 +44,11 @@ void autonomous() {
     //           << '\n';
 
     std::cout << "Front safe auto \n";
-    normalLeftMotors.move(127);
-    normalRightMotors.move(127);
+    normalLeftMotors.move(-127);
+    normalRightMotors.move(-127);
     pros::delay(1400);
-    normalLeftMotors.move(0);
-    normalRightMotors.move(0);
-    normalLeftMotors.move(-70);
-    normalRightMotors.move(-70);
+    normalLeftMotors.move(70);
+    normalRightMotors.move(70);
     pros::delay(500);
     chassis.turnTo(150, 0, 1000);
 

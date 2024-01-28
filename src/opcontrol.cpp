@@ -24,24 +24,23 @@ void opcontrol() {
         /** NOTE: TESTS | DISABLE FOR COMP */
         if (!isCompMatch) {
             if (gamepad1.a.pressed) { 
-                std::cout << "A PRESSED \n";
                 chassis.setPose(0,0,0);
-                chassis.turnTo(100,0,1000);
+                // chassis.turnTo(100,0,1000);
+                chassis.moveToPose(0, 24, 0, 2000);
+                chassis.turnTo(100, chassis.getPose().y, 1000);
                 chassis.waitUntilDone();
-                normalLeftMotors.move_velocity(0);
-                normalRightMotors.move_velocity(0);
-                std::cout << "turned | " << chassis.getPose().theta
+                std::cout << "moved | " << chassis.getPose().theta
                           << '\n';
                 // autonomous();
             }
-            float kP = chassis.angularSettings.kP, kD = chassis.angularSettings.kD;
-            chassis.angularSettings.kP = (gamepad1.dpadUp.pressed)     ? kP + 1
-                                         : (gamepad1.dpadDown.pressed) ? kP - 1
-                                                                       : kP;
-            chassis.angularSettings.kD = (gamepad1.dpadRight.pressed)  ? kD + 1
-                                         : (gamepad1.dpadLeft.pressed) ? kD - 1
-                                                                       : kD;
-            gamepad1.controller->print(0, 0, "%d | %d", (int)chassis.angularSettings.kP, (int)chassis.angularSettings.kD);
+            // float kP = chassis.angularSettings.kP, kD = chassis.angularSettings.kD;
+            // chassis.angularSettings.kP = (gamepad1.dpadUp.pressed)     ? kP + 1
+            //                              : (gamepad1.dpadDown.pressed) ? kP - 1
+            //                                                            : kP;
+            // chassis.angularSettings.kD = (gamepad1.dpadRight.pressed)  ? kD + 1
+            //                              : (gamepad1.dpadLeft.pressed) ? kD - 1
+            //                                                            : kD;
+            // gamepad1.controller->print(0, 0, "%d | %d", (int)chassis.angularSettings.kP, (int)chassis.angularSettings.kD);
         }
 
         /** REGION: INTAKE STATE MACHINE*/
@@ -109,7 +108,8 @@ void opcontrol() {
             case DModes::normal:
                 // Retract back wings, use front wings 
                 rearWings.set_value(true);
-                frontWings.set_value(!(bool)gamepad1.lt);
+
+                frontWings.set_value((bool)gamepad1.lt);
 
                 // Switch to semiauton when in a LemLib motion
                 if (chassis.isInMotion()) driveMode = DModes::semiauton;
@@ -125,7 +125,7 @@ void opcontrol() {
                 throttleVel *= -1; // Reverse driving
 
                 // Retract front wings, use back wings
-                frontWings.set_value(true);
+                frontWings.set_value(false);
                 rearWings.set_value(!(bool)gamepad1.lt);
 
                 // Switch to semiauton when in a LemLib motion

@@ -1,17 +1,16 @@
 #include "autonHelpers.hpp"
+#include "globals.hpp"
+#include "lemlib/chassis/chassis.hpp"
 
 // Red front auton
 void frontQual_funct() {
     std::cout << "Front qual auto \n";
-    chassis.setPose(-50, -58, 90);
-    rearWings.set_value(true);
-    chassis.turnTo(-65, -75, 2000, true);
-    chassis.waitUntilDone();
-    rearWings.set_value(false);
-    chassis.moveToPoint(-58, -23, 1000);
-    // outtake ball
-    chassis.moveToPoint(-30, -59, 1000);
-    chassis.moveToPoint(-4,-59,1000);
+
+    chassis.setPose(-48, -51, -45);
+    chassis.moveToPose(-58, -27, 0, 2000, {.forwards=false, .minSpeed=127});
+    // chassis.moveToPose(-46, -58, -15, 2000, {.forwards=false});
+    // rearWings.set_value(false);
+    // chassis.turnTo(chassis.getPose().x + 100, chassis.getPose().y, 2000);
 }
 
 // Red front auton
