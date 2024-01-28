@@ -1,3 +1,4 @@
+#include "globals.hpp"
 #include "main.h"
 #include "opcontrolHelpers.hpp"
 
@@ -89,6 +90,33 @@ void opcontrol() {
                 break;
         }
 
+        /** REGION: WINGS STATE MACHINES */
+        switch (sysStates.wingState) {
+            case WingStates::none:
+                rearWings.set_value(true);
+                frontWings.retract();
+                if (gamepad1.lt.pressed) sysStates.wingState = WingStates::front;
+                else if (gamepad1.lb.pressed) sysStates.wingState = WingStates::back;
+
+                break;
+
+            case WingStates::front:
+                rearWings.set_value(true);
+                frontWings.extend();
+                if (gamepad1.lt.released) sysStates.wingState = WingStates::none;
+                if (gamepad1.lb.pressed) sysStates.wingState = WingStates::back;
+
+                break;
+
+            case WingStates::back:
+                rearWings.set_value(false);
+                frontWings.retract();
+                if (gamepad1.lb.released) sysStates.wingState = WingStates::none;
+                if (gamepad1.lt.pressed) sysStates.wingState = WingStates::front;
+
+                break;
+        }
+
         /** REGION: DRIVETRAIN COMMANDS */
         // Map stick inputs to throttleVel and turnVel
         std::tie(throttleVel, turnVel) = processSticks();
@@ -108,30 +136,10 @@ void opcontrol() {
             case DModes::normal:
                 // Retract back wings, use front wings 
                 rearWings.set_value(true);
-
-                frontWings.set_value((bool)gamepad1.lt);
-
-                // Switch to semiauton when in a LemLib motion
-                if (chassis.isInMotion()) driveMode = DModes::semiauton;
-
-                if (gamepad1.lb.pressed) driveMode = DModes::reverse;
-
-                chassis.arcade(throttleVel * 127, turnVel * 127);
-
-                break;
-
-            // Reverse (drive backwards)
-            case DModes::reverse:
-                throttleVel *= -1; // Reverse driving
-
-                // Retract front wings, use back wings
-                frontWings.set_value(false);
-                rearWings.set_value(!(bool)gamepad1.lt);
+                frontWings.set_value(gamepad1.lt.held);
 
                 // Switch to semiauton when in a LemLib motion
                 if (chassis.isInMotion()) driveMode = DModes::semiauton;
-
-                if (gamepad1.lb.released) driveMode = DModes::normal;
 
                 chassis.arcade(throttleVel * 127, turnVel * 127);
 
