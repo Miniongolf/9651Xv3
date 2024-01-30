@@ -29,28 +29,15 @@ enum class AutoSelect {
  * from where it left off.
  */
 void autonomous() {
-    // std::cout << "auton\n";
-    // chassis.setPose(0, 0, 0);
+    backElim_funct();
 
-    // chassis.turnTo(100, 0, 1000);
-    // chassis.waitUntilDone();
-    // std::cout << "turned | " << chassis.getPose().x << ' ' << chassis.getPose().y << ' ' << chassis.getPose().theta
-    //           << '\n';
-    // pros::delay(1000);
-
-    // chassis.moveToPoint(24, 0, 2000);
-    // chassis.waitUntilDone();
-    // std::cout << "moved | " << chassis.getPose().x << ' ' << chassis.getPose().y << ' ' << chassis.getPose().theta
-    //           << '\n';
-
-    // std::cout << "Front safe auto \n";
-    normalLeftMotors.move(-127);
-    normalRightMotors.move(-127);
-    pros::delay(1400);
-    normalLeftMotors.move(70);
-    normalRightMotors.move(70);
-    pros::delay(500);
-    chassis.turnTo(150, 0, 1000);
+    // normalLeftMotors.move(-127);
+    // normalRightMotors.move(-127);
+    // pros::delay(1400);
+    // normalLeftMotors.move(70);
+    // normalRightMotors.move(70);
+    // pros::delay(500);
+    // chassis.turnTo(150, 0, 1000);
 
     // AutoSelect autonMode = static_cast<AutoSelect>(selector::auton);
 

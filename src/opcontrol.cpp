@@ -17,6 +17,19 @@ void opcontrol() {
     float throttleVel, turnVel;
     float targetTheta;
 
+    // Task for controller driver assistance
+    pros::Task controllerAssistTask{[=] {
+        int opcontrolStartTime = pros::millis();
+        while (true) {
+            // Controller driver assistance
+            if (pros::millis() - opcontrolStartTime > 90000) {
+                gamepad1.controller->rumble("...");
+                break;
+            }
+            pros::delay(10);
+        }
+    }};
+
     while (true) {
         /** REGION: UPDATE SYSTEM STATES */
         gamepad1.update();
@@ -25,23 +38,8 @@ void opcontrol() {
         /** NOTE: TESTS | DISABLE FOR COMP */
         if (!isCompMatch) {
             if (gamepad1.a.pressed) { 
-                chassis.setPose(0,0,0);
-                // chassis.turnTo(100,0,1000);
-                chassis.moveToPose(0, 24, 0, 2000);
-                chassis.turnTo(100, chassis.getPose().y, 1000);
-                chassis.waitUntilDone();
-                std::cout << "moved | " << chassis.getPose().theta
-                          << '\n';
-                // autonomous();
+                autonomous();
             }
-            // float kP = chassis.angularSettings.kP, kD = chassis.angularSettings.kD;
-            // chassis.angularSettings.kP = (gamepad1.dpadUp.pressed)     ? kP + 1
-            //                              : (gamepad1.dpadDown.pressed) ? kP - 1
-            //                                                            : kP;
-            // chassis.angularSettings.kD = (gamepad1.dpadRight.pressed)  ? kD + 1
-            //                              : (gamepad1.dpadLeft.pressed) ? kD - 1
-            //                                                            : kD;
-            // gamepad1.controller->print(0, 0, "%d | %d", (int)chassis.angularSettings.kP, (int)chassis.angularSettings.kD);
         }
 
         /** REGION: INTAKE STATE MACHINE*/
@@ -93,7 +91,7 @@ void opcontrol() {
         /** REGION: WINGS STATE MACHINES */
         switch (sysStates.wingState) {
             case WingStates::none:
-                rearWings.set_value(true);
+                rearWings.set_value(false);
                 frontWings.retract();
                 if (gamepad1.lt.pressed) sysStates.wingState = WingStates::front;
                 else if (gamepad1.lb.pressed) sysStates.wingState = WingStates::back;
@@ -101,15 +99,15 @@ void opcontrol() {
                 break;
 
             case WingStates::front:
-                rearWings.set_value(true);
                 frontWings.extend();
+                rearWings.set_value(false);
                 if (gamepad1.lt.released) sysStates.wingState = WingStates::none;
                 if (gamepad1.lb.pressed) sysStates.wingState = WingStates::back;
 
                 break;
 
             case WingStates::back:
-                rearWings.set_value(false);
+                rearWings.set_value(true);
                 frontWings.retract();
                 if (gamepad1.lb.released) sysStates.wingState = WingStates::none;
                 if (gamepad1.lt.pressed) sysStates.wingState = WingStates::front;

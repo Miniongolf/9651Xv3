@@ -33,7 +33,7 @@ PistonGroup frontWings({'F', 'G'});
 pros::ADIDigitalOut rearWings('H');
 
 // CHASSIS PID
-lemlib::ControllerSettings lateralController(6, // proportional gain (kP)
+lemlib::ControllerSettings lateralController(5, // proportional gain (kP)
                                              0, // integral gain (kI)
                                              5, // derivative gain (kD)
                                              0, // anti windup
@@ -44,7 +44,7 @@ lemlib::ControllerSettings lateralController(6, // proportional gain (kP)
                                              0 // maximum acceleration (slew)
 );
 
-lemlib::ControllerSettings angularController(4, // proportional gain (kP)
+lemlib::ControllerSettings angularController(3.5, // proportional gain (kP)
                                              0, // integral gain (kI)
                                              5, // derivative gain (kD)
                                              0, // anti windup
