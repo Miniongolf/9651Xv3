@@ -41,7 +41,6 @@
  * You should add more #includes here
  */
 
-#include "autoSelect/selection.h"
 #include "lemlib/api.hpp"
 #include "nicklib/api.hpp"
 

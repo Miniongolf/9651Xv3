@@ -6,8 +6,6 @@
  * to keep execution time for this mode under a few seconds.
  */
 void initialize() {
-    // LVGL auton selector init
-    selector::init();
     normalLeftMotors.set_brake_modes(pros::E_MOTOR_BRAKE_BRAKE);
     normalRightMotors.set_brake_modes(pros::E_MOTOR_BRAKE_BRAKE);
     // Initialize chassis

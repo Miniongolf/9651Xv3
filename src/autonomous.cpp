@@ -37,20 +37,8 @@ void autonomous() {
               << '\n';
     pros::delay(1000);
 
-    // chassis.moveToPoint(24, 0, 2000);
-    // chassis.waitUntilDone();
-    // std::cout << "moved | " << chassis.getPose().x << ' ' << chassis.getPose().y << ' ' << chassis.getPose().theta
-    //           << '\n';
-
-    AutoSelect autonMode = static_cast<AutoSelect>(selector::auton);
-
-    switch (autonMode) {
-        case AutoSelect::frontQual: frontQual_funct(); break;
-        case AutoSelect::frontSafe: frontSafe_funct(); break;
-        case AutoSelect::frontElim: frontElim_funct(); break;
-        case AutoSelect::backQual: backSafe_funct(); break;
-        case AutoSelect::backSafe: backSafe_funct(); break;
-        case AutoSelect::backElim: frontElim_funct(); break;
-        case AutoSelect::doNothing: backElim_funct(); break;
-    }
+    chassis.moveToPoint(24, 0, 2000);
+    chassis.waitUntilDone();
+    std::cout << "moved | " << chassis.getPose().x << ' ' << chassis.getPose().y << ' ' << chassis.getPose().theta
+              << '\n';
 }

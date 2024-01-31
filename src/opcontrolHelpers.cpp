@@ -13,7 +13,7 @@ std::tuple<float, float> processSticks() {
 }
 
 // Subsystem states constructor
-SysStates::SysStates(CataStates cataState, IntakeStates intakeState, BlockerStates blockerState)
+SysStates::SysStates(CataStates cataState, IntakeStates intakeState, WingStates wingState)
     : cataState(cataState),
       intakeState(intakeState),
-      blockerState(blockerState) {}
+      wingState(wingState) {}

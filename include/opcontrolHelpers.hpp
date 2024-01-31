@@ -9,7 +9,7 @@
 std::tuple<float, float> processSticks();
 
 // Drive mode state machine enum
-enum class DModes { normal, reverse, semiauton };
+enum class DModes { normal, semiauton };
 
 // Autoalign state machine enum
 enum class AutoAlignStates { off, start, on, stop };
@@ -20,18 +20,19 @@ enum class CataStates { fire, idle };
 // Intake state machine enum
 enum class IntakeStates { intake, outtake, stop };
 
-// Blocker state machine enum
-enum class BlockerStates { up, down, hang };
+// Wings state machine enum
+enum class WingStates { none, front, back };
 
 // Single wing state machine enum
 // enum class WingStates { extended, retracted };
 
 // Subsystems state machines struct
 struct SysStates {
-        SysStates(CataStates cataState = CataStates::idle, IntakeStates intakeState = IntakeStates::stop,
-                  BlockerStates blockerState = BlockerStates::down);
+        SysStates(CataStates cataState = CataStates::idle,
+                  IntakeStates intakeState = IntakeStates::stop,
+                  WingStates blockerState = WingStates::none);
 
         CataStates cataState;
         IntakeStates intakeState;
-        BlockerStates blockerState;
+        WingStates wingState;
 };

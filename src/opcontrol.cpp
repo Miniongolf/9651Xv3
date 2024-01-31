@@ -104,6 +104,34 @@ void opcontrol() {
                 break;
         }
 
+        /** REGION: WINGS STATE MACHINE*/
+        // lt for front wings, lb for back
+        switch (sysStates.wingState) {
+            case WingStates::none:
+                rearWings.retract();
+                frontWings.retract();
+                if (gamepad1.lt.pressed) sysStates.wingState = WingStates::front;
+                else if (gamepad1.lb.pressed) sysStates.wingState = WingStates::back;
+
+                break;
+
+            case WingStates::front:
+                frontWings.extend();
+                rearWings.retract();
+                if (gamepad1.lt.released) sysStates.wingState = WingStates::none;
+                if (gamepad1.lb.pressed) sysStates.wingState = WingStates::back;
+
+                break;
+
+            case WingStates::back:
+                rearWings.extend();
+                frontWings.retract();
+                if (gamepad1.lb.released) sysStates.wingState = WingStates::none;
+                if (gamepad1.lt.pressed) sysStates.wingState = WingStates::front;
+
+                break;
+        }
+
         /** REGION: DRIVETRAIN COMMANDS */
         // Map stick inputs to throttleVel and turnVel
         std::tie(throttleVel, turnVel) = processSticks();
@@ -126,24 +154,6 @@ void opcontrol() {
 
                 if (chassis.isInMotion()) // Switch to semiauton when in a LemLib motion
                     driveMode = DModes::semiauton;
-
-                if (gamepad1.lb) // Reverse if lb is pressed
-                    driveMode = DModes::reverse;
-
-                chassis.arcade(throttleVel * 127, turnVel * 127);
-
-                break;
-
-            // Reverse (drive backwards)
-            case DModes::reverse:
-                throttleVel *= -1; // Reverse driving
-
-                /** TODO: Retract front wings, use back wings */
-
-                if (chassis.isInMotion()) // Switch to semiauton when in a LemLib motion
-                    driveMode = DModes::semiauton;
-
-                if (!gamepad1.lb) driveMode = DModes::normal;
 
                 chassis.arcade(throttleVel * 127, turnVel * 127);
 
