@@ -22,7 +22,7 @@ void opcontrol() {
         int opcontrolStartTime = pros::millis();
         while (true) {
             // Controller driver assistance
-            if (pros::millis() - opcontrolStartTime > 90000) {
+            if (pros::millis() - opcontrolStartTime > 105000) {
                 gamepad1.controller->rumble("...");
                 break;
             }

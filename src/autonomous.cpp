@@ -3,21 +3,6 @@
 #include "main.h"
 
 /**
- * LemLib path txt file assets
- */
-
-// Auton selection enum
-enum class AutoSelect {
-    frontQual = 1,
-    frontSafe = 2,
-    frontElim = 3,
-    backQual = -1,
-    backSafe = -2,
-    backElim = -3,
-    doNothing = 0
-};
-
-/**
  * Runs the user autonomous code. This function will be started in its own task
  * with the default priority and stack size whenever the robot is enabled via
  * the Field Management System or the VEX Competition Switch in the autonomous
@@ -29,7 +14,7 @@ enum class AutoSelect {
  * from where it left off.
  */
 void autonomous() {
-    backElim_funct();
+    // closeQual_funct();
 
     // normalLeftMotors.move(-127);
     // normalRightMotors.move(-127);
@@ -39,17 +24,17 @@ void autonomous() {
     // pros::delay(500);
     // chassis.turnTo(150, 0, 1000);
 
-    // AutoSelect autonMode = static_cast<AutoSelect>(selector::auton);
+    AutoSelect autonMode = static_cast<AutoSelect>(selector::auton);
 
-    // // std::cout << selector::auton << '\n';
-
-    // switch (autonMode) {
-    //     case AutoSelect::frontQual: frontQual_funct(); break;
-    //     case AutoSelect::frontSafe: frontSafe_funct(); break;
-    //     case AutoSelect::frontElim: frontElim_funct(); break;
-    //     case AutoSelect::backQual: backSafe_funct(); break;
-    //     case AutoSelect::backSafe: backSafe_funct(); break;
-    //     case AutoSelect::backElim: backElim_funct(); break;
-    //     case AutoSelect::doNothing: break;
-    // }
+    switch (autonMode) {
+        case AutoSelect::closeQual: closeQual_funct(); break;
+        case AutoSelect::closeSafe: closeSafe_funct(); break;
+        case AutoSelect::closeElim: closeElim_funct(); break;
+        case AutoSelect::farQual: farQual_funct(); break;
+        case AutoSelect::farSafe: farSafe_funct(); break;
+        case AutoSelect::farElim: farElim_funct(); break;
+        case AutoSelect::testing:
+            chassis.setPose(0, 0, 0);
+            chassis.moveToPose(0, 24, 0, 1000);
+    }
 }

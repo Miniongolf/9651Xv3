@@ -30,7 +30,7 @@ pros::Motor intakeMotor(9, pros::E_MOTOR_GEAR_BLUE);
 
 // SUBSYSTEMS
 PistonGroup frontWings({'F', 'G'});
-pros::ADIDigitalOut rearWings('H');
+PistonGroup rearWings('H');
 
 // CHASSIS PID
 lemlib::ControllerSettings lateralController(5, // proportional gain (kP)
@@ -41,7 +41,7 @@ lemlib::ControllerSettings lateralController(5, // proportional gain (kP)
                                              100, // small error range timeout, in milliseconds
                                              3, // large error range, in inches
                                              500, // large error range timeout, in milliseconds
-                                             0 // maximum acceleration (slew)
+                                             20 // maximum acceleration (slew)
 );
 
 lemlib::ControllerSettings angularController(3.5, // proportional gain (kP)
@@ -58,7 +58,7 @@ lemlib::ControllerSettings angularController(3.5, // proportional gain (kP)
 // LEMLIB CHASSIS
 lemlib::Drivetrain drivetrain(&normalLeftMotors, // left drivetrain motors
                               &normalRightMotors, // right drivetrain motors
-                              10.7, // track width
+                              13, // track width
                               lemlib::Omniwheel::NEW_325, // wheel diameter
                               450, // wheel rpm
                               8 // chase power

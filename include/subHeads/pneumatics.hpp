@@ -11,6 +11,7 @@ class PistonGroup {
 
         // Piston Group class constructor
         PistonGroup(const std::vector<uint8_t> ports);
+        PistonGroup(uint8_t port);
 
         void extend();
         void retract();

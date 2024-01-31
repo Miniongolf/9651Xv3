@@ -10,6 +10,10 @@ PistonGroup::PistonGroup(const std::vector<uint8_t> ports) {
     }
 }
 
+PistonGroup::PistonGroup(uint8_t port) {
+    this->pistonsVec.push_back(pros::ADIDigitalOut(port));
+}
+
 // PistonGroup extend
 void PistonGroup::extend() {
     for (pros::ADIDigitalOut piston : this->pistonsVec) {
