@@ -4,7 +4,7 @@
 #include "pros/motors.hpp"
 
 // GAMEPADS
-nicklib::Gamepad gamepad1(pros::E_CONTROLLER_MASTER); // Primary controller
+// nicklib::Gamepad gamepad1(pros::E_CONTROLLER_MASTER); // Primary controller
 
 // SENSORS
 pros::IMU imu(12);

@@ -6,10 +6,10 @@
  *
  * @return Tuple of forwards power and turning power. Use std::tie() to unpack.
  */
-std::tuple<float, float> processSticks();
+std::tuple<float, float> processSticks(nicklib::Gamepad* gamepad);
 
 // Drive mode state machine enum
-enum class DModes { normal, semiauton };
+enum class DModes { normal, override, semiauton };
 
 // Autoalign state machine enum
 enum class AutoAlignStates { off, start, on, stop };
