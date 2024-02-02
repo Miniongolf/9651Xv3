@@ -22,7 +22,7 @@ extern pros::MotorGroup normalLeftMotors; // Left side drivetrain motor group (n
 extern pros::MotorGroup normalRightMotors; // Right side drivetrain motor group (normal)
 
 // INTAKE MOTOR
-extern pros::Motor intakeMotor;
+extern pros::MotorGroup intakeMotors;
 
 // CATA MOTORS
 extern pros::MotorGroup cataMotors; // Catapult motor group

@@ -10,25 +10,16 @@ nicklib::Gamepad gamepad1(pros::E_CONTROLLER_MASTER); // Primary controller
 pros::IMU imu(12);
 
 // MOTOR GROUPS
-pros::MotorGroup normalLeftMotors({
-    pros::Motor(-20, pros::E_MOTOR_GEAR_BLUE),
-    pros::Motor(-16, pros::E_MOTOR_GEAR_BLUE),
-    pros::Motor(-11, pros::E_MOTOR_GEAR_BLUE)
-});
+pros::MotorGroup normalLeftMotors({pros::Motor(-20, pros::E_MOTOR_GEAR_BLUE), pros::Motor(-16, pros::E_MOTOR_GEAR_BLUE),
+                                   pros::Motor(-11, pros::E_MOTOR_GEAR_BLUE)});
 
-pros::MotorGroup normalRightMotors({
-    pros::Motor(10, pros::E_MOTOR_GEAR_BLUE),
-    pros::Motor(3, pros::E_MOTOR_GEAR_BLUE),
-    pros::Motor(1, pros::E_MOTOR_GEAR_BLUE)
-});
+pros::MotorGroup normalRightMotors({pros::Motor(10, pros::E_MOTOR_GEAR_BLUE), pros::Motor(3, pros::E_MOTOR_GEAR_BLUE),
+                                    pros::Motor(1, pros::E_MOTOR_GEAR_BLUE)});
 
-pros::MotorGroup cataMotors({
-    pros::Motor(6, pros::E_MOTOR_GEAR_GREEN),
-    pros::Motor(-15, pros::E_MOTOR_GEAR_GREEN)
-});
+pros::MotorGroup cataMotors({pros::Motor(-15, pros::E_MOTOR_GEAR_GREEN)});
 
-// INTAKE MOTOR
-pros::Motor intakeMotor(9, pros::E_MOTOR_GEAR_BLUE);
+// INTAKE MOTORS
+pros::MotorGroup intakeMotors({pros::Motor(19, pros::E_MOTOR_GEAR_GREEN), pros::Motor(-6, pros::E_MOTOR_GEAR_GREEN)});
 
 // SUBSYSTEMS
 PistonGroup frontWings({'A', 'H'});
