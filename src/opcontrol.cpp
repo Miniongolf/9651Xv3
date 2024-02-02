@@ -1,9 +1,12 @@
 #include "main.h"
+#include "nicklib/gamepad.hpp"
 #include "opcontrolHelpers.hpp"
 
 // TeleOp
 void opcontrol() {
     // Drive mode enums
+    nicklib::Gamepad gamepad1(pros::E_CONTROLLER_MASTER);
+
     DModes driveMode = DModes::normal;
 
     // System states
