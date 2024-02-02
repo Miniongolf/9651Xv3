@@ -14,9 +14,9 @@
 
 // SENSORS
 extern pros::IMU imu; // Inertial Measurement Unit
-extern pros::Distance cataDistance; // Catapult distance sensor
-extern pros::Distance leftDistance; // Left distance sensor
-extern pros::Distance rightDistance; // Right distance sensor
+// extern pros::Distance cataDistance; // Catapult distance sensor
+// extern pros::Distance leftDistance; // Left distance sensor
+// extern pros::Distance rightDistance; // Right distance sensor
 
 // MOTOR GROUPS
 extern pros::MotorGroup normalLeftMotors; // Left side drivetrain motor group (normal)

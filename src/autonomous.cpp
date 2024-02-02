@@ -34,7 +34,11 @@ void autonomous() {
         case AutoSelect::farElim: farElim_funct(); break;
         case AutoSelect::testing:
             chassis.setPose(0, 0, 0);
-            chassis.moveToPose(0, 24, 0, 1000);
+            chassis.moveToPose(0, 24, 0, 5000);
+            chassis.waitUntilDone();
+            std::cout << fmt::format("{} {} {}\n", chassis.getPose().x, chassis.getPose().y, chassis.getPose().theta);
+            chassis.turnTo(100, 0, 5000);
+            chassis.waitUntilDone();
             std::cout << fmt::format("{} {} {}\n", chassis.getPose().x, chassis.getPose().y, chassis.getPose().theta);
     }
 }
