@@ -1,6 +1,7 @@
 #include "autonHelpers.hpp"
 #include "globals.hpp"
 #include "lemlib/chassis/chassis.hpp"
+#include "pros/misc.h"
 
 void closeQual_funct() {
     std::cout << "Close qual auto \n";
@@ -43,10 +44,11 @@ void closeSafe_funct() {
     rearWings.retract();
 
     // Touch matchload bar
-    chassis.turnTo(0, -90, 2000, false);
-    chassis.moveToPose(-34, -65, 90, 2000, {.lead = 0, .maxSpeed=60});
-    // chassis.moveToPose(-5, -65, 90, 2000, {.forwards = false, .lead = 1, .maxSpeed=60});
-    
+    chassis.turnTo(0, -90, 2000);
+    intakeMotors.move(-127);
+    chassis.moveToPose(-34, -60, 90, 2000, {.lead = 0, .maxSpeed=100});
+    chassis.moveToPose(-8, -60, 90, 2000, {.lead = 0, .maxSpeed=100});
+    while (true) {pros::delay(50);}
 }
 
 void closeElim_funct() { std::cout << "Close elim auto \n"; }
