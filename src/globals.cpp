@@ -1,5 +1,7 @@
 #include "globals.hpp"
 
+#define UNUSED_PORT 5
+
 // SENSORS
 pros::IMU imu(12);
 pros::Distance cataDistance(1);
@@ -11,14 +13,14 @@ pros::MotorGroup normalLeftMotors({
     pros::Motor(-20, pros::E_MOTOR_GEAR_BLUE),
     pros::Motor(-16, pros::E_MOTOR_GEAR_BLUE),
     pros::Motor(-11, pros::E_MOTOR_GEAR_BLUE),
-    pros::Motor(6, pros::E_MOTOR_GEAR_GREEN) // 5.5 watt motor
+    pros::Motor(-15, pros::E_MOTOR_GEAR_GREEN) // 5.5 watt motor
 });
 
 pros::MotorGroup normalRightMotors({
     pros::Motor(10, pros::E_MOTOR_GEAR_BLUE),
     pros::Motor(3, pros::E_MOTOR_GEAR_BLUE),
     pros::Motor(1, pros::E_MOTOR_GEAR_BLUE),
-    pros::Motor(-15, pros::E_MOTOR_GEAR_GREEN) // 5.5 watt motor
+    pros::Motor(9, pros::E_MOTOR_GEAR_GREEN) // 5.5 watt motor
     
 });
 
