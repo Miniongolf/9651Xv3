@@ -44,7 +44,7 @@ void opcontrol() {
         // Always controlled by gamepad 1
         switch (sysStates.intakeState) {
             case IntakeStates::intake:
-                intakeMotor.move(127);
+                intakeMotors.move(127);
 
                 if (gamepad1.rb.pressed) { // press rb to outtake
                     sysStates.intakeState = IntakeStates::outtake;
@@ -59,7 +59,7 @@ void opcontrol() {
                 break;
 
             case IntakeStates::outtake:
-                intakeMotor.move(-127);
+                intakeMotors.move(-127);
 
                 if (gamepad1.rt.pressed) { // press rt to intake
                     sysStates.intakeState = IntakeStates::intake;
@@ -75,7 +75,7 @@ void opcontrol() {
                 break;
 
             case IntakeStates::stop:
-                intakeMotor.move(0);
+                intakeMotors.move(0);
 
                 if (gamepad1.rt.pressed) { // press rt to intake
                     sysStates.intakeState = IntakeStates::intake;

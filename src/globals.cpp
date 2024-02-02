@@ -1,13 +1,10 @@
 #include "globals.hpp"
-#include "lemlib/chassis/trackingWheel.hpp"
-#include "pros/adi.hpp"
-#include "pros/motors.hpp"
-
-// GAMEPADS
-// nicklib::Gamepad gamepad1(pros::E_CONTROLLER_MASTER); // Primary controller
 
 // SENSORS
 pros::IMU imu(12);
+pros::Distance cataDistance(1);
+pros::Distance leftDistance(1);
+pros::Distance rightDistance(1);
 
 // MOTOR GROUPS
 pros::MotorGroup normalLeftMotors({
@@ -26,9 +23,11 @@ pros::MotorGroup normalRightMotors({
 });
 
 // INTAKE MOTOR
-pros::Motor intakeMotor(9, pros::E_MOTOR_GEAR_BLUE);
+pros::MotorGroup intakeMotors({pros::Motor(19, pros::E_MOTOR_GEAR_GREEN), pros::Motor(-6, pros::E_MOTOR_GEAR_GREEN)});
 
 // SUBSYSTEMS
+pros::ADIDigitalOut frontLeftWing('F');
+pros::ADIDigitalOut frontRightWing('G');
 PistonGroup frontWings({'F', 'G'});
 PistonGroup rearWings('H');
 

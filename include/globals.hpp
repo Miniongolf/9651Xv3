@@ -1,5 +1,6 @@
 #pragma once
 
+#include "pros/distance.hpp"
 #include "pros/misc.hpp"
 #include "pros/motors.hpp"
 #include "pros/adi.hpp"
@@ -11,23 +12,25 @@
 
 #include "subHeads/pneumatics.hpp"
 
-// GAMEPADS
-// extern nicklib::Gamepad gamepad1; // Primary controller
-
 // SENSORS
 extern pros::IMU imu; // Inertial Measurement Unit
+extern pros::Distance cataDistance; // Catapult distance sensor
+extern pros::Distance leftDistance; // Left distance sensor
+extern pros::Distance rightDistance; // Right distance sensor
 
 // MOTOR GROUPS
 extern pros::MotorGroup normalLeftMotors; // Left side drivetrain motor group (normal)
 extern pros::MotorGroup normalRightMotors; // Right side drivetrain motor group (normal)
 
 // INTAKE MOTOR
-extern pros::Motor intakeMotor;
+extern pros::MotorGroup intakeMotors;
 
 // CATA MOTORS
 extern pros::MotorGroup cataMotors; // Catapult motor group
 
 // SUBSYSTEMS
+extern pros::ADIDigitalOut frontLeftWing; // Front left wing piston
+extern pros::ADIDigitalOut frontRightWing; // Front right wing piston
 extern PistonGroup frontWings; // Front wings piston group
 extern PistonGroup rearWings; // Rear wings piston
 

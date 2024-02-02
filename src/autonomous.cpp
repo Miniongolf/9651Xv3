@@ -1,6 +1,5 @@
-#include "autoSelect/selection.h"
-#include "autonHelpers.hpp"
 #include "main.h"
+#include "autonHelpers.hpp"
 
 /**
  * Runs the user autonomous code. This function will be started in its own task
@@ -36,5 +35,6 @@ void autonomous() {
         case AutoSelect::testing:
             chassis.setPose(0, 0, 0);
             chassis.moveToPose(0, 24, 0, 1000);
+            std::cout << fmt::format("{} {} {}\n", chassis.getPose().x, chassis.getPose().y, chassis.getPose().theta);
     }
 }
