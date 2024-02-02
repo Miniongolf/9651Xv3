@@ -12,13 +12,15 @@ pros::IMU imu(12);
 
 // MOTOR GROUPS
 pros::MotorGroup normalLeftMotors({
-    pros::Motor(-12, pros::E_MOTOR_GEAR_BLUE),
-    pros::Motor(-19, pros::E_MOTOR_GEAR_BLUE)
+    pros::Motor(2, pros::E_MOTOR_GEAR_BLUE),
+    pros::Motor(6, pros::E_MOTOR_GEAR_BLUE),
+    pros::Motor(1, pros::E_MOTOR_GEAR_BLUE)
 });
 
 pros::MotorGroup normalRightMotors({
-    pros::Motor(2, pros::E_MOTOR_GEAR_BLUE),
-    pros::Motor(6, pros::E_MOTOR_GEAR_BLUE)
+    pros::Motor(-12, pros::E_MOTOR_GEAR_BLUE),
+    pros::Motor(-19, pros::E_MOTOR_GEAR_BLUE),
+    pros::Motor(-11, pros::E_MOTOR_GEAR_BLUE)
 });
 
 pros::MotorGroup cataMotors({
