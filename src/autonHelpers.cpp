@@ -29,13 +29,23 @@ void closeQual_funct() {
 
 void closeSafe_funct() {
     std::cout << "Close safe auto \n";
+    // Matchload zone descore
+    chassis.arcade(50, 0);
+    pros::delay(450);
+    chassis.arcade(0, 0);
+    intakeMotors.move(-127);
     chassis.setPose(-51, -49, -45);
     rearWings.extend();
     pros::delay(500);
+    intakeMotors.move(0);
     chassis.turnTo(0, 0, 1000, false);
     chassis.waitUntilDone();
     rearWings.retract();
-    chassis.moveToPose(-8, -59, 90, 2000, {.forwards = false, .lead = 0.6});
+
+    // Touch matchload bar
+    chassis.turnTo(0, -90, 2000, false);
+    chassis.moveToPose(-34, -65, 90, 2000, {.lead = 0, .maxSpeed=60});
+    // chassis.moveToPose(-5, -65, 90, 2000, {.forwards = false, .lead = 1, .maxSpeed=60});
     
 }
 

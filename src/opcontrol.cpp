@@ -23,7 +23,7 @@ void opcontrol() {
     // Task for controller driver assistance
     pros::Task controllerAssistTask {[&gamepad1] {
         int opcontrolStartTime = pros::millis();
-        pros::delay(105000);
+        pros::delay(90000);
         gamepad1.controller->rumble("...");
         pros::delay(15000);
         gamepad1.controller->rumble("-..");
