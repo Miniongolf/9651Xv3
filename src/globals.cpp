@@ -13,7 +13,7 @@ pros::MotorGroup normalLeftMotors({pros::Motor(-20, pros::E_MOTOR_GEAR_BLUE), pr
 pros::MotorGroup normalRightMotors({pros::Motor(10, pros::E_MOTOR_GEAR_BLUE), pros::Motor(3, pros::E_MOTOR_GEAR_BLUE),
                                     pros::Motor(1, pros::E_MOTOR_GEAR_BLUE)});
 
-pros::MotorGroup cataMotors({pros::Motor(-21, pros::E_MOTOR_GEAR_RED)});
+pros::MotorGroup cataMotors({pros::Motor(21, pros::E_MOTOR_GEAR_RED)});
 
 // INTAKE MOTORS
 pros::MotorGroup intakeMotors({pros::Motor(19, pros::E_MOTOR_GEAR_GREEN), pros::Motor(-6, pros::E_MOTOR_GEAR_GREEN)});
