@@ -137,7 +137,7 @@ void opcontrol() {
 
         /** REGION: DRIVETRAIN COMMANDS */
         // Map stick inputs to throttleVel and turnVel
-        std::tie(throttleVel, turnVel) = processSticks();
+        std::tie(throttleVel, turnVel) = processSticks(&gamepad1);
         std::array<float, 2> vels = nicklib::normalizeVels(throttleVel, turnVel);
         throttleVel = vels[0], turnVel = vels[1];
         gamepad1.controller->print(0, 0, "%d | %d", (int)(throttleVel * 100), (int)(turnVel * 100));
