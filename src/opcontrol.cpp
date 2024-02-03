@@ -86,6 +86,23 @@ void opcontrol() {
                 break;
         }
 
+        /** REGION: CATA STATE MACHINES */
+        switch (sysStates.cataState) {
+            case CataStates::fire:
+                cataMotors.move(127);
+
+                if (gamepad1.x.pressed) { sysStates.cataState = CataStates::idle; }
+
+                break;
+
+            case CataStates::idle:
+                cataMotors.move(0);
+
+                if (gamepad1.x.pressed) { sysStates.cataState = CataStates::fire; }
+
+                break;
+        }
+
         /** REGION: WINGS STATE MACHINES */
         switch (sysStates.wingState) {
             case WingStates::none:
