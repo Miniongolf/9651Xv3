@@ -55,7 +55,7 @@ void closeSafe_funct() {
     chassis.turnTo(0, -90, 2000);
     intakeMotors.move(-127);
     chassis.moveToPose(-34, -60, 90, 2000, {.lead = 0, .maxSpeed=100});
-    chassis.moveToPose(-8, -60, 90, 2000, {.lead = 0, .maxSpeed=100});
+    chassis.moveToPose(-5, -60, 90, 2000, {.lead = 0, .maxSpeed=100});
     while (true) {pros::delay(50);}
 }
 
