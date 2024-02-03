@@ -13,19 +13,27 @@ void closeQual_funct() {
     chassis.waitUntilDone();
     intakeMotors.move(0);
     chassis.tank(-50, -50);
-    pros::delay(500);
+    pros::delay(300);
     chassis.tank(127, 127);
     pros::delay(500);
     chassis.tank(0, 0);
     pros::delay(500);
     chassis.setPose(-58, -33, 0); // Odom reset on net
 
-    chassis.moveToPose(-53, -65, -45, 5000, {.forwards = false, .lead = 0.6}); // Move beside matchload bar
-    // rearWings.set_value(true); // Extend wings
-    // chassis.turnTo(chassis.getPose().x + 100, chassis.getPose().y, 1000,
-    //                false); // Turn to push triball out of matchload zone
-    // rearWings.set_value(false); // Retract wings
-    // chassis.moveToPose(-10, -58, 90, 1000, {.forwards = false, .lead = 0.6}); // Touch matchload bar
+    chassis.moveToPose(-51, -49, -45, 2000, {.forwards=false});
+    rearWings.extend();
+    pros::delay(500);
+    intakeMotors.move(0);
+    chassis.turnTo(0, 0, 1000, false);
+    chassis.waitUntilDone();
+    rearWings.retract();
+
+    // Touch matchload bar
+    chassis.turnTo(0, -90, 2000);
+    intakeMotors.move(-127);
+    chassis.moveToPose(-34, -60, 90, 2000, {.lead = 0, .maxSpeed=100});
+    chassis.moveToPose(-8, -60, 90, 2000, {.lead = 0, .maxSpeed=100});
+    while (true) {pros::delay(50);}
 }
 
 void closeSafe_funct() {
