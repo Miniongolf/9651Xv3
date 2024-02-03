@@ -11,9 +11,6 @@
 
 #include "subHeads/pneumatics.hpp"
 
-// GAMEPADS
-extern nicklib::Gamepad gamepad1; // Primary controller
-
 // SENSORS
 extern pros::IMU imu; // Inertial Measurement Unit
 

@@ -28,17 +28,5 @@ enum class AutoSelect {
  * from where it left off.
  */
 void autonomous() {
-    std::cout << "auton\n";
-    chassis.setPose(0, 0, 0);
-
-    chassis.turnTo(100, 0, 1000);
-    chassis.waitUntilDone();
-    std::cout << "turned | " << chassis.getPose().x << ' ' << chassis.getPose().y << ' ' << chassis.getPose().theta
-              << '\n';
-    pros::delay(1000);
-
-    chassis.moveToPoint(24, 0, 2000);
-    chassis.waitUntilDone();
-    std::cout << "moved | " << chassis.getPose().x << ' ' << chassis.getPose().y << ' ' << chassis.getPose().theta
-              << '\n';
+    cataMotors.move(127);
 }

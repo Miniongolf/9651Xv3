@@ -1,7 +1,7 @@
 #include "opcontrolHelpers.hpp"
 
-std::tuple<float, float> processSticks() {
-    float forwardsVel = gamepad1.leftY, turnVel = gamepad1.rightX;
+std::tuple<float, float> processSticks(nicklib::Gamepad* gamepad) {
+    float forwardsVel = (*gamepad).leftY, turnVel = gamepad->rightX;
 
     forwardsVel = nicklib::deadzone(forwardsVel, CONTROLLER_DEADZONE);
     turnVel = nicklib::deadzone(turnVel, CONTROLLER_DEADZONE);
