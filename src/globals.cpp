@@ -1,92 +1,71 @@
 #include "globals.hpp"
-#include "lemlib/chassis/trackingWheel.hpp"
-#include "pros/adi.hpp"
-#include "pros/motors.hpp"
 
-// GAMEPADS
-nicklib::Gamepad gamepad1(pros::E_CONTROLLER_MASTER); // Primary controller
+#define UNUSED_PORT 4
 
 // SENSORS
-pros::IMU imu(13);
-
-// // DRIVE MOTORS
-std::array<pros::Motor, 2> ptoMotors = {
-    pros::Motor(3, pros::E_MOTOR_GEAR_GREEN), // left side
-    pros::Motor(-4, pros::E_MOTOR_GEAR_GREEN) // right side
-};
+pros::IMU imu(12);
+// pros::Distance cataDistance(UNUSED_PORT);
+// pros::Distance leftDistance(UNUSED_PORT);
+// pros::Distance rightDistance(UNUSED_PORT);
 
 // MOTOR GROUPS
 pros::MotorGroup normalLeftMotors({
-    pros::Motor(12, pros::E_MOTOR_GEAR_BLUE),
-    pros::Motor(19, pros::E_MOTOR_GEAR_BLUE),
-    // pros::Motor(-20, pros::E_MOTOR_GEAR_BLUE)
+    pros::Motor(-20, pros::E_MOTOR_GEAR_BLUE),
+    pros::Motor(-16, pros::E_MOTOR_GEAR_BLUE),
+    pros::Motor(-11, pros::E_MOTOR_GEAR_BLUE),
+    // pros::Motor(-15, pros::E_MOTOR_GEAR_GREEN) // 5.5 watt motor
 });
 
 pros::MotorGroup normalRightMotors({
-    pros::Motor(-2, pros::E_MOTOR_GEAR_BLUE),
-    pros::Motor(-9, pros::E_MOTOR_GEAR_BLUE),
-    pros::Motor(10, pros::E_MOTOR_GEAR_BLUE)
+    pros::Motor(10, pros::E_MOTOR_GEAR_BLUE),
+    pros::Motor(3, pros::E_MOTOR_GEAR_BLUE),
+    pros::Motor(1, pros::E_MOTOR_GEAR_BLUE),
+    // pros::Motor(9, pros::E_MOTOR_GEAR_GREEN) // 5.5 watt motor
+    
 });
 
-pros::MotorGroup ptoLeftMotors({
-    pros::Motor(12, pros::E_MOTOR_GEAR_BLUE),
-    pros::Motor(19, pros::E_MOTOR_GEAR_BLUE),
-    // pros::Motor(-20, pros::E_MOTOR_GEAR_BLUE),
-    // ptoMotors[0] // 5.5 watt motor
-});
-
-pros::MotorGroup ptoRightMotors({
-    pros::Motor(-2, pros::E_MOTOR_GEAR_BLUE),
-    pros::Motor(-9, pros::E_MOTOR_GEAR_BLUE),
-    // pros::Motor(10, pros::E_MOTOR_GEAR_BLUE),
-    // ptoMotors[1] // 5.5 watt motor
-});
+// CATA MOTOR
+pros::MotorGroup cataMotors({pros::Motor(5, pros::E_MOTOR_GEAR_RED)});
 
 // INTAKE MOTOR
-pros::Motor intakeMotor(5, pros::E_MOTOR_GEAR_BLUE);
-
-// CATA MOTORS
-/** NOTE: these motors are the same as the drivetrain ones. */
-pros::MotorGroup cataMotors({
-    ptoMotors[0], // left side
-    ptoMotors[1] // right side
-});
+pros::MotorGroup intakeMotors({pros::Motor(19, pros::E_MOTOR_GEAR_GREEN), pros::Motor(-6, pros::E_MOTOR_GEAR_GREEN)});
 
 // SUBSYSTEMS
-pros::ADIDigitalOut ptoPiston('C');
-PistonGroup frontWings({'A', 'H'});
-PistonGroup backWings({'B', 'G'});
+pros::ADIDigitalOut frontLeftWing('F');
+pros::ADIDigitalOut frontRightWing('G');
+PistonGroup frontWings({'F', 'G'});
+PistonGroup rearWings('H');
 
 // CHASSIS PID
-lemlib::ControllerSettings lateralController(8, // proportional gain (kP)
+lemlib::ControllerSettings lateralController(7, // proportional gain (kP)
                                              0, // integral gain (kI)
-                                             0, // derivative gain (kD)
+                                             3, // derivative gain (kD)
                                              0, // anti windup
                                              1, // small error range, in inches
                                              100, // small error range timeout, in milliseconds
                                              3, // large error range, in inches
                                              500, // large error range timeout, in milliseconds
-                                             127 // maximum acceleration (slew)
+                                             20 // maximum acceleration (slew)
 );
 
-lemlib::ControllerSettings angularController(8, // proportional gain (kP)
+lemlib::ControllerSettings angularController(1.5, // proportional gain (kP)
                                              0, // integral gain (kI)
-                                             0, // derivative gain (kD)
+                                             10, // derivative gain (kD)
                                              0, // anti windup
-                                             3, // small error range, in degrees
+                                             2, // small error range, in degrees
                                              100, // small error range timeout, in milliseconds
-                                             5, // large error range, in degrees
+                                             4, // large error range, in degrees
                                              500, // large error range timeout, in milliseconds
-                                             127 // maximum acceleration (slew)
+                                             20 // maximum acceleration (slew)
 );
 
 // LEMLIB CHASSIS
 lemlib::Drivetrain drivetrain(&normalLeftMotors, // left drivetrain motors
                               &normalRightMotors, // right drivetrain motors
-                              13.25, // track width
-                              lemlib::Omniwheel::OLD_4, // wheel diameter
-                              600, // wheel rpm
-                              2 // chase power
+                              13, // track width
+                              lemlib::Omniwheel::NEW_325, // wheel diameter
+                              450, // wheel rpm
+                              8 // chase power
 );
 
 lemlib::OdomSensors odomSensors(nullptr, // vertical tracking wheel 1

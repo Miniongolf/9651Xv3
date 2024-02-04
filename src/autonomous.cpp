@@ -1,21 +1,5 @@
-#include "autonHelpers.hpp"
 #include "main.h"
-
-/**
- * LemLib path txt file assets
- */
-ASSET(jerrycurve_txt);
-
-// Auton selection enum
-enum class AutoSelect {
-    frontQual = 1,
-    frontSafe = 2,
-    frontElim = 3,
-    backQual = -1,
-    backSafe = -2,
-    backElim = -3,
-    doNothing = 0
-};
+#include "autonHelpers.hpp"
 
 /**
  * Runs the user autonomous code. This function will be started in its own task
@@ -29,29 +13,32 @@ enum class AutoSelect {
  * from where it left off.
  */
 void autonomous() {
-    std::cout << "auton\n";
-    chassis.setPose(0, 0, 0);
+    // closeQual_funct();
 
-    chassis.turnTo(100, 0, 1000);
-    chassis.waitUntilDone();
-    std::cout << "turned | " << chassis.getPose().x << ' ' << chassis.getPose().y << ' ' << chassis.getPose().theta
-              << '\n';
-    pros::delay(1000);
-
-    chassis.moveToPoint(24, 0, 2000);
-    chassis.waitUntilDone();
-    std::cout << "moved | " << chassis.getPose().x << ' ' << chassis.getPose().y << ' ' << chassis.getPose().theta
-              << '\n';
+    // normalLeftMotors.move(-127);
+    // normalRightMotors.move(-127);
+    // pros::delay(1400);
+    // normalLeftMotors.move(70);
+    // normalRightMotors.move(70);
+    // pros::delay(500);
+    // chassis.turnTo(150, 0, 1000);
 
     AutoSelect autonMode = static_cast<AutoSelect>(selector::auton);
 
     switch (autonMode) {
-        case AutoSelect::frontQual: frontQual_funct(); break;
-        case AutoSelect::frontSafe: frontSafe_funct(); break;
-        case AutoSelect::frontElim: frontElim_funct(); break;
-        case AutoSelect::backQual: backSafe_funct(); break;
-        case AutoSelect::backSafe: backSafe_funct(); break;
-        case AutoSelect::backElim: frontElim_funct(); break;
-        case AutoSelect::doNothing: backElim_funct(); break;
+        case AutoSelect::closeQual: closeQual_funct(); break;
+        case AutoSelect::closeSafe: closeSafe_funct(); break;
+        case AutoSelect::closeElim: closeElim_funct(); break;
+        case AutoSelect::farQual: farQual_funct(); break;
+        case AutoSelect::farSafe: farSafe_funct(); break;
+        case AutoSelect::farElim: farElim_funct(); break;
+        case AutoSelect::testing:
+            chassis.setPose(0, 0, 0);
+            chassis.moveToPose(0, 24, 0, 5000);
+            chassis.waitUntilDone();
+            std::cout << fmt::format("{} {} {}\n", chassis.getPose().x, chassis.getPose().y, chassis.getPose().theta);
+            chassis.turnTo(100, 0, 5000);
+            chassis.waitUntilDone();
+            std::cout << fmt::format("{} {} {}\n", chassis.getPose().x, chassis.getPose().y, chassis.getPose().theta);
     }
 }

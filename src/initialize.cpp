@@ -1,5 +1,4 @@
 #include "main.h"
-
 /**
  * Runs initialization code. This occurs as soon as the program is started.
  *
@@ -9,7 +8,11 @@
 void initialize() {
     // LVGL auton selector init
     selector::init();
+    normalLeftMotors.set_brake_modes(pros::E_MOTOR_BRAKE_BRAKE);
+    normalRightMotors.set_brake_modes(pros::E_MOTOR_BRAKE_BRAKE);
 
+    rearWings.set_value(false);
+    frontWings.retract();
     // Initialize chassis
     chassis.calibrate();
     chassis.setPose(0, 0, 0);

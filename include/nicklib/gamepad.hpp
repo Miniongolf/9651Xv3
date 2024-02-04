@@ -33,10 +33,10 @@ class Gamepad {
          */
         Gamepad(pros::controller_id_e_t id);
 
-        // /**
-        //  * @brief Delete default constructor to force initialization with an id
-        //  */
-        // Gamepad() = delete;
+        /**
+         * @brief Delete default constructor to force initialization with an id
+         */
+        Gamepad() = delete;
 
         /**
          * @brief Gets the inputs from the gamepad
