@@ -13,16 +13,6 @@
  * from where it left off.
  */
 void autonomous() {
-    // closeQual_funct();
-
-    // normalLeftMotors.move(-127);
-    // normalRightMotors.move(-127);
-    // pros::delay(1400);
-    // normalLeftMotors.move(70);
-    // normalRightMotors.move(70);
-    // pros::delay(500);
-    // chassis.turnTo(150, 0, 1000);
-
     AutoSelect autonMode = static_cast<AutoSelect>(selector::auton);
 
     switch (autonMode) {
@@ -36,9 +26,11 @@ void autonomous() {
             chassis.setPose(0, 0, 0);
             chassis.moveToPose(0, 24, 0, 5000);
             chassis.waitUntilDone();
-            std::cout << fmt::format("{} {} {}\n", chassis.getPose().x, chassis.getPose().y, chassis.getPose().theta);
+            std::cout << fmt::format("x: {} | y: {} | θ: {}\n", chassis.getPose().x, chassis.getPose().y,
+                                     chassis.getPose().theta);
             chassis.turnToHeading(90, 5000);
             chassis.waitUntilDone();
-            std::cout << fmt::format("{} {} {}\n", chassis.getPose().x, chassis.getPose().y, chassis.getPose().theta);
+            std::cout << fmt::format("x: {} | y: {} | θ: {}\n", chassis.getPose().x, chassis.getPose().y,
+                                     chassis.getPose().theta);
     }
 }
