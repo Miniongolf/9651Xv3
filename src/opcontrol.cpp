@@ -154,8 +154,7 @@ void opcontrol() {
                 // Autoalign
                 if ((std::fabs(gamepad1.rightY) > 0.8) && (driveMode != DModes::semiauton)) {
                     targetTheta = (gamepad1.rightY > 0.75) ? 90 : -90;
-                    targetTheta = lemlib::degToRad(targetTheta);
-                    chassis.turnTo(100 * cos(targetTheta), 100 * sin(targetTheta), 750);
+                    chassis.turnToHeading(targetTheta, 1000);
                 }
 
                 if (gamepad2.lt && gamepad2.rt) driveMode = DModes::override;

@@ -37,7 +37,7 @@ void autonomous() {
             chassis.moveToPose(0, 24, 0, 5000);
             chassis.waitUntilDone();
             std::cout << fmt::format("{} {} {}\n", chassis.getPose().x, chassis.getPose().y, chassis.getPose().theta);
-            chassis.turnTo(100, 0, 5000);
+            chassis.turnToHeading(90, 5000);
             chassis.waitUntilDone();
             std::cout << fmt::format("{} {} {}\n", chassis.getPose().x, chassis.getPose().y, chassis.getPose().theta);
     }

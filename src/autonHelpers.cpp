@@ -24,12 +24,12 @@ void closeQual_funct() {
     rearWings.extend();
     pros::delay(500);
     intakeMotors.move(0);
-    chassis.turnTo(0, 0, 1000, false);
+    chassis.turnToHeading(45, 1000, {.forwards=false});
     chassis.waitUntilDone();
     rearWings.retract();
 
     // Touch matchload bar
-    chassis.turnTo(0, -90, 2000);
+    chassis.turnToHeading(135, 2000, {.forwards=false});
     intakeMotors.move(-127);
     chassis.moveToPose(-34, -60, 90, 2000, {.lead = 0, .maxSpeed=100});
     chassis.moveToPose(-8, -60, 90, 2000, {.lead = 0, .maxSpeed=100});
@@ -47,12 +47,12 @@ void closeSafe_funct() {
     rearWings.extend();
     pros::delay(500);
     intakeMotors.move(0);
-    chassis.turnTo(0, 0, 1000, false);
+    chassis.turnToHeading(45, 1000, {.forwards=false});
     chassis.waitUntilDone();
     rearWings.retract();
 
     // Touch matchload bar
-    chassis.turnTo(0, -90, 2000);
+    chassis.turnToHeading(135, 2000, {.forwards=false});
     intakeMotors.move(-127);
     chassis.moveToPose(-34, -60, 90, 2000, {.lead = 0, .maxSpeed=100});
     chassis.moveToPose(-5, -60, 90, 2000, {.lead = 0, .maxSpeed=100});
@@ -75,7 +75,7 @@ void farSafe_funct() {
     pros::delay(750);
     chassis.tank(70, 70);
     pros::delay(500);
-    chassis.turnTo(0, 0, 1000);
+    chassis.turnToHeading(45, 1000);
 }
 
 void farElim_funct() {
@@ -87,7 +87,7 @@ void farElim_funct() {
     intakeMotors.move(127); // Run intake
     chassis.waitUntilDone();
     intakeMotors.move(0);
-    chassis.turnTo(1000, chassis.getPose().y, 1000); // Turn to face net
+    chassis.turnToHeading(90, 1000); // Turn to face net
     chassis.waitUntilDone();
     frontWings.extend();
 
