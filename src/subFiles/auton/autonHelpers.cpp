@@ -1,5 +1,4 @@
-#include "autonHelpers.hpp"
-#include "lemlib/chassis/chassis.hpp"
+#include "subHeads/auton/autonHelpers.hpp"
 
 // CLOSE POSITIONS
 lemlib::Pose closeMatchLoadPose(-51, -49, -45);

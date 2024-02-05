@@ -1,5 +1,4 @@
-#include "autonFuncts.hpp"
-#include "autonHelpers.hpp"
+#include "subHeads/auton/autonFuncts.hpp"
 
 void closeQual_funct() {
     std::cout << "Close qual auto \n";

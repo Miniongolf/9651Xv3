@@ -1,6 +1,6 @@
 #pragma once
 #include "main.h"
-#include "autonHelpers.hpp"
+#include "subHeads/auton/autonHelpers.hpp"
 
 // Auton selection enum
 enum class AutoSelect {

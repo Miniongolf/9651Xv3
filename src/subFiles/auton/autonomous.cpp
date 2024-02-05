@@ -1,5 +1,5 @@
 #include "main.h"
-#include "autonHelpers.hpp"
+#include "subHeads/auton/autonFuncts.hpp"
 
 /**
  * Runs the user autonomous code. This function will be started in its own task
@@ -23,14 +23,16 @@ void autonomous() {
         case AutoSelect::farSafe: farSafe_funct(); break;
         case AutoSelect::farElim: farElim_funct(); break;
         case AutoSelect::testing:
-            chassis.setPose(0, 0, 0);
-            chassis.moveToPose(0, 24, 0, 5000);
-            chassis.waitUntilDone();
-            std::cout << fmt::format("x: {} | y: {} | θ: {}\n", chassis.getPose().x, chassis.getPose().y,
-                                     chassis.getPose().theta);
-            chassis.turnToHeading(90, 5000);
-            chassis.waitUntilDone();
-            std::cout << fmt::format("x: {} | y: {} | θ: {}\n", chassis.getPose().x, chassis.getPose().y,
-                                     chassis.getPose().theta);
+            lemlib::Pose testBall(24, 24);
+            moveToBall(testBall, 90, 1000, 24);
+            // chassis.setPose(0, 0, 0);
+            // chassis.moveToPose(0, 24, 0, 5000);
+            // chassis.waitUntilDone();
+            // std::cout << fmt::format("x: {} | y: {} | θ: {}\n", chassis.getPose().x, chassis.getPose().y,
+            //                          chassis.getPose().theta);
+            // chassis.turnToHeading(90, 5000);
+            // chassis.waitUntilDone();
+            // std::cout << fmt::format("x: {} | y: {} | θ: {}\n", chassis.getPose().x, chassis.getPose().y,
+            //                          chassis.getPose().theta);
     }
 }

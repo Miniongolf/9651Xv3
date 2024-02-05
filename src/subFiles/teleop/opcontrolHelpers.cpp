@@ -1,4 +1,4 @@
-#include "opcontrolHelpers.hpp"
+#include "subHeads/teleop/opcontrolHelpers.hpp"
 
 std::tuple<float, float> processSticks(nicklib::Gamepad* gamepad) {
     float forwardsVel = (*gamepad).leftY, turnVel = gamepad->rightX;
