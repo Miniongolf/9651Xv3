@@ -12,6 +12,10 @@
 
 #include "subHeads/pneumatics.hpp"
 
+// Gamepads
+extern nicklib::Gamepad gamepad1;
+extern nicklib::Gamepad gamepad2;
+
 // SENSORS
 extern pros::IMU imu; // Inertial Measurement Unit
 // extern pros::Distance cataDistance; // Catapult distance sensor

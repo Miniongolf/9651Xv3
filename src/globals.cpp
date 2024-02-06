@@ -2,6 +2,10 @@
 
 #define UNUSED_PORT 4
 
+
+nicklib::Gamepad gamepad1(pros::E_CONTROLLER_MASTER);
+nicklib::Gamepad gamepad2(pros::E_CONTROLLER_PARTNER);
+
 // SENSORS
 pros::IMU imu(12);
 // pros::Distance cataDistance(UNUSED_PORT);
@@ -13,14 +17,14 @@ pros::MotorGroup normalLeftMotors({
     pros::Motor(-20, pros::E_MOTOR_GEAR_BLUE),
     pros::Motor(-16, pros::E_MOTOR_GEAR_BLUE),
     pros::Motor(-11, pros::E_MOTOR_GEAR_BLUE),
-    // pros::Motor(-15, pros::E_MOTOR_GEAR_GREEN) // 5.5 watt motor
+    pros::Motor(-15, pros::E_MOTOR_GEAR_GREEN) // 5.5 watt motor
 });
 
 pros::MotorGroup normalRightMotors({
     pros::Motor(10, pros::E_MOTOR_GEAR_BLUE),
     pros::Motor(3, pros::E_MOTOR_GEAR_BLUE),
     pros::Motor(1, pros::E_MOTOR_GEAR_BLUE),
-    // pros::Motor(9, pros::E_MOTOR_GEAR_GREEN) // 5.5 watt motor
+    pros::Motor(4, pros::E_MOTOR_GEAR_GREEN) // 5.5 watt motor
     
 });
 
@@ -34,6 +38,7 @@ pros::MotorGroup intakeMotors({pros::Motor(19, pros::E_MOTOR_GEAR_GREEN), pros::
 pros::ADIDigitalOut frontLeftWing('F');
 pros::ADIDigitalOut frontRightWing('G');
 PistonGroup frontWings({'F', 'G'});
+
 PistonGroup rearWings('H');
 
 // CHASSIS PID

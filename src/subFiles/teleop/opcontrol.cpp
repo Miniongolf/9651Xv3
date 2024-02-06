@@ -1,12 +1,12 @@
+#include "globals.hpp"
+#include "lemlib/util.hpp"
 #include "main.h"
 #include "subHeads/teleop/opcontrolHelpers.hpp"
+#include "subHeads/movements.hpp"
+#include <cmath>
 
 // TeleOp
 void opcontrol() {
-    // Gamepads
-    nicklib::Gamepad gamepad1(pros::E_CONTROLLER_MASTER);
-    nicklib::Gamepad gamepad2(pros::E_CONTROLLER_PARTNER);
-
     // Drive mode enums
     DModes driveMode = DModes::normal;
 
@@ -21,7 +21,7 @@ void opcontrol() {
     float targetTheta;
 
     // Task for controller driver assistance
-    pros::Task controllerAssistTask {[&gamepad1] {
+    pros::Task controllerAssistTask {[] {
         int opcontrolStartTime = pros::millis();
         pros::delay(90000);
         gamepad1.controller->rumble("...");
@@ -29,14 +29,38 @@ void opcontrol() {
         gamepad1.controller->rumble("-..");
     }};
 
+    // Semi auton movements
+    SemiAutonMovement autoAlignUp([]() { chassis.turnToHeading(90, 1000); }, isSticksMoved);
+    SemiAutonMovement autoAlignDown([]() { chassis.turnToHeading(-90, 1000); }, isSticksMoved);
+
+    SemiAutonMovement rightSideBowl(
+        []() {
+            if (chassis.getPose().y > -34) chassis.moveToPoint(-30, -60, 2000);
+            chassis.moveToPose(40, -60, 90, 5000, {.minSpeed = 70, .earlyExitRange = 10});
+            chassis.moveToPose(48, -48, 45, 2000, {.lead = 0.8, .minSpeed = 70});
+        },
+        isSticksMoved);
+
+    SemiAutonMovement leftSideBowl(
+        []() {
+            if (chassis.getPose().y < 34) chassis.moveToPoint(-30, 60, 2000, {.minSpeed = 70, .earlyExitRange = 10});
+            chassis.moveToPose(40, 60, 90, 5000, {.minSpeed = 70, .earlyExitRange = 10});
+            chassis.moveToPose(48, 48, 45, 2000, {.lead = 0.8, .minSpeed = 70});
+        },
+        isSticksMoved);
+
     while (true) {
         /** REGION: UPDATE SYSTEM STATES */
         gamepad1.update();
         gamepad2.update();
         robotPos = chassis.getPose();
 
-        /** NOTE: TESTS | DISABLE FOR COMP */
-        if (!isCompMatch) {
+        gamepad1.controller->print(0, 0, "%d %d | %d %d", normalLeftMotors[0].get_efficiency(),
+                                       normalRightMotors[0].get_efficiency(), floor(normalLeftMotors[0].get_temperature() * 10), floor(normalRightMotors[0].get_temperature() * 10));
+
+        if (isCompMatch) {
+            
+        } else {
             if (gamepad1.a.pressed) { autonomous(); }
         }
 
@@ -90,16 +114,19 @@ void opcontrol() {
         switch (sysStates.cataState) {
             case CataStates::fire:
                 cataMotors.move(127);
+                if (gamepad1.x.pressed) { sysStates.cataState = CataStates::load; }
+                break;
 
-                if (gamepad1.x.pressed) { sysStates.cataState = CataStates::idle; }
-
+            case CataStates::load:
+                // if ((int)lemlib::avg(cataMotors.get_positions()) % 120 > 5) {
+                //     cataMotors.move(127);
+                // } else sysStates.cataState = CataStates::idle;
+                sysStates.cataState = CataStates::idle;
                 break;
 
             case CataStates::idle:
                 cataMotors.move(0);
-
                 if (gamepad1.x.pressed) { sysStates.cataState = CataStates::fire; }
-
                 break;
         }
 
@@ -151,17 +178,25 @@ void opcontrol() {
                 throttleVel = vels[0], turnVel = vels[1];
                 chassis.arcade(throttleVel * 127, turnVel * 127);
 
+                /** REGION: Semi autons */
                 // Autoalign
                 if ((std::fabs(gamepad1.rightY) > 0.8) && (driveMode != DModes::semiauton)) {
-                    targetTheta = (gamepad1.rightY > 0.75) ? 90 : -90;
-                    chassis.turnToHeading(targetTheta, 1000);
+                    if (gamepad1.rightY > 0) autoAlignUp.start();
+                    else autoAlignDown.start();
                 }
+
+                // Auto bowl
+                if (gamepad1.dpadUp.pressed) {
+                    if (chassis.getPose().y < -24) rightSideBowl.start();
+                    else if (chassis.getPose().x > 24) leftSideBowl.start();
+                }
+
 
                 if (gamepad2.lt && gamepad2.rt) driveMode = DModes::override;
                 else if (chassis.isInMotion()) driveMode = DModes::semiauton;
 
                 break;
-
+            // Override (gamepad 2 has control over chassis and wings, but not intake and cata)
             case DModes::override:
                 gamepad1.controller->rumble(".  ");
                 std::tie(throttleVel, turnVel) = processSticks(&gamepad2);
@@ -173,7 +208,7 @@ void opcontrol() {
 
                 break;
 
-            // Semiauton (disable controller driving), hold `b` to cancel
+            // Semiauton (disable controller driving), hold `b` to cancel or meet the movement's exit conditions
             case DModes::semiauton:
                 throttleVel = 0;
                 turnVel = 0;
@@ -183,6 +218,10 @@ void opcontrol() {
 
                 break;
         }
+
+        /** REGION: Odom resets */
+        if (gamepad1.dpadRight.pressed) { chassis.setPose(-50, -50, 45); }
+        if (gamepad1.dpadLeft.pressed) { chassis.setPose(-50, 50, 135); }
 
         pros::delay(10); // Delay to prevent from overdrawing cpu resources
     }
