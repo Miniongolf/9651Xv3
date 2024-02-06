@@ -11,6 +11,9 @@ void initialize() {
     // LVGL auton selector init
     selector::init();
 
+    // Set chassis brake mode
+    chassis.setBrakeMode(pros::E_MOTOR_BRAKE_BRAKE);
+
     // Retract wings
     rearWings.set_value(false);
     frontWings.set_value(false);

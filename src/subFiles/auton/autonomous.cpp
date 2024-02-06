@@ -23,6 +23,7 @@ void autonomous() {
         case AutoSelect::farSafe: farSafe_funct(); break;
         case AutoSelect::farElim: farElim_funct(); break;
         case AutoSelect::testing:
+            chassis.setPose(0, 0, 0);
             lemlib::Pose testBall(24, 24);
             moveToBall(testBall, 90, 1000, 24);
             // chassis.setPose(0, 0, 0);

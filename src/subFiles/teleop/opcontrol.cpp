@@ -35,9 +35,9 @@ void opcontrol() {
 
     SemiAutonMovement rightSideBowl(
         []() {
-            if (chassis.getPose().y > -34) chassis.moveToPoint(-30, -60, 2000);
-            chassis.moveToPose(40, -60, 90, 5000, {.minSpeed = 70, .earlyExitRange = 10});
-            chassis.moveToPose(48, -48, 45, 2000, {.lead = 0.8, .minSpeed = 70});
+            if (chassis.getPose().y > -34) chassis.moveToPoint(-30, -58, 2000);
+            chassis.moveToPose(40, -58, 90, 5000, {.earlyExitRange = 10});
+            chassis.moveToPose(48, -48, 45, 2000, {.lead = 0.8});
         },
         isSticksMoved);
 
@@ -188,7 +188,7 @@ void opcontrol() {
                 // Auto bowl
                 if (gamepad1.dpadUp.pressed) {
                     if (chassis.getPose().y < -24) rightSideBowl.start();
-                    else if (chassis.getPose().x > 24) leftSideBowl.start();
+                    else if (chassis.getPose().y > 24) leftSideBowl.start();
                 }
 
 
@@ -220,8 +220,8 @@ void opcontrol() {
         }
 
         /** REGION: Odom resets */
-        if (gamepad1.dpadRight.pressed) { chassis.setPose(-50, -50, 45); }
-        if (gamepad1.dpadLeft.pressed) { chassis.setPose(-50, 50, 135); }
+        if (gamepad1.dpadRight.pressed) { chassis.setPose(-45, -55, 45); }
+        if (gamepad1.dpadLeft.pressed) { chassis.setPose(-45, 55, 135); }
 
         pros::delay(10); // Delay to prevent from overdrawing cpu resources
     }

@@ -1,5 +1,6 @@
 #include "subHeads/movements.hpp"
 #include "pros/rtos.hpp"
+#include <iostream>
 
 /**
  * @brief Construct a new Semi Auton Movement object
@@ -18,8 +19,10 @@ void SemiAutonMovement::start() {
     movementFunct();
 
     pros::Task task([this]() {
-        while (isActive) {
+        while (this->isActive) {
+            std::cout << gamepad1.leftX << '\n';
             if (exitCondition()) {
+                std::cout << "Exiting semi auton movement\n";
                 this->isActive = false;
                 chassis.cancelAllMotions();
                 break;
