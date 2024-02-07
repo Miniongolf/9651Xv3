@@ -1,7 +1,7 @@
 #pragma once
 #include "main.h"
 
-constexpr float intakeOffset = 0.0;
+constexpr float intakeOffset = 9.0;
 
 
 extern lemlib::Pose closeMatchLoadPose;
