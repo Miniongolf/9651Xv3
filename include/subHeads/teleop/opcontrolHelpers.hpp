@@ -35,6 +35,7 @@ struct SysStates {
  */
 std::tuple<float, float> processSticks(nicklib::Gamepad* gamepad);
 
+bool isBHeld();
 bool isSticksMoved();
 
 void autoAlignUp_funct();

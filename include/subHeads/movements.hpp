@@ -3,7 +3,10 @@
 
 class SemiAutonMovement {
     private:
+        // Movement function
         std::function<void()> movementFunct;
+
+        // Exit condition function
         std::function<bool()> exitCondition;
     
     public:

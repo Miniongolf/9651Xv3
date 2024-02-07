@@ -18,6 +18,10 @@ std::tuple<float, float> processSticks(nicklib::Gamepad* gamepad) {
     return std::make_tuple(forwardsVel, turnVel * TURN_CONST);
 }
 
+bool isBHeld() {
+    return (int)gamepad1.b > 500;
+}
+
 bool isSticksMoved() {
     return (gamepad1.leftX != 0 || gamepad1.leftY != 0 || gamepad1.rightX != 0 || gamepad1.rightY != 0);
 }

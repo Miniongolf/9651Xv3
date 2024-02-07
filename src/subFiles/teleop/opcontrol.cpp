@@ -30,13 +30,13 @@ void opcontrol() {
     }};
 
     // Semi auton movements
-    SemiAutonMovement autoAlignUp([]() { chassis.turnToHeading(90, 1000); }, isSticksMoved);
-    SemiAutonMovement autoAlignDown([]() { chassis.turnToHeading(-90, 1000); }, isSticksMoved);
+    SemiAutonMovement autoAlignUp([]() { chassis.turnToHeading(90, 1000); }, isBHeld);
+    SemiAutonMovement autoAlignDown([]() { chassis.turnToHeading(-90, 1000); }, isBHeld);
 
     SemiAutonMovement rightSideBowl(
         []() {
             if (chassis.getPose().y > -34) chassis.moveToPoint(-30, -58, 2000);
-            chassis.moveToPose(40, -58, 90, 5000, {.earlyExitRange = 10});
+            chassis.moveToPose(45, -58, 90, 5000, {.minSpeed = 100, .earlyExitRange = 10});
             chassis.moveToPose(48, -48, 45, 2000, {.lead = 0.8});
         },
         isSticksMoved);

@@ -18,13 +18,13 @@ void SemiAutonMovement::start() {
     this->isActive = true;
     movementFunct();
 
-    pros::Task task([this]() {
+    pros::Task checkExit([this]() {
         while (this->isActive) {
-            std::cout << gamepad1.leftX << '\n';
+            std::cout << fmt::format("%d");
             if (exitCondition()) {
                 std::cout << "Exiting semi auton movement\n";
-                this->isActive = false;
                 chassis.cancelAllMotions();
+                this->isActive = false;
                 break;
             }
         }

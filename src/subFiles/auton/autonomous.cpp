@@ -24,13 +24,13 @@ void autonomous() {
         case AutoSelect::farElim: farElim_funct(); break;
         case AutoSelect::testing:
             chassis.setPose(0, 0, 0);
-            lemlib::Pose testBall(24, 24);
-            moveToBall(testBall, 90, 1000, 24);
+            lemlib::Pose testBall(35, 48);
+            moveToBall(testBall, 90, 1000, 50);
             // chassis.setPose(0, 0, 0);
             // chassis.moveToPose(0, 24, 0, 5000);
             // chassis.waitUntilDone();
-            // std::cout << fmt::format("x: {} | y: {} | θ: {}\n", chassis.getPose().x, chassis.getPose().y,
-            //                          chassis.getPose().theta);
+            std::cout << fmt::format("x: {} | y: {} | θ: {}\n", chassis.getPose().x, chassis.getPose().y,
+                                     chassis.getPose().theta);
             // chassis.turnToHeading(90, 5000);
             // chassis.waitUntilDone();
             // std::cout << fmt::format("x: {} | y: {} | θ: {}\n", chassis.getPose().x, chassis.getPose().y,
