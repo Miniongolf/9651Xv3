@@ -13,7 +13,8 @@ std::tuple<float, float> processSticks(nicklib::Gamepad* gamepad) {
 }
 
 // Subsystem states constructor
-SysStates::SysStates(CataStates cataState, IntakeStates intakeState, WingStates wingState)
-    : cataState(cataState),
-      intakeState(intakeState),
-      wingState(wingState) {}
+SysStates::SysStates(CataStates cataState, IntakeStates intakeState, WingStates wingState, BalanceState balanceState)
+        : cataState(cataState),
+            intakeState(intakeState),
+            wingState(wingState),
+            balanceState(balanceState) {}

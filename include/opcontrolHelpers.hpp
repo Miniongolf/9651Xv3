@@ -23,6 +23,9 @@ enum class IntakeStates { intake, outtake, stop };
 // Wings state machine enum
 enum class WingStates { none, front, back };
 
+// Balance piston state machine enum
+enum class BalanceState { none, up, down };
+
 // Single wing state machine enum
 // enum class WingStates { extended, retracted };
 
@@ -30,9 +33,11 @@ enum class WingStates { none, front, back };
 struct SysStates {
         SysStates(CataStates cataState = CataStates::idle,
                   IntakeStates intakeState = IntakeStates::stop,
-                  WingStates blockerState = WingStates::none);
+                  WingStates blockerState = WingStates::none,
+                  BalanceState balanceState = BalanceState::none);
 
         CataStates cataState;
         IntakeStates intakeState;
         WingStates wingState;
+        BalanceState balanceState;
 };
