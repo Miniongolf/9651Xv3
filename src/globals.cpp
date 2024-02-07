@@ -2,7 +2,6 @@
 
 #define UNUSED_PORT 4
 
-
 nicklib::Gamepad gamepad1(pros::E_CONTROLLER_MASTER);
 nicklib::Gamepad gamepad2(pros::E_CONTROLLER_PARTNER);
 
@@ -14,18 +13,14 @@ pros::IMU imu(12);
 
 // MOTOR GROUPS
 pros::MotorGroup normalLeftMotors({
-    pros::Motor(-20, pros::E_MOTOR_GEAR_BLUE),
-    pros::Motor(-16, pros::E_MOTOR_GEAR_BLUE),
-    pros::Motor(-11, pros::E_MOTOR_GEAR_BLUE),
-    pros::Motor(-15, pros::E_MOTOR_GEAR_GREEN) // 5.5 watt motor
+    pros::Motor(-20, pros::E_MOTOR_GEAR_BLUE), pros::Motor(-16, pros::E_MOTOR_GEAR_BLUE),
+    pros::Motor(-11, pros::E_MOTOR_GEAR_BLUE), pros::Motor(-15, pros::E_MOTOR_GEAR_GREEN) // 5.5 watt motor
 });
 
 pros::MotorGroup normalRightMotors({
-    pros::Motor(10, pros::E_MOTOR_GEAR_BLUE),
-    pros::Motor(3, pros::E_MOTOR_GEAR_BLUE),
-    pros::Motor(1, pros::E_MOTOR_GEAR_BLUE),
-    pros::Motor(4, pros::E_MOTOR_GEAR_GREEN) // 5.5 watt motor
-    
+    pros::Motor(10, pros::E_MOTOR_GEAR_BLUE), pros::Motor(3, pros::E_MOTOR_GEAR_BLUE),
+    pros::Motor(1, pros::E_MOTOR_GEAR_BLUE), pros::Motor(4, pros::E_MOTOR_GEAR_GREEN) // 5.5 watt motor
+
 });
 
 // CATA MOTOR
@@ -35,11 +30,9 @@ pros::MotorGroup cataMotors({pros::Motor(5, pros::E_MOTOR_GEAR_RED)});
 pros::MotorGroup intakeMotors({pros::Motor(19, pros::E_MOTOR_GEAR_GREEN), pros::Motor(-6, pros::E_MOTOR_GEAR_GREEN)});
 
 // SUBSYSTEMS
-pros::ADIDigitalOut frontLeftWing('F');
-pros::ADIDigitalOut frontRightWing('G');
-PistonGroup frontWings({'F', 'G'});
-
+PistonGroup frontWings('G');
 PistonGroup rearWings('H');
+PistonGroup balancePiston('E');
 
 // CHASSIS PID
 lemlib::ControllerSettings lateralController(7, // proportional gain (kP)

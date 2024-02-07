@@ -1,10 +1,11 @@
 #include "subHeads/teleop/opcontrolHelpers.hpp"
 
 // Subsystem states constructor
-SysStates::SysStates(CataStates cataState, IntakeStates intakeState, WingStates wingState)
+SysStates::SysStates(CataStates cataState, IntakeStates intakeState, WingStates wingState, HangStates hangState)
     : cataState(cataState),
       intakeState(intakeState),
-      wingState(wingState) {}
+      wingState(wingState),
+      hangState(hangState) {}
 
 std::tuple<float, float> processSticks(nicklib::Gamepad* gamepad) {
     float forwardsVel = (*gamepad).leftY, turnVel = gamepad->rightX;

@@ -17,15 +17,20 @@ enum class IntakeStates { intake, outtake, stop };
 // Wings state machine enum
 enum class WingStates { none, front, back };
 
+// Hang state machine enum
+enum class HangStates { up, down };
+
 // Subsystems state machines struct
 struct SysStates {
         SysStates(CataStates cataState = CataStates::idle,
                   IntakeStates intakeState = IntakeStates::stop,
-                  WingStates wingState = WingStates::none);
+                  WingStates wingState = WingStates::none,
+                  HangStates hangState = HangStates::down);
 
         CataStates cataState;
         IntakeStates intakeState;
         WingStates wingState;
+        HangStates hangState;
 };
 
 /**

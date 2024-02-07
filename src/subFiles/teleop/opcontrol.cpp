@@ -118,23 +118,22 @@ void opcontrol() {
                 break;
 
             case CataStates::load:
-                // if ((int)lemlib::avg(cataMotors.get_positions()) % 120 > 5) {
-                //     cataMotors.move(127);
-                // } else sysStates.cataState = CataStates::idle;
-                sysStates.cataState = CataStates::idle;
+                std::cout << (int)cataMotors[0].get_position() % 120 << '\n';
+                if (((int)cataMotors[0].get_position() % 120) > 10) {
+                    cataMotors.move(127);
+                } else sysStates.cataState = CataStates::idle;
                 break;
 
             case CataStates::idle:
-                cataMotors.move(0);
                 if (gamepad1.x.pressed) { sysStates.cataState = CataStates::fire; }
+                
+                cataMotors.move(0);
                 break;
         }
 
         /** REGION: WINGS STATE MACHINES */
         switch (sysStates.wingState) {
             case WingStates::none:
-                frontWings.set_value(false);
-                rearWings.set_value(false);
                 if (driveMode == DModes::normal) {
                     if (gamepad1.lt) sysStates.wingState = WingStates::front;
                     else if (gamepad1.lb) sysStates.wingState = WingStates::back;
@@ -142,13 +141,13 @@ void opcontrol() {
                     if (gamepad2.lt) sysStates.wingState = WingStates::front;
                     else if (gamepad2.lb) sysStates.wingState = WingStates::back;
                 }
+                
+                frontWings.set_value(false);
+                rearWings.set_value(false);
 
                 break;
 
             case WingStates::front:
-                frontWings.set_value(true);
-                rearWings.set_value(false);
-
                 if (driveMode == DModes::normal) {
                     if (!gamepad1.lt) sysStates.wingState = WingStates::none;
                     else if (gamepad1.lb) sysStates.wingState = WingStates::back;
@@ -157,14 +156,33 @@ void opcontrol() {
                     else if (gamepad2.lb) sysStates.wingState = WingStates::back;
                 }
 
+                frontWings.set_value(true);
+                rearWings.set_value(false);
+
                 break;
 
             case WingStates::back:
-                frontWings.set_value(false);
-                rearWings.set_value(true);
                 if (gamepad1.lb.released) sysStates.wingState = WingStates::none;
                 if (gamepad1.lt.pressed) sysStates.wingState = WingStates::front;
 
+                frontWings.set_value(false);
+                rearWings.set_value(true);
+
+                break;
+        }
+
+        /** REGION: HANG STATE MACHINE */
+        switch (sysStates.hangState) {
+            case HangStates::up:
+                if (!gamepad1.b) sysStates.hangState = HangStates::down;
+
+                balancePiston.set_value(true);
+                break;
+
+            case HangStates::down:
+                if (!gamepad1.b) sysStates.hangState = HangStates::up;
+
+                balancePiston.set_value(false);
                 break;
         }
 
