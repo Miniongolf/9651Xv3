@@ -55,11 +55,10 @@ void opcontrol() {
         gamepad2.update();
         robotPos = chassis.getPose();
 
-        gamepad1.controller->print(0, 0, "%d %d | %d %d", normalLeftMotors[0].get_efficiency(),
-                                       normalRightMotors[0].get_efficiency(), floor(normalLeftMotors[0].get_temperature() * 10), floor(normalRightMotors[0].get_temperature() * 10));
+        gamepad1.controller->print(0, 0, "%d | %d", floor(normalLeftMotors[0].get_temperature() * 10),
+                                   floor(normalRightMotors[0].get_temperature() * 10));
 
         if (isCompMatch) {
-            
         } else {
             if (gamepad1.a.pressed) { autonomous(); }
         }
@@ -126,7 +125,7 @@ void opcontrol() {
 
             case CataStates::idle:
                 if (gamepad1.x.pressed) { sysStates.cataState = CataStates::fire; }
-                
+
                 cataMotors.move(0);
                 break;
         }
@@ -141,7 +140,7 @@ void opcontrol() {
                     if (gamepad2.lt) sysStates.wingState = WingStates::front;
                     else if (gamepad2.lb) sysStates.wingState = WingStates::back;
                 }
-                
+
                 frontWings.set_value(false);
                 rearWings.set_value(false);
 
@@ -174,13 +173,13 @@ void opcontrol() {
         /** REGION: HANG STATE MACHINE */
         switch (sysStates.hangState) {
             case HangStates::up:
-                if (!gamepad1.b) sysStates.hangState = HangStates::down;
+                if (gamepad1.b.pressed) sysStates.hangState = HangStates::down;
 
                 balancePiston.set_value(true);
                 break;
 
             case HangStates::down:
-                if (!gamepad1.b) sysStates.hangState = HangStates::up;
+                if (gamepad1.b.pressed) sysStates.hangState = HangStates::up;
 
                 balancePiston.set_value(false);
                 break;
@@ -194,23 +193,23 @@ void opcontrol() {
                 std::tie(throttleVel, turnVel) = processSticks(&gamepad1);
                 vels = nicklib::normalizeVels(throttleVel, turnVel);
                 throttleVel = vels[0], turnVel = vels[1];
+
                 chassis.arcade(throttleVel * 127, turnVel * 127);
 
                 /** REGION: Semi autons */
                 // Autoalign
-                if ((std::fabs(gamepad1.rightY) > 0.8) && (driveMode != DModes::semiauton)) {
-                    if (gamepad1.rightY > 0) autoAlignUp.start();
-                    else autoAlignDown.start();
-                }
+                // if ((std::fabs(gamepad1.rightY) > 0.8) && (driveMode != DModes::semiauton)) {
+                //     if (gamepad1.rightY > 0) autoAlignUp.start();
+                //     else autoAlignDown.start();
+                // }
 
                 // Auto bowl
-                if (gamepad1.dpadUp.pressed) {
-                    if (chassis.getPose().y < -24) rightSideBowl.start();
-                    else if (chassis.getPose().y > 24) leftSideBowl.start();
-                }
+                // if (gamepad1.dpadUp.pressed) {
+                //     if (chassis.getPose().y < -24) rightSideBowl.start();
+                //     else if (chassis.getPose().y > 24) leftSideBowl.start();
+                // }
 
-
-                if (gamepad2.lt && gamepad2.rt) driveMode = DModes::override;
+                if (gamepad2.rb && gamepad2.rt) driveMode = DModes::override;
                 else if (chassis.isInMotion()) driveMode = DModes::semiauton;
 
                 break;
@@ -235,6 +234,41 @@ void opcontrol() {
                 if (!chassis.isInMotion()) { driveMode = DModes::normal; }
 
                 break;
+        }
+
+        // Skills semiauton start
+        if (gamepad1.dpadUp.pressed) {
+            // Score preloads
+            chassis.setPose(-45, -57, 135);
+            chassis.moveToPose(-60, -28, 180, 1000, {.forwards = false, .minSpeed = 100});
+            chassis.waitUntilDone();
+            chassis.arcade(50, 0);
+            pros::delay(400);
+            chassis.arcade(-127, 0);
+            pros::delay(400);
+            chassis.setPose(-60, -32, 180); // odom reset
+
+            // Move to shoot
+            chassis.moveToPose(-56, -47, -105, 2000, {.maxSpeed = 70}); // Move to matchload bar
+
+            // Shoot
+            chassis.waitUntilDone();
+            frontWings.set_value(true); // Deploy wings to maintain contact with bar
+
+            cataMotors.tare_position();
+            float startCataPose = cataMotors[0].get_position();
+            int startTime = pros::millis();
+
+            cataMotors.move(127); // Start shooting
+
+            // Wait to finish matchloading
+            while (cataMotors[0].get_position() - startCataPose < 360 * 50 && !gamepad1.x) {
+                gamepad1.update();
+                pros::delay(10);
+            }
+
+            cataMotors.move(0); // Stop shooting
+            frontWings.set_value(false); // Retract wings
         }
 
         /** REGION: Odom resets */

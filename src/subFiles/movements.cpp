@@ -27,6 +27,7 @@ void SemiAutonMovement::start() {
                 this->isActive = false;
                 break;
             }
+            pros::delay(10);
         }
     });
 }
