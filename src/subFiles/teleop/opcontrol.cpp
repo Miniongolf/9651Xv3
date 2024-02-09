@@ -185,23 +185,6 @@ void opcontrol() {
                 break;
         }
 
-        /** REGION: BALANCE PISTON STATE MACHINE */
-        switch (sysStates.balanceState) {
-            case BalanceState::up:
-                balancePiston.set_value(true);
-
-                if (gamepad1.b.pressed) { sysStates.balanceState = BalanceState::none; }
-
-                break;
-
-            case BalanceState::none:
-                balancePiston.set_value(false);
-
-                if (gamepad1.b.pressed) { sysStates.balanceState = BalanceState::up; }
-
-                break;
-        }
-
         /** REGION: DRIVE MODE STATE MACHINE */
         switch (driveMode) {
             // Normal (drive forwards)
