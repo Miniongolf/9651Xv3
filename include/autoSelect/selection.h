@@ -4,7 +4,7 @@
 
 //selector configuration
 #define HUE 360
-#define DEFAULT 2
+#define DEFAULT 0
 #define AUTONS "Qual", "Safe", "Elims"
 
 namespace selector{
