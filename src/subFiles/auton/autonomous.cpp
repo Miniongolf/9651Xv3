@@ -46,28 +46,29 @@ void autonomous() {
                 chassis.setPose(-60, -32, 180); // odom reset
 
                 // Move to shoot
-                chassis.moveToPose(-56, -47, -105, 2000, {.maxSpeed = 70}); // Move to matchload bar
+                chassis.moveToPose(-56, -47, -115, 2000, {.maxSpeed = 70}); // Move to matchload bar
 
                 // Shoot
                 chassis.waitUntilDone();
                 frontWings.set_value(true); // Deploy wings to maintain contact with bar
-                
+
                 cataMotors.tare_position();
                 float startCataPose = cataMotors[0].get_position();
-                int startTime = pros::millis();            
+                int startCataTime = pros::millis();
 
-                cataMotors.move(127); // Start shooting
-                
-                // Wait to finish matchloading
-                while (cataMotors[0].get_position() - startCataPose < 360 * 50) {
-                    pros::delay(10);
-                }
+                // cataMotors.move(127); // Start shooting
+
+                // // Wait to finish matchloading
+                // while (cataMotors[0].get_position() - startCataPose < 360 * 50) { pros::delay(10); }
 
                 cataMotors.move(0); // Stop shooting
                 frontWings.set_value(false); // Retract wings
 
                 // Cross to other side
-                chassis.moveToPose(-24, -60, -90, 2000, {.forwards = false}); // Move to bowling position
+                chassis.moveToPoint(-29, -54, 2000,
+                                    {.forwards = false, .earlyExitRange = 24}); // Interpolate to bowling position
+                chassis.moveToPose(-32, -60, -90, 2000, {.forwards = false}); // Move to bowling position
+                debug::printPose();
                 chassis.turnToHeading(90, 1000);
                 debug::printPose();
                 chassis.moveToPose(35, -60, 90, 2000, {.earlyExitRange = 24});
@@ -77,9 +78,10 @@ void autonomous() {
                 // Right push
                 chassis.moveToPose(48, -48, 45, 1000, {.earlyExitRange = 10});
                 chassis.moveToPose(60, -28, 180, 2000, {.minSpeed = 120});
-
+                frontWings.set_value(false);
 
                 // Middle push 1
+                chassis.moveToPoint(44, -53, 2000, {.forwards = false});
 
                 // Middle push 2
 

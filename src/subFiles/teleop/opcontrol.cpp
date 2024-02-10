@@ -4,6 +4,25 @@
 #include "subHeads/teleop/opcontrolHelpers.hpp"
 #include "subHeads/movements.hpp"
 #include <cmath>
+#include <functional>
+
+// Semiauton exit condition
+std::function<bool()> semiAutonExitFunct;
+
+void bowl(bool rightSide) {
+    semiAutonExitFunct = isSticksMoved;
+    if (rightSide) {
+        if (chassis.getPose().y > -34) chassis.moveToPoint(-30, -58, 2000, {.minSpeed = 70, .earlyExitRange = 10});
+        chassis.moveToPose(45, -58, 90, 5000, {.minSpeed = 100, .earlyExitRange = 10});
+        chassis.moveToPose(48, -48, 45, 2000, {.lead = 0.8, .minSpeed = 70});
+    } else {
+        if (chassis.getPose().y < 34) chassis.moveToPoint(-30, 60, 2000, {.minSpeed = 70, .earlyExitRange = 10});
+        chassis.moveToPose(40, 60, 90, 5000, {.minSpeed = 100, .earlyExitRange = 10});
+        chassis.moveToPose(48, 48, 45, 2000, {.lead = 0.8, .minSpeed = 70});
+    }
+}
+
+
 
 // TeleOp
 void opcontrol() {
@@ -27,27 +46,7 @@ void opcontrol() {
         gamepad1.controller->rumble("...");
         pros::delay(15000);
         gamepad1.controller->rumble("-..");
-    }};
-
-    // Semi auton movements
-    SemiAutonMovement autoAlignUp([]() { chassis.turnToHeading(90, 1000); }, isBHeld);
-    SemiAutonMovement autoAlignDown([]() { chassis.turnToHeading(-90, 1000); }, isBHeld);
-
-    SemiAutonMovement rightSideBowl(
-        []() {
-            if (chassis.getPose().y > -34) chassis.moveToPoint(-30, -58, 2000);
-            chassis.moveToPose(45, -58, 90, 5000, {.minSpeed = 100, .earlyExitRange = 10});
-            chassis.moveToPose(48, -48, 45, 2000, {.lead = 0.8});
-        },
-        isSticksMoved);
-
-    SemiAutonMovement leftSideBowl(
-        []() {
-            if (chassis.getPose().y < 34) chassis.moveToPoint(-30, 60, 2000, {.minSpeed = 70, .earlyExitRange = 10});
-            chassis.moveToPose(40, 60, 90, 5000, {.minSpeed = 70, .earlyExitRange = 10});
-            chassis.moveToPose(48, 48, 45, 2000, {.lead = 0.8, .minSpeed = 70});
-        },
-        isSticksMoved);
+    }};    
 
     while (true) {
         /** REGION: UPDATE SYSTEM STATES */
@@ -197,17 +196,12 @@ void opcontrol() {
                 chassis.arcade(throttleVel * 127, turnVel * 127);
 
                 /** REGION: Semi autons */
-                // Autoalign
-                // if ((std::fabs(gamepad1.rightY) > 0.8) && (driveMode != DModes::semiauton)) {
-                //     if (gamepad1.rightY > 0) autoAlignUp.start();
-                //     else autoAlignDown.start();
-                // }
 
                 // Auto bowl
-                // if (gamepad1.dpadUp.pressed) {
-                //     if (chassis.getPose().y < -24) rightSideBowl.start();
-                //     else if (chassis.getPose().y > 24) leftSideBowl.start();
-                // }
+                if (gamepad1.y.pressed) {
+                    if (robotPos.y > 0) bowl(true);
+                    else bowl(false);
+                }
 
                 if (gamepad2.rb && gamepad2.rt) driveMode = DModes::override;
                 else if (chassis.isInMotion()) driveMode = DModes::semiauton;
@@ -230,13 +224,14 @@ void opcontrol() {
                 throttleVel = 0;
                 turnVel = 0;
 
-                if ((int)gamepad1.b > 500 || (gamepad2.rb && gamepad2.rt && gamepad2.b)) { chassis.cancelAllMotions(); }
+                if ((int)gamepad1.b > 500 || semiAutonExitFunct()) { chassis.cancelAllMotions(); }
                 if (!chassis.isInMotion()) { driveMode = DModes::normal; }
 
                 break;
         }
 
         // Skills semiauton start
+        /** NOTE: This function is blocking */
         if (gamepad1.dpadUp.pressed) {
             // Score preloads
             chassis.setPose(-45, -57, 135);
@@ -249,7 +244,7 @@ void opcontrol() {
             chassis.setPose(-60, -32, 180); // odom reset
 
             // Move to shoot
-            chassis.moveToPose(-56, -47, -105, 2000, {.maxSpeed = 70}); // Move to matchload bar
+            chassis.moveToPose(-56, -47, -115, 2000, {.maxSpeed = 70}); // Move to matchload bar
 
             // Shoot
             chassis.waitUntilDone();
@@ -257,7 +252,7 @@ void opcontrol() {
 
             cataMotors.tare_position();
             float startCataPose = cataMotors[0].get_position();
-            int startTime = pros::millis();
+            int startCataTime = pros::millis();
 
             cataMotors.move(127); // Start shooting
 
@@ -266,7 +261,7 @@ void opcontrol() {
                 gamepad1.update();
                 pros::delay(10);
             }
-
+            
             cataMotors.move(0); // Stop shooting
             frontWings.set_value(false); // Retract wings
         }

@@ -2,7 +2,7 @@
 
 // CLOSE POSITIONS
 lemlib::Pose closeMatchLoadPose(-51, -49, -45);
-lemlib::Pose closeTouchBarPose(-5, -60, 90);
+lemlib::Pose closeTouchBarPose(-12, -60, 90);
 
 lemlib::Pose closeLeftBall(3.4, 0); // Barrier ball
 lemlib::Pose closeRightBall(24, 0); // Middle ball

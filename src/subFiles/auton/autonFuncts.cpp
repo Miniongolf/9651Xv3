@@ -1,46 +1,50 @@
 #include "subHeads/auton/autonFuncts.hpp"
+#include "subHeads/auton/autonHelpers.hpp"
 
 void closeQual_funct() {
     std::cout << "Close qual auto \n";
 
-    chassis.setPose(-48, -55, -45); // Initial pose
-    chassis.moveToPose(-75, -0, 0, 1250); // score preload
-    chassis.waitUntil(24);
-    intakeMotors.move(-127);
-    chassis.waitUntilDone();
-    intakeMotors.move(0);
-    chassis.tank(-50, -50);
-    pros::delay(300);
-    chassis.tank(127, 127);
-    pros::delay(500);
-    chassis.tank(0, 0);
-    pros::delay(500);
-    chassis.setPose(-58, -33, 0); // Odom reset on net
-
-    chassis.moveToPose(-51, -49, -45, 2000, {.forwards = false});
-    rearWings.extend();
-    pros::delay(500);
-    intakeMotors.move(0);
-    chassis.turnToHeading(45, 1000, {.forwards = false});
-    chassis.waitUntilDone();
-    rearWings.retract();
-
-    // Touch matchload bar
-    chassis.turnToHeading(135, 2000, {.forwards = false});
-    intakeMotors.move(-127);
-    chassis.moveToPose(-34, -60, 90, 2000, {.lead = 0, .maxSpeed = 100});
-    chassis.moveToPose(-8, -60, 90, 2000, {.lead = 0, .maxSpeed = 100});
-    while (true) { pros::delay(50); }
-}
-
-void closeSafe_funct() {
-    std::cout << "Close safe auto \n";
-    // Matchload zone descore
+    // Descore matchload zone
     chassis.arcade(50, 0);
     pros::delay(450);
     chassis.arcade(0, 0);
     intakeMotors.move(-127);
     chassis.setPose(-51, -49, -45);
+
+    rearWings.extend();
+    pros::delay(500);
+    intakeMotors.move(0);
+    chassis.turnToHeading(45, 2000, {.forwards = false, .minSpeed = 100});
+    chassis.turnToHeading(-45, 2000, {.forwards = false});
+    chassis.waitUntilDone();
+    rearWings.retract();
+    chassis.moveToPose(-60, -28, 180, 1000, {.forwards = false});
+    chassis.arcade(50, 0);
+    pros::delay(400);
+    chassis.arcade(-127, 0);
+    pros::delay(400);
+    chassis.setPose(-60, -32, 180); // odom reset
+
+
+}
+
+void closeSafe_funct() {
+    std::cout << "Close safe auto \n";
+    // Score preload
+    chassis.setPose(-45, -57, 135);
+    chassis.moveToPose(-60, -28, 180, 1000, {.forwards = false});
+    chassis.waitUntilDone();
+    chassis.arcade(50, 0);
+    pros::delay(400);
+    chassis.arcade(-127, 0);
+    pros::delay(400);
+    chassis.setPose(-60, -32, 180); // odom reset
+
+    // Move to descore
+    chassis.moveToPose(-49, -47, 135, 2000);
+    chassis.waitUntilDone();
+
+    // Descore matchload bar
     rearWings.extend();
     pros::delay(500);
     intakeMotors.move(0);
@@ -48,11 +52,12 @@ void closeSafe_funct() {
     chassis.waitUntilDone();
     rearWings.retract();
 
-    // Touch matchload bar
+    // Touch elevation bar
     chassis.turnToHeading(135, 2000, {.forwards = false});
     intakeMotors.move(-127);
     chassis.moveToPose(-34, -60, 90, 2000, {.lead = 0, .maxSpeed = 100});
-    chassis.moveToPose(-5, -60, 90, 2000, {.lead = 0, .maxSpeed = 100});
+    chassis.moveToPose(closeTouchBarPose.x, closeTouchBarPose.y, closeTouchBarPose.theta, 2000,
+                       {.lead = 0, .maxSpeed = 100});
     while (true) { pros::delay(50); }
 }
 
@@ -63,7 +68,8 @@ void farQual_funct() {
     chassis.setPose(24, -58, -90); // Set start pose
     moveToBall(farBarBall, -90, 2000, 0); // Grab elevation bar ball
     chassis.moveToPose(50, -60, 90, 2000, {.forwards = false}); // Interpolation to matchload zone
-    chassis.moveToPose(farMatchLoadPose.x, farMatchLoadPose.y, farMatchLoadPose.theta, 2000, {.lead = 0.6}); // Interpolation to matchload
+    chassis.moveToPose(farMatchLoadPose.x, farMatchLoadPose.y, farMatchLoadPose.theta, 2000,
+                       {.lead = 0.6}); // Interpolation to matchload
 }
 
 void farSafe_funct() {

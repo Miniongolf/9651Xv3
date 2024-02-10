@@ -16,14 +16,14 @@ pros::MotorGroup normalLeftMotors({
     pros::Motor(-20, pros::E_MOTOR_GEAR_BLUE), // m1
     pros::Motor(-16, pros::E_MOTOR_GEAR_BLUE), // m2
     pros::Motor(-11, pros::E_MOTOR_GEAR_BLUE), // m3
-    // pros::Motor(-15, pros::E_MOTOR_GEAR_GREEN) // 5.5 watt motor
+    pros::Motor(-15, pros::E_MOTOR_GEAR_GREEN) // 5.5 watt motor
 });
 
 pros::MotorGroup normalRightMotors({
     pros::Motor(10, pros::E_MOTOR_GEAR_BLUE), // m1
     pros::Motor(3, pros::E_MOTOR_GEAR_BLUE), // m2
     pros::Motor(1, pros::E_MOTOR_GEAR_BLUE), // m3
-    // pros::Motor(4, pros::E_MOTOR_GEAR_GREEN) // 5.5 watt motor
+    pros::Motor(4, pros::E_MOTOR_GEAR_GREEN) // 5.5 watt motor
 
 });
 
