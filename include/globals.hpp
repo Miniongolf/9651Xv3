@@ -17,15 +17,13 @@ extern nicklib::Gamepad gamepad1; // Primary controller
 // SENSORS
 extern pros::IMU imu; // Inertial Measurement Unit
 
-// SUBSYS MOTORS
-extern std::array<pros::Motor, 2> ptoMotors;
-
 // MOTOR GROUPS
 extern pros::MotorGroup normalLeftMotors; // Left side drivetrain motor group (normal)
 extern pros::MotorGroup normalRightMotors; // Right side drivetrain motor group (normal)
 
 // CATA MOTORS
 extern pros::MotorGroup cataMotors; // Catapult motor group
+extern pros::MotorGroup intakeMotors; // Intake motor group
 
 // CHASSIS PID
 extern lemlib::ControllerSettings lateralController; // LemLib Lateral PID

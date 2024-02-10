@@ -12,25 +12,31 @@ pros::IMU imu(12);
 
 // MOTOR GROUPS
 pros::MotorGroup normalLeftMotors({
-    pros::Motor(-2, pros::E_MOTOR_GEAR_GREEN),
     pros::Motor(-6, pros::E_MOTOR_GEAR_GREEN),
-    pros::Motor(1, pros::E_MOTOR_GEAR_GREEN)
+    pros::Motor(-2, pros::E_MOTOR_GEAR_GREEN),
+    pros::Motor(16, pros::E_MOTOR_GEAR_GREEN)
 });
 
 pros::MotorGroup normalRightMotors({
-    pros::Motor(12, pros::E_MOTOR_GEAR_GREEN),
     pros::Motor(19, pros::E_MOTOR_GEAR_GREEN),
-    pros::Motor(-11, pros::E_MOTOR_GEAR_GREEN)
+    pros::Motor(12, pros::E_MOTOR_GEAR_GREEN),
+    pros::Motor(-14, pros::E_MOTOR_GEAR_GREEN)
 });
 
 pros::MotorGroup cataMotors({
     pros::Motor(18, pros::E_MOTOR_GEAR_GREEN)
 });
 
+pros::MotorGroup intakeMotors({
+    pros::Motor(11, pros::E_MOTOR_GEAR_BLUE)
+});
+
+
+
 // CHASSIS PID
-lemlib::ControllerSettings lateralController(8, // proportional gain (kP)
+lemlib::ControllerSettings lateralController(5, // proportional gain (kP)
                                              0, // integral gain (kI)
-                                             0, // derivative gain (kD)
+                                             3, // derivative gain (kD)
                                              0, // anti windup
                                              1, // small error range, in inches
                                              100, // small error range timeout, in milliseconds
@@ -39,9 +45,9 @@ lemlib::ControllerSettings lateralController(8, // proportional gain (kP)
                                              0 // maximum acceleration (slew)
 );
 
-lemlib::ControllerSettings angularController(8, // proportional gain (kP)
+lemlib::ControllerSettings angularController(5, // proportional gain (kP)
                                              0, // integral gain (kI)
-                                             0, // derivative gain (kD)
+                                             3, // derivative gain (kD)
                                              0, // anti windup
                                              3, // small error range, in degrees
                                              100, // small error range timeout, in milliseconds
@@ -55,7 +61,7 @@ lemlib::Drivetrain drivetrain(&normalLeftMotors, // left drivetrain motors
                               &normalRightMotors, // right drivetrain motors
                               10.7, // track width
                               lemlib::Omniwheel::OLD_4, // wheel diameter
-                              600, // wheel rpm
+                              200, // wheel rpm
                               8 // chase power
 );
 

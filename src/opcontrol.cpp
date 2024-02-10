@@ -34,6 +34,52 @@ void opcontrol() {
             // (int)chassis.angularSettings.kD);
         }
 
+        /** REGION: INTAKE STATE MACHINE*/
+        // Always controlled by gamepad 1
+        switch (sysStates.intakeState) {
+            case IntakeStates::intake:
+                intakeMotors.move(127);
+
+                if (gamepad1.rb.pressed) { // press rb to outtake
+                    sysStates.intakeState = IntakeStates::outtake;
+                } else if (!gamepad1.rt) {
+                    if (gamepad1.rb) { // outtakes if rb is still pressed
+                        sysStates.intakeState = IntakeStates::outtake;
+                    } else { // stops if both are released
+                        sysStates.intakeState = IntakeStates::stop;
+                    }
+                }
+
+                break;
+
+            case IntakeStates::outtake:
+                intakeMotors.move(-127);
+
+                if (gamepad1.rt.pressed) { // press rt to intake
+                    sysStates.intakeState = IntakeStates::intake;
+                } else if (!gamepad1.rb) {
+                    if (gamepad1.rt) { // intakes if rt is still pressed
+                        sysStates.intakeState = IntakeStates::intake;
+                    } else { // stops if both are released
+                        sysStates.intakeState = IntakeStates::stop;
+                    }
+                    break;
+                }
+
+                break;
+
+            case IntakeStates::stop:
+                intakeMotors.move(0);
+
+                if (gamepad1.rt.pressed) { // press rt to intake
+                    sysStates.intakeState = IntakeStates::intake;
+                } else if (gamepad1.rb.pressed) { // press rb to outtake
+                    sysStates.intakeState = IntakeStates::outtake;
+                }
+
+                break;
+        }
+
         /** REGION: CATA STATE MACHINE*/
         switch (sysStates.cataState) {
             case CataStates::fire:
