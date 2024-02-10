@@ -2,7 +2,7 @@
 
 // CLOSE POSITIONS
 lemlib::Pose closeMatchLoadPose(-51, -49, -45);
-lemlib::Pose closeTouchBarPose(-12, -60, 90);
+lemlib::Pose closeTouchBarPose(-15.5, -56, 90);
 
 lemlib::Pose closeLeftBall(3.4, 0); // Barrier ball
 lemlib::Pose closeRightBall(24, 0); // Middle ball
@@ -16,6 +16,10 @@ lemlib::Pose farRightBall(24, 0); // Far middle ball
 lemlib::Pose farCloseBall(3.4, -24); // Close long barrier ball
 lemlib::Pose farBarBall(0, -60); // Elevation bar ball
 
+void debug::printPose(bool wait) {
+    if (wait) chassis.waitUntilDone();
+    std::printf("x: %f | y: %f | θ: %f\n", chassis.getPose().x, chassis.getPose().y, chassis.getPose().theta);
+}
 
 /**
  * @brief Calculate the target position to move to based on the ball position, intake offset, and the target angle

@@ -3,13 +3,6 @@
 #include "main.h"
 #include "subHeads/auton/autonFuncts.hpp"
 
-namespace debug {
-void printPose(bool wait = true) {
-    if (wait) chassis.waitUntilDone();
-    std::printf("x: %f | y: %f | θ: %f\n", chassis.getPose().x, chassis.getPose().y, chassis.getPose().theta);
-}
-} // namespace debug
-
 /**
  * Runs the user autonomous code. This function will be started in its own task
  * with the default priority and stack size whenever the robot is enabled via

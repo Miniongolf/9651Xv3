@@ -1,6 +1,10 @@
 #pragma once
 #include "main.h"
 
+namespace debug {
+void printPose(bool wait = true);
+}
+
 constexpr float intakeOffset = 9.0;
 
 
