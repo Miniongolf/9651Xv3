@@ -235,35 +235,35 @@ void opcontrol() {
         if (gamepad1.dpadUp.pressed) {
             // Score preloads
             chassis.setPose(-45, -57, 135);
-            chassis.moveToPose(-60, -28, 180, 1000, {.forwards = false, .minSpeed = 100});
-            chassis.waitUntilDone();
-            chassis.arcade(50, 0);
-            pros::delay(400);
-            chassis.arcade(-127, 0);
-            pros::delay(400);
-            chassis.setPose(-60, -32, 180); // odom reset
+            chassis.moveToPose(-60, -28, 180, 2000, {.forwards = false, .minSpeed = 100});
+            // chassis.waitUntilDone();
+            // chassis.arcade(50, 0);
+            // pros::delay(400);
+            // chassis.arcade(-127, 0);
+            // pros::delay(400);
+            // chassis.setPose(-60, -32, 180); // odom reset
 
-            // Move to shoot
-            chassis.moveToPose(-56, -47, -115, 2000, {.maxSpeed = 70}); // Move to matchload bar
+            // // Move to shoot
+            // chassis.moveToPose(-56, -47, -115, 2000, {.maxSpeed = 70}); // Move to matchload bar
 
-            // Shoot
-            chassis.waitUntilDone();
-            frontWings.set_value(true); // Deploy wings to maintain contact with bar
+            // // Shoot
+            // chassis.waitUntilDone();
+            // frontWings.set_value(true); // Deploy wings to maintain contact with bar
 
-            cataMotors.tare_position();
-            float startCataPose = cataMotors[0].get_position();
-            int startCataTime = pros::millis();
+            // cataMotors.tare_position();
+            // float startCataPose = cataMotors[0].get_position();
+            // int startCataTime = pros::millis();
 
-            cataMotors.move(127); // Start shooting
+            // cataMotors.move(127); // Start shooting
 
-            // Wait to finish matchloading
-            while (cataMotors[0].get_position() - startCataPose < 360 * 50 && !gamepad1.x) {
-                gamepad1.update();
-                pros::delay(10);
-            }
+            // // Wait to finish matchloading
+            // while (cataMotors[0].get_position() - startCataPose < 360 * 50 && !gamepad1.x) {
+            //     gamepad1.update();
+            //     pros::delay(10);
+            // }
             
-            cataMotors.move(0); // Stop shooting
-            frontWings.set_value(false); // Retract wings
+            // cataMotors.move(0); // Stop shooting
+            // frontWings.set_value(false); // Retract wings
         }
 
         /** REGION: Odom resets */

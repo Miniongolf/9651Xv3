@@ -11,21 +11,22 @@ void closeQual_funct() {
     intakeMotors.move(-127);
     chassis.setPose(-51, -49, -45);
 
+    // Descore matchload bar
     rearWings.extend();
     pros::delay(500);
     intakeMotors.move(0);
-    chassis.turnToHeading(45, 2000, {.forwards = false, .minSpeed = 100});
-    chassis.turnToHeading(-45, 2000, {.forwards = false});
+    chassis.turnToHeading(45, 1000, {.forwards = false});
     chassis.waitUntilDone();
     rearWings.retract();
-    chassis.moveToPose(-60, -28, 180, 1000, {.forwards = false});
-    chassis.arcade(50, 0);
-    pros::delay(400);
-    chassis.arcade(-127, 0);
-    pros::delay(400);
-    chassis.setPose(-60, -32, 180); // odom reset
 
+    // Touch elevation bar
+    chassis.turnToHeading(135, 2000, {.forwards = false});
+    intakeMotors.move(-127);
+    chassis.moveToPose(-34, -57, 90, 2000, {.lead = 0, .maxSpeed = 100});
+    chassis.moveToPose(closeTouchBarPose.x, closeTouchBarPose.y, closeTouchBarPose.theta, 2000,
+                       {.lead = 0, .maxSpeed = 100});
 
+    while (true) { pros::delay(50); }
 }
 
 void closeSafe_funct() {
