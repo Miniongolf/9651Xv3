@@ -24,7 +24,6 @@ pros::MotorGroup normalRightMotors({
     pros::Motor(3, pros::E_MOTOR_GEAR_BLUE), // m2
     pros::Motor(1, pros::E_MOTOR_GEAR_BLUE), // m3
     pros::Motor(4, pros::E_MOTOR_GEAR_GREEN) // 5.5 watt motor
-
 });
 
 // CATA MOTOR
