@@ -1,5 +1,3 @@
-#include "globals.hpp"
-#include "lemlib/chassis/chassis.hpp"
 #include "main.h"
 #include "subHeads/auton/autonFuncts.hpp"
 
@@ -24,17 +22,13 @@ void autonomous() {
         case AutoSelect::farQual: farQual_funct(); break;
         case AutoSelect::farSafe: farSafe_funct(); break;
         case AutoSelect::farElim: farElim_funct(); break;
-        case AutoSelect::testing:
+        case AutoSelect::skills:
             // if (isCompMatch) { // Plugged into comp controller
                 std::printf("comp");
                 // Score preloads
                 chassis.setPose(-45, -57, 135);
                 chassis.moveToPose(-60, -28, 180, 1000, {.forwards = false, .minSpeed = 100});
-                chassis.waitUntilDone();
-                chassis.arcade(50, 0);
-                pros::delay(400);
-                chassis.arcade(-127, 0);
-                pros::delay(400);
+                chassisRam();
                 chassis.setPose(-60, -32, 180); // odom reset
 
                 // Move to shoot
@@ -51,7 +45,7 @@ void autonomous() {
                 cataMotors.move(127); // Start shooting
 
                 // Wait to finish matchloading
-                while (cataMotors[0].get_position() - startCataPose < 360 * 50) { pros::delay(10); }
+                while (cataMotors[0].get_position() - startCataPose < 360 * 50) { pros::delay(20); }
 
                 cataMotors.move(0); // Stop shooting
                 frontWings.set_value(false); // Retract wings
@@ -67,11 +61,7 @@ void autonomous() {
                 // Right push
                 chassis.moveToPose(48, -48, -135, 1000, {.forwards = false, .minSpeed = 70, .earlyExitRange = 10});
                 chassis.moveToPose(60, -28, 180, 2000, {.forwards = false, .minSpeed = 127});
-                chassis.waitUntilDone();
-                chassis.arcade(50, 0);
-                pros::delay(400);
-                chassis.arcade(-127, 0);
-                pros::delay(400);
+                chassisRam();
 
                 // Middle push 1
                 chassis.waitUntilDone();

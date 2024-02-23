@@ -1,5 +1,20 @@
 #include "subHeads/auton/autonFuncts.hpp"
+#include "globals.hpp"
 #include "subHeads/auton/autonHelpers.hpp"
+
+void chassisMovePowers(int leftPower, int rightPower, int time) {
+    // Wait until chassis is done async LemLib motions
+    if (chassis.isInMotion()) chassis.waitUntilDone();
+
+    chassis.tank(leftPower, rightPower);
+    if (time >= 0) { pros::delay(time); }
+    chassis.tank(0, 0);
+}
+
+void chassisRam() {
+    chassisMovePowers(50, 50, 400);
+    chassisMovePowers(-127, -127, 400);
+}
 
 void closeQual_funct() {
     std::cout << "Close qual auto \n";
@@ -109,4 +124,54 @@ void farElim_funct() {
     // chassis.moveToPose(61, -49, 45, 2000, {.lead=0.6});
 
     // chassis.setPose(46, -9, 44);
+}
+
+void skillsAuton_funct() {
+    std::printf("auton skills\n");
+    // Score preloads
+    chassis.setPose(-45, -57, 135);
+    chassis.moveToPose(-60, -28, 180, 1000, {.forwards = false, .minSpeed = 100});
+    chassisRam();
+    chassis.setPose(-60, -32, 180); // odom reset
+
+    // Move to shoot
+    chassis.moveToPose(-56, -47, -115, 2000, {.maxSpeed = 70}); // Move to matchload bar
+
+    // Shoot
+    chassis.waitUntilDone();
+
+    cataMotors.tare_position();
+    float startCataPose = cataMotors[0].get_position();
+    int startCataTime = pros::millis();
+
+    frontWings.set_value(true); // Deploy wings to maintain contact with bar
+    cataMotors.move(127); // Start shooting
+
+    // Wait to finish matchloading
+    while (cataMotors[0].get_position() - startCataPose < 360 * 50) { pros::delay(20); }
+
+    cataMotors.move(0); // Stop shooting
+    frontWings.set_value(false); // Retract wings
+
+    // Cross to other side
+    chassis.moveToPoint(-29, -58, 2000, {.forwards = false}); // Interpolate to bowling position
+    chassis.moveToPose(-32, -58, -90, 2000, {.forwards = false}); // Move to bowling position
+    debug::printPose();
+    chassis.moveToPose(45, -58, -90, 2000, {.forwards = false, .minSpeed = 70, .earlyExitRange = 24});
+
+    // Right push
+    chassis.moveToPose(48, -48, -135, 1000, {.forwards = false, .minSpeed = 70, .earlyExitRange = 10});
+    chassis.moveToPose(60, -28, 180, 2000, {.forwards = false, .minSpeed = 127});
+    chassisRam();
+
+    // Middle push 1
+    chassisMovePowers(50, 50, 750);
+    chassis.turnToHeading(-45, 1000);
+    chassis.moveToPoint(29, -33, 2000);
+    chassis.moveToPose(18, -10, 0, 2000);
+    chassis.waitUntilDone();
+    frontWings.set_value(true);
+    chassis.moveToPose(38, -7, 90, 2000);
+    chassisMovePowers(-50, -50, 400);
+    chassis.arcade(0, 0);
 }
