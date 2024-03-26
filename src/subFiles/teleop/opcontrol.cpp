@@ -9,21 +9,6 @@
 // Semiauton exit condition
 std::function<bool()> semiAutonExitFunct;
 
-void bowl(bool rightSide) {
-    semiAutonExitFunct = isSticksMoved;
-    if (rightSide) {
-        if (chassis.getPose().y > -34) chassis.moveToPoint(-30, -58, 2000, {.minSpeed = 70, .earlyExitRange = 10});
-        chassis.moveToPose(45, -58, 90, 5000, {.minSpeed = 100, .earlyExitRange = 10});
-        chassis.moveToPose(48, -48, 45, 2000, {.lead = 0.8, .minSpeed = 70});
-    } else {
-        if (chassis.getPose().y < 34) chassis.moveToPoint(-30, 60, 2000, {.minSpeed = 70, .earlyExitRange = 10});
-        chassis.moveToPose(40, 60, 90, 5000, {.minSpeed = 100, .earlyExitRange = 10});
-        chassis.moveToPose(48, 48, 45, 2000, {.lead = 0.8, .minSpeed = 70});
-    }
-}
-
-
-
 // TeleOp
 void opcontrol() {
     // Drive mode enums
@@ -35,20 +20,18 @@ void opcontrol() {
     // Robot position pose
     lemlib::Pose robotPos = chassis.getPose();
 
+    // Start time
+    int startTime = pros::millis();
+
     std::array<float, 2> vels;
     float throttleVel, turnVel;
     float targetTheta;
 
-    // Task for controller driver assistance
-    pros::Task controllerAssistTask {[] {
-        int opcontrolStartTime = pros::millis();
-        pros::delay(90000);
-        gamepad1.controller->rumble("...");
-        pros::delay(15000);
-        gamepad1.controller->rumble("-..");
-    }};    
-
     while (true) {
+        // Timer buzz
+        if (pros::millis() == startTime + 90000) gamepad1.controller->rumble("...");
+        else if (pros::millis() == startTime + 105000) gamepad1.controller->rumble(".._");
+
         /** REGION: UPDATE SYSTEM STATES */
         gamepad1.update();
         gamepad2.update();
@@ -112,7 +95,7 @@ void opcontrol() {
         switch (sysStates.cataState) {
             case CataStates::fire:
                 cataMotors.move(127);
-                if (gamepad1.x.pressed) { sysStates.cataState = CataStates::load; }
+                if (gamepad1.x.pressed) { sysStates.cataState = CataStates::idle; }
                 break;
 
             case CataStates::load:
@@ -132,55 +115,75 @@ void opcontrol() {
         /** REGION: WINGS STATE MACHINES */
         switch (sysStates.wingState) {
             case WingStates::none:
-                if (driveMode == DModes::normal) {
-                    if (gamepad1.lt) sysStates.wingState = WingStates::front;
-                    else if (gamepad1.lb) sysStates.wingState = WingStates::back;
-                } else if (driveMode == DModes::override) {
-                    if (gamepad2.lt) sysStates.wingState = WingStates::front;
-                    else if (gamepad2.lb) sysStates.wingState = WingStates::back;
-                }
+                if (gamepad1.lt || (gamepad1.b && gamepad1.dpadDown)) sysStates.wingState = WingStates::front;
+                else if (gamepad1.b) sysStates.wingState = WingStates::right;
+                else if (gamepad1.dpadDown) sysStates.wingState = WingStates::left;
+                else if (gamepad1.lb) sysStates.wingState = WingStates::back;
 
                 frontWings.set_value(false);
-                rearWings.set_value(false);
+                rearWing.set_value(false);
 
                 break;
 
+            case WingStates::left:
+                if (gamepad1.dpadDown) sysStates.wingState = WingStates::left;
+                else if (gamepad1.lt || (gamepad1.b && gamepad1.dpadDown)) sysStates.wingState = WingStates::front;
+                else if (gamepad1.b) sysStates.wingState = WingStates::right;
+                else if (gamepad1.lb) sysStates.wingState = WingStates::back;
+                else sysStates.wingState = WingStates::none;
+
+                leftWing.set_value(true);
+                rightWing.set_value(false);
+                rearWing.set_value(false);
+                break;
+
+            case WingStates::right:
+                if (gamepad1.b) sysStates.wingState = WingStates::right;
+                else if (gamepad1.lt || (gamepad1.b && gamepad1.dpadDown)) sysStates.wingState = WingStates::front;
+                else if (gamepad1.dpadDown) sysStates.wingState = WingStates::left;
+                else if (gamepad1.lb) sysStates.wingState = WingStates::back;
+                else sysStates.wingState = WingStates::none;
+
+                leftWing.set_value(false);
+                rightWing.set_value(true);
+                rearWing.set_value(false);
+                break;
+
             case WingStates::front:
-                if (driveMode == DModes::normal) {
-                    if (!gamepad1.lt) sysStates.wingState = WingStates::none;
-                    else if (gamepad1.lb) sysStates.wingState = WingStates::back;
-                } else if (driveMode == DModes::override) {
-                    if (!gamepad2.lt) sysStates.wingState = WingStates::none;
-                    else if (gamepad2.lb) sysStates.wingState = WingStates::back;
-                }
+                if (gamepad1.lt) sysStates.wingState = WingStates::front;
+                else if (gamepad1.b) sysStates.wingState = WingStates::right;
+                else if (gamepad1.dpadDown) sysStates.wingState = WingStates::left;
+                else if (gamepad1.lb) sysStates.wingState = WingStates::back;
+                else sysStates.wingState = WingStates::none;
 
                 frontWings.set_value(true);
-                rearWings.set_value(false);
+                rearWing.set_value(false);
 
                 break;
 
             case WingStates::back:
-                if (gamepad1.lb.released) sysStates.wingState = WingStates::none;
-                if (gamepad1.lt.pressed) sysStates.wingState = WingStates::front;
+                if (gamepad1.lb) sysStates.wingState = WingStates::back;
+                else if (gamepad1.lt || (gamepad1.b && gamepad1.dpadDown)) sysStates.wingState = WingStates::front;
+                else if (gamepad1.b) sysStates.wingState = WingStates::right;
+                else if (gamepad1.dpadDown) sysStates.wingState = WingStates::left;
+                else sysStates.wingState = WingStates::none;
 
                 frontWings.set_value(false);
-                rearWings.set_value(true);
+                rearWing.set_value(true);
 
                 break;
         }
 
         /** REGION: HANG STATE MACHINE */
         switch (sysStates.hangState) {
-            case HangStates::up:
-                if (gamepad1.b.pressed) sysStates.hangState = HangStates::down;
-
-                balancePiston.set_value(true);
-                break;
-
             case HangStates::down:
-                if (gamepad1.b.pressed) sysStates.hangState = HangStates::up;
-
-                balancePiston.set_value(false);
+                if (gamepad1.y.pressed) sysStates.hangState = HangStates::up;
+                hangArm.set_value(false);
+                break;
+            
+            case HangStates::up:
+                if (gamepad1.y.pressed) sysStates.hangState = HangStates::down;
+                hangArm.set_value(true);
                 break;
         }
 
@@ -194,14 +197,6 @@ void opcontrol() {
                 throttleVel = vels[0], turnVel = vels[1];
 
                 chassis.arcade(throttleVel * 127, turnVel * 127);
-
-                /** REGION: Semi autons */
-
-                // Auto bowl
-                if (gamepad1.y.pressed) {
-                    if (robotPos.y > 0) bowl(true);
-                    else bowl(false);
-                }
 
                 if (gamepad2.rb && gamepad2.rt) driveMode = DModes::override;
                 else if (chassis.isInMotion()) driveMode = DModes::semiauton;
@@ -224,46 +219,10 @@ void opcontrol() {
                 throttleVel = 0;
                 turnVel = 0;
 
-                if ((int)gamepad1.b > 500 || semiAutonExitFunct()) { chassis.cancelAllMotions(); }
+                if (((int)gamepad1.rt > 500 && (int)gamepad1.rb > 500) || semiAutonExitFunct()) { chassis.cancelAllMotions(); }
                 if (!chassis.isInMotion()) { driveMode = DModes::normal; }
 
                 break;
-        }
-
-        // Skills semiauton start
-        /** NOTE: This function is blocking */
-        if (gamepad1.dpadUp.pressed) {
-            // Score preloads
-            chassis.setPose(-45, -57, 135);
-            chassis.moveToPose(-60, -28, 180, 2000, {.forwards = false, .minSpeed = 100});
-            // chassis.waitUntilDone();
-            // chassis.arcade(50, 0);
-            // pros::delay(400);
-            // chassis.arcade(-127, 0);
-            // pros::delay(400);
-            // chassis.setPose(-60, -32, 180); // odom reset
-
-            // // Move to shoot
-            // chassis.moveToPose(-56, -47, -115, 2000, {.maxSpeed = 70}); // Move to matchload bar
-
-            // // Shoot
-            // chassis.waitUntilDone();
-            // frontWings.set_value(true); // Deploy wings to maintain contact with bar
-
-            // cataMotors.tare_position();
-            // float startCataPose = cataMotors[0].get_position();
-            // int startCataTime = pros::millis();
-
-            // cataMotors.move(127); // Start shooting
-
-            // // Wait to finish matchloading
-            // while (cataMotors[0].get_position() - startCataPose < 360 * 50 && !gamepad1.x) {
-            //     gamepad1.update();
-            //     pros::delay(10);
-            // }
-            
-            // cataMotors.move(0); // Stop shooting
-            // frontWings.set_value(false); // Retract wings
         }
 
         /** REGION: Odom resets */

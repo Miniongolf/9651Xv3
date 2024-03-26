@@ -2,14 +2,14 @@
 
 // CLOSE POSITIONS
 lemlib::Pose closeMatchLoadPose(-51, -49, -45);
-lemlib::Pose closeTouchBarPose(-15.5, -56, 90);
+lemlib::Pose closeTouchBarPose(-13, -56, 90);
 
-lemlib::Pose closeLeftBall(3.4, 0); // Barrier ball
-lemlib::Pose closeRightBall(24, 0); // Middle ball
+lemlib::Pose closeLeftBall(-24, 0); // Barrier ball
+lemlib::Pose closeRightBall(-3.4, 0); // Middle ball
 
 // FAR POSITIONS
 lemlib::Pose farTouchBarPose(5, -60, -90);
-lemlib::Pose farMatchLoadPose(0, 0, 0);
+lemlib::Pose farMatchLoadPose(50, -50, -45);
 
 lemlib::Pose farLeftBall(3.4, 0); // Far long barrier ball
 lemlib::Pose farRightBall(24, 0); // Far middle ball
@@ -28,8 +28,8 @@ void debug::printPose(bool wait) {
  * @param targetAngle The angle to end at (in degrees)
  */
 lemlib::Pose calcTargetPose(lemlib::Pose ballPoint, float targetAngle) {
-    float x = ballPoint.x + intakeOffset * cos(targetAngle+90);
-    float y = ballPoint.y + intakeOffset * sin(targetAngle+90);
+    float x = ballPoint.x + intakeOffset * sin(targetAngle);
+    float y = ballPoint.y + intakeOffset * cos(targetAngle);
     return lemlib::Pose(x, y, targetAngle);
 }
 
@@ -39,17 +39,19 @@ lemlib::Pose calcTargetPose(lemlib::Pose ballPoint, float targetAngle) {
  * @param ballPoint position of the ball as a lemlib::Pose
  * @param targetAngle target heading in degrees
  * @param timeout longest time the robot can spend moving
- * @param grabDistance movement distance to wait before grabbing. -1 by default, meaning no grab.
  * @param params struct to simulate named parameters
  */
-void moveToBall(lemlib::Pose ballPoint, float targetAngle, float timeout, int grabDistance,
-                lemlib::MoveToPoseParams params) {
+void grabBall(lemlib::Pose ballPoint, float targetAngle, float timeout, lemlib::MoveToPoseParams params) {
+    lemlib::Timer timer(0);
+    timer.set(timeout);
+    
+    if (chassis.isInMotion()) chassis.waitUntilDone();
+
     lemlib::Pose targetPose = calcTargetPose(ballPoint, targetAngle);
     chassis.moveToPose(targetPose.x, targetPose.y, targetPose.theta, timeout, params);
 
-    // Grab ball if async and grabDistance is set
-    if (grabDistance != -1) {
-        chassis.waitUntil(grabDistance);
-        intakeMotors.move(127);
+    intakeMotors.move(127);
+    while (intakeMotors[0].get_power() < 4.0 && chassis.isInMotion() && !timer.isDone()) {
+        pros::delay(20);
     }
 }

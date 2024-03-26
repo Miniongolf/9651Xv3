@@ -1,6 +1,8 @@
 #pragma once
 #include "main.h"
 
+#include "lemlib/timer.hpp"
+
 // Auton selection enum
 enum class AutoSelect {
     skills = 0,
@@ -12,7 +14,7 @@ enum class AutoSelect {
     farElim = -3
 };
 
-constexpr float intakeOffset = 9.0;
+constexpr float intakeOffset = 9.25;
 
 namespace debug {
 void printPose(bool wait = true);
@@ -46,8 +48,7 @@ lemlib::Pose calcTargetPose(lemlib::Pose ballPoint, float targetAngle);
  * @param ballPoint position of the ball as a lemlib::Pose
  * @param targetAngle target heading in degrees
  * @param timeout longest time the robot can spend moving
- * @param grabDistance movement distance to wait before grabbing. -1 by default, meaning no grab.
  * @param params struct to simulate named parameters
  */
-void moveToBall(lemlib::Pose ballPoint, float targetAngle, float timeout, int grabDistance = -1,
+void grabBall(lemlib::Pose ballPoint, float targetAngle, float timeout,
                 lemlib::MoveToPoseParams params = {});

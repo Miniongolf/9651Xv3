@@ -1,5 +1,6 @@
 #include "main.h"
 #include "subHeads/auton/autonFuncts.hpp"
+#include "subHeads/auton/autonHelpers.hpp"
 
 /**
  * Runs the user autonomous code. This function will be started in its own task
@@ -13,6 +14,7 @@
  * from where it left off.
  */
 void autonomous() {
+    hangArm.set_value(false);
     AutoSelect autonMode = static_cast<AutoSelect>(selector::auton);
 
     switch (autonMode) {
@@ -23,101 +25,11 @@ void autonomous() {
         case AutoSelect::farSafe: farSafe_funct(); break;
         case AutoSelect::farElim: farElim_funct(); break;
         case AutoSelect::skills:
-            // if (isCompMatch) { // Plugged into comp controller
-                std::printf("comp");
-                // Score preloads
-                chassis.setPose(-45, -57, 135);
-                chassis.moveToPose(-60, -28, 180, 1000, {.forwards = false, .minSpeed = 100});
-                chassisRam();
-                chassis.setPose(-60, -32, 180); // odom reset
-
-                // Move to shoot
-                chassis.moveToPose(-56, -47, -115, 2000, {.maxSpeed = 70}); // Move to matchload bar
-
-                // Shoot
-                chassis.waitUntilDone();
-
-                cataMotors.tare_position();
-                float startCataPose = cataMotors[0].get_position();
-                int startCataTime = pros::millis();
-
-                frontWings.set_value(true); // Deploy wings to maintain contact with bar
-                cataMotors.move(127); // Start shooting
-
-                // Wait to finish matchloading
-                while (cataMotors[0].get_position() - startCataPose < 360 * 50) { pros::delay(20); }
-
-                cataMotors.move(0); // Stop shooting
-                frontWings.set_value(false); // Retract wings
-
-                chassis.setPose(-56, -48, -115);
-
-                // Cross to other side
-                chassis.moveToPoint(-29, -58, 2000, {.forwards = false}); // Interpolate to bowling position
-                chassis.moveToPose(-32, -58, -90, 2000, {.forwards = false}); // Move to bowling position
-                debug::printPose();
-                chassis.moveToPose(45, -58, -90, 2000, {.forwards = false, .minSpeed = 70, .earlyExitRange = 24});
-
-                // Right push
-                chassis.moveToPose(48, -48, -135, 1000, {.forwards = false, .minSpeed = 70, .earlyExitRange = 10});
-                chassis.moveToPose(60, -28, 180, 2000, {.forwards = false, .minSpeed = 127});
-                chassisRam();
-
-                // Middle push 1
-                chassis.waitUntilDone();
-                chassis.arcade(50, 0);
-                pros::delay(750);
-                chassis.turnToHeading(-45, 1000);
-                chassis.moveToPoint(29, -33, 2000);
-                chassis.moveToPose(18, -10, 0, 2000);
-                chassis.waitUntilDone();
-                frontWings.set_value(true);
-                chassis.moveToPose(38, -7, 90, 2000);
-                chassis.waitUntilDone();
-                chassis.arcade(-50, 0);
-                pros::delay(400);
-                chassis.arcade(0, 0);
-
-                // Middle push 2
-
-                // Left push
-
-            // } else { // Testing
-            //     std::printf("testing");
-            //     chassis.setPose(-45, -57, 135);
-            //     chassis.moveToPose(-60, -28, 180, 2000, {.forwards = false});
-            //     debug::printPose();
-            //     chassis.waitUntilDone();
-            //     chassis.arcade(50, 0);
-            //     pros::delay(400);
-            //     chassis.arcade(-127, 0);
-            //     pros::delay(400);
-            //     chassis.setPose(-60, -32, 180); // odom reset
-
-            //     chassis.moveToPose(-56, -47, -100, 2000, {.maxSpeed = 70});
-            //     debug::printPose();
-
-            //     // chassis.setPose(0, 0, 0);
-            //     // chassis.turnToHeading(90, 2000);
-            //     // debug::printPose();
-            //     // std::printf("error: %f\n", chassis.getPose().theta - 90);
-            //     // pros::delay(1000);
-            //     // chassis.moveToPose(48, 0, 90, 2000);
-            //     // debug::printPose();
-            //     // std::printf("error: %f\n", chassis.getPose().x - 48);
-            // }
-
-            // chassis.setPose(0, 0, 0);
-            // lemlib::Pose testBall(35, 48);
-            // moveToBall(testBall, 90, 1000, 50);
-            // chassis.setPose(0, 0, 0);
-            // chassis.moveToPose(0, 24, 0, 5000);
-            // chassis.waitUntilDone();
-            // std::cout << fmt::format("x: {} | y: {} | θ: {}\n", chassis.getPose().x, chassis.getPose().y,
-            //                          chassis.getPose().theta);
-            // chassis.turnToHeading(90, 5000);
-            // chassis.waitUntilDone();
-            // std::cout << fmt::format("x: {} | y: {} | θ: {}\n", chassis.getPose().x, chassis.getPose().y,
-            //                          chassis.getPose().theta);
+            chassis.setPose(0, 0, 0);
+            chassis.turnToHeading(90, 1000);
+            debug::printPose();
+            chassis.moveToPose(36, 0, 90, 1500);
+            debug::printPose();
+            // skillsAuton_funct();
     }
 }

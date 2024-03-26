@@ -17,25 +17,27 @@ void chassisRam() {
 }
 
 void closeQual_funct() {
-    std::cout << "Close qual auto \n";
+    chassis.setPose(-43.5, -58, -45);
 
     // Descore matchload zone
-    chassis.arcade(50, 0);
-    pros::delay(450);
-    chassis.arcade(0, 0);
+    chassisMovePowers(40, 40, 450);
     intakeMotors.move(-127);
-    chassis.setPose(-51, -49, -45);
 
     // Descore matchload bar
-    rearWings.extend();
+    rearWing.extend();
     pros::delay(500);
     intakeMotors.move(0);
-    chassis.turnToHeading(45, 1000, {.forwards = false});
+    chassis.turnToHeading(-90, 1000);
     chassis.waitUntilDone();
-    rearWings.retract();
+    rearWing.retract();
+    pros::delay(50);
+
+    // Ram preload
+    // chassis.moveToPose(-60, -28, 180, 1000, {.forwards = false, .minSpeed = 100});
+    // chassisRam();
 
     // Touch elevation bar
-    chassis.turnToHeading(135, 2000, {.forwards = false});
+    chassis.turnToHeading(90, 1250);
     intakeMotors.move(-127);
     chassis.moveToPose(-34, -57, 90, 2000, {.lead = 0, .maxSpeed = 100});
     chassis.moveToPose(closeTouchBarPose.x, closeTouchBarPose.y, closeTouchBarPose.theta, 2000,
@@ -45,15 +47,11 @@ void closeQual_funct() {
 }
 
 void closeSafe_funct() {
-    std::cout << "Close safe auto \n";
     // Score preload
     chassis.setPose(-45, -57, 135);
     chassis.moveToPose(-60, -28, 180, 1000, {.forwards = false});
     chassis.waitUntilDone();
-    chassis.arcade(50, 0);
-    pros::delay(400);
-    chassis.arcade(-127, 0);
-    pros::delay(400);
+    chassisRam();
     chassis.setPose(-60, -32, 180); // odom reset
 
     // Move to descore
@@ -61,12 +59,12 @@ void closeSafe_funct() {
     chassis.waitUntilDone();
 
     // Descore matchload bar
-    rearWings.extend();
+    rearWing.extend();
     pros::delay(500);
     intakeMotors.move(0);
     chassis.turnToHeading(45, 1000, {.forwards = false});
     chassis.waitUntilDone();
-    rearWings.retract();
+    rearWing.retract();
 
     // Touch elevation bar
     chassis.turnToHeading(135, 2000, {.forwards = false});
@@ -77,19 +75,51 @@ void closeSafe_funct() {
     while (true) { pros::delay(50); }
 }
 
-void closeElim_funct() { std::cout << "Close elim auto \n"; }
+void closeElim_funct() {
+    int autonStartTime = pros::millis();
+
+    // Set start pose
+    chassis.setPose(-41.5, -57, 0);
+
+    // Wing push preload near net
+    leftWing.set_value(true);
+
+    // Grab middle ball
+    chassis.moveToPose(-30, -24, 30, 1500, {.minSpeed = 100});
+    pros::delay(500);
+    leftWing.set_value(false);
+    chassis.moveToPose(-24, -4, 0, 1500);
+    intakeMotors.move(127);
+
+    // Come back and score preload
+    chassis.moveToPose(-32, -32, 45, 1500, {.forwards = false, .minSpeed = 100});
+
+    chassis.waitUntil(24);
+    intakeMotors.move(0);
+
+    chassis.moveToPose(-60, -36, 90, 1000, {.forwards = false, .minSpeed = 100});
+    chassis.moveToPose(-60, -24, 180, 1000, {.forwards = false, .lead = 0});
+    chassisRam();
+    chassis.setPose(-60, -32, 180);
+
+    chassisMovePowers(50, 50, 400);
+}
 
 void farQual_funct() {
-    std::cout << "Far 3-ball \n";
     chassis.setPose(24, -58, -90); // Set start pose
-    moveToBall(farBarBall, -90, 2000, 0); // Grab elevation bar ball
+    grabBall(farBarBall, -90, 2000); // Grab elevation bar ball
     chassis.moveToPose(50, -60, 90, 2000, {.forwards = false}); // Interpolation to matchload zone
     chassis.moveToPose(farMatchLoadPose.x, farMatchLoadPose.y, farMatchLoadPose.theta, 2000,
-                       {.lead = 0.6}); // Interpolation to matchload
+                       {.forwards = false, .lead = 0.6}); // Go to matchload zone
+    chassis.waitUntilDone();
+    rearWing.set_value(true);
+    chassis.turnToHeading(180, 1000);
+    chassis.turnToHeading(45, 1000, {.forwards = false});
+    chassis.moveToPose(58, -24, 180, 1200, {.forwards = false});
+    chassisRam();
 }
 
 void farSafe_funct() {
-    std::cout << "Far safe \n";
     chassis.setPose(0, 0, 0);
     chassis.tank(-127, -127);
     pros::delay(750);
@@ -99,7 +129,6 @@ void farSafe_funct() {
 }
 
 void farElim_funct() {
-    std::cout << "Far 6-ball rush \n";
     chassis.setPose(50, -58, -45); // Set start pose
     chassis.moveToPose(24, -18, -15, 2000,
                        {.lead = 0.6, .minSpeed = 100, .earlyExitRange = 5}); // Interpolation to 1st triball
@@ -127,7 +156,6 @@ void farElim_funct() {
 }
 
 void skillsAuton_funct() {
-    std::printf("auton skills\n");
     // Score preloads
     chassis.setPose(-45, -57, 135);
     chassis.moveToPose(-60, -28, 180, 1000, {.forwards = false, .minSpeed = 100});
@@ -136,6 +164,10 @@ void skillsAuton_funct() {
 
     // Move to shoot
     chassis.moveToPose(-56, -47, -115, 2000, {.maxSpeed = 70}); // Move to matchload bar
+
+    chassisMovePowers(-50, -50, 400);
+    chassis.turnToHeading(-115, 1000, {.forwards = false});
+    chassisMovePowers(-50, -50, 400);
 
     // Shoot
     chassis.waitUntilDone();

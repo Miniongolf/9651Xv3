@@ -15,8 +15,9 @@ void initialize() {
     chassis.setBrakeMode(pros::E_MOTOR_BRAKE_BRAKE);
 
     // Retract wings
-    rearWings.set_value(false);
+    rearWing.set_value(false);
     frontWings.set_value(false);
+    hangArm.set_value(true);
     
     // Initialize chassis
     chassis.calibrate();

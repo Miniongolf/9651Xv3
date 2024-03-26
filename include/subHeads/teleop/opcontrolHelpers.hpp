@@ -15,7 +15,7 @@ enum class CataStates { fire, load, idle };
 enum class IntakeStates { intake, outtake, stop };
 
 // Wings state machine enum
-enum class WingStates { none, front, back };
+enum class WingStates { none, left, right, front, back };
 
 // Hang state machine enum
 enum class HangStates { up, down };
